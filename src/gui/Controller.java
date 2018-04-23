@@ -231,7 +231,7 @@ public class Controller  implements Initializable {
                 String fileName=chosenFile.toString();
 
                 FilePathTreeItem fileTree=new FilePathTreeItem(new File(fileName));
-                fileTree.encryptFileTree();
+                fileTree.encryptFileTree(folderChoosenPath,"");
             }
         }
         else{

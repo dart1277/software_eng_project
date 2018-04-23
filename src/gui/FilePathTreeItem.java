@@ -7,6 +7,9 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class FilePathTreeItem extends TreeItem<String>
 {
@@ -118,7 +121,7 @@ public class FilePathTreeItem extends TreeItem<String>
 
         public boolean findPath(String pathToFind)
         {
-            //System.out.println("szukam "+pathToFind+" w "+this.toString());
+            System.out.println("szukam "+pathToFind+" w "+this.toString());
             if(pathToFind.equals(this.toString()))      //check if this is searched path
                 return true;
 
@@ -139,29 +142,53 @@ public class FilePathTreeItem extends TreeItem<String>
 
             return false;
         }
-        public void encryptFileTree()
+        public void encryptFileTree(String mainPath,String localPath)
         {
-
             File f=this.file;
+            String newLocalPath="";
+
             if(f!=null && f.isDirectory())  // this is file ->keep digging deeper...
             {
+                //experimental:
+                String plik=f.getAbsolutePath();
+                if(localPath.isEmpty())
+                {
+                    plik=plik.substring(plik.lastIndexOf("\\"),plik.length());
+                }
+                else
+                {
+                    plik=plik.substring(plik.lastIndexOf(localPath),plik.length());
+                }
+
+                //--------------
+                //System.out.println("creating: "+mainPath+plik);
+                Path newDirPath = Paths.get(mainPath+plik);
+                try {
+                    Files.createDirectory(newDirPath);
+                }catch(Exception e){ e.printStackTrace(); }
+
+                newLocalPath=plik;
                 File[] files=f.listFiles();
                 if (files != null)
                 {
                     for(File childFile : files)
                     {
-                        new FilePathTreeItem(childFile).encryptFileTree();
+                        new FilePathTreeItem(childFile).encryptFileTree(mainPath,newLocalPath);
                     }
                 }
             }
             else if(f.isFile())       //this is file ->encode
             {
-                encrypt(f.toString());
+                newLocalPath=mainPath+localPath;
+                encrypt(f,newLocalPath);
             }
         }
-        public void encrypt(String path)        //encrypting function
+        public void encrypt(File toEncrypt,String newPathFile)        //encrypting function
         {
+            String newFilePath=newPathFile+"\\"+toEncrypt.getName();
+            System.out.println("--encrytping:"+toEncrypt+ " --> "+newFilePath);
             //encrypt here
+
         }
 
     }
