@@ -101,7 +101,7 @@ public class ByteArrayUtils {
         Integer headerSize = new Integer(new String(lengthAsChars));
 
         byte[] message = new byte[headerSize];
-        System.arraycopy(array,6 + denotation.length, message, 0, headerSize);
+        System.arraycopy(array,9 + denotation.length, message, 0, headerSize);
 
         String messageStr = new String(message, "UTF-8");
         String paddingStr = new String(paddingAsChars);
@@ -132,8 +132,8 @@ public class ByteArrayUtils {
 
         byte[] cleaned = new byte[array.length - denotation.length - headerSize - 6];
 
-        System.arraycopy(array, headerSize + 6 + denotation.length, cleaned,
-                0,array.length - denotation.length - headerSize - 6);
+        System.arraycopy(array, headerSize + 9 + denotation.length, cleaned,
+                0,array.length - denotation.length - headerSize - 9);
 
         return cleaned;
     }

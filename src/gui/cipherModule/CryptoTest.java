@@ -17,6 +17,21 @@ public class CryptoTest {
     public static void main(String[] args) {
 
         String key = "Dowolnej dlugosci kurwa jego mać zadziałą";
+
+        FileEncryptor enc = new FileEncryptor();
+
+        enc.configure(key, CryptoModule.REGULAR_MODE, true, "Masełko pizdełko");
+        try {
+            enc.encrypt("software_eng_project.iml", "CopyFolder/software_eng_project.iml");
+            System.out.println(enc.getHelpMessage("CopyFolder/software_eng_project.iml"));
+            enc.decrypt("CopyFolder/software_eng_project.iml", "CopyFolder/software_eng_projectD.iml");
+
+        } catch (IOException | CryptoException ex) {
+            System.out.println("!" + ex.getMessage());
+        }
+
+        /*
+        String key = "Dowolnej dlugosci kurwa jego mać zadziałą";
         File inputFile = new File("document.txt");
         File encryptedFile = new File("document_encrypted.jpg");
         File decryptedFile = new File("document_decrypted.jpg");
@@ -41,7 +56,7 @@ public class CryptoTest {
         } catch (CryptoException | IOException ex) {
             System.out.println(ex.getMessage());
         }
-
+        */
 
     }
 }

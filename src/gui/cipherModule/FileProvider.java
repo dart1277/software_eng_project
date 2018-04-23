@@ -39,6 +39,30 @@ public class FileProvider implements FileProviderInterface {
         this.destName = destDriName;
     }
 
+    public void addNextPrimitive(String path, String dst){
+        if(this.fos != null)
+            closeOutputFile();
+        file_list.clear();
+        file_list.add(new File(path));
+        fileToSave = new File(dst);
+    }
+
+    public File getNextPrimitive(){
+        if (this.hasNext()) {
+            current_file = file_list.get(0);
+            bytesSaved = 0;
+
+            try {
+                fos = new FileOutputStream(fileToSave);
+            } catch (FileNotFoundException e) {
+                //System.out.println(e.getMessage() + " File not found primitive");
+            }
+            return current_file;
+        }
+
+        return null;
+    }
+
      public File getNext() {
         if (this.hasNext()) {
             current_file = iter.next();
