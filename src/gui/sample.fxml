@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
+   <children>
+      <GridPane fx:id="mainGrid" hgap="10.0" layoutX="43.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" vgap="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" prefWidth="150.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" prefWidth="150.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" prefWidth="150.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" prefWidth="150.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="215.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="90.0" minHeight="90.0" prefHeight="90.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="24.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <StackPane fx:id="fileBrowserPane" prefHeight="419.0" prefWidth="380.0" style="-fx-border-color: blue;" GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.rowSpan="6" />
+            <Label fx:id="fileBrowserLabel" prefHeight="17.0" prefWidth="198.0" text="Przeglądaj pliki" GridPane.rowIndex="2" />
+            <Button fx:id="addBtn" alignment="CENTER" cache="true" contentDisplay="TEXT_ONLY" mnemonicParsing="false" onMouseClicked="#addFileOrFolderClick" prefHeight="30.0" prefWidth="288.0" style="-fx-background-color: #673ab7; -fx-border-style: solid; -fx-border-color: #673ab7; -fx-border-width: 1;" text="Dodaj plik/folder" textAlignment="CENTER" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="9">
+               <font>
+                  <Font name="Calibri" size="16.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <effect>
+                  <DropShadow blurType="GAUSSIAN" color="#00000080" height="10.0" offsetX="2.0" offsetY="2.0" radius="4.5" width="10.0" />
+               </effect>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </Button>
+            <StackPane fx:id="selectedFileBrowserPane" prefHeight="219.0" prefWidth="380.0" style="-fx-border-color: blue;" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+            <Label fx:id="fileSelectedLabel" prefHeight="18.0" prefWidth="122.0" text="Wybrane pliki" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <RadioButton fx:id="encryptFiles" mnemonicParsing="false" onMouseClicked="#encodeRadioClick" prefHeight="17.0" prefWidth="196.0" text="Zaszyfruj pliki" GridPane.rowIndex="1" />
+            <RadioButton fx:id="decryptFiles" mnemonicParsing="false" onMouseClicked="#decodeRadioClick" prefHeight="17.0" prefWidth="187.0" text="Odszyfruj pliki" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button fx:id="encryptOrDecryptFilesBtn" alignment="CENTER" cache="true" contentDisplay="TEXT_ONLY" mnemonicParsing="false" onMouseClicked="#encryptOrDecryptFilesClick" prefHeight="30.0" prefWidth="288.0" style="-fx-background-color: #673ab7; -fx-border-style: solid; -fx-border-color: #673ab7; -fx-border-width: 1;" text="Zaszyfruj pliki" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="9">
+               <font>
+                  <Font name="Calibri" size="16.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <effect>
+                  <DropShadow blurType="GAUSSIAN" color="#00000080" height="10.0" offsetX="2.0" offsetY="2.0" radius="4.5" width="10.0" />
+               </effect>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </Button>
+            <MenuBar fx:id="menuBar" prefHeight="28.0" prefWidth="834.0" style="-fx-background-color: #673ab7; -fx-border-color: #673ab7; -fx-border-style: solid; -fx-border-width: 1;" GridPane.columnSpan="2147483647">
+              <menus>
+                <Menu fx:id="program" mnemonicParsing="false" text="Program">
+                  <items>
+                    <MenuItem fx:id="help" mnemonicParsing="false" onAction="#helpMenuSelected" text="Pomoc" />
+                  </items>
+                </Menu>
+                <Menu fx:id="chooseLanguage" mnemonicParsing="false" text="Wybór języka">
+                  <items>
+                        <MenuItem fx:id="polish" mnemonicParsing="false" onAction="#choosePolishLanguage" text="Polish" />
+                    <MenuItem fx:id="english" mnemonicParsing="false" onAction="#chooseEnglishLanguage" text="English" />
+                  </items>
+                </Menu>
+                <Menu fx:id="fontSize" mnemonicParsing="false" text="Rozmiar czcionki">
+                  <items>
+                        <MenuItem mnemonicParsing="false" onAction="#fontSize14pxSelected" text="14px" />
+                    <MenuItem mnemonicParsing="false" onAction="#fontSize12pxSelected" text="12px" />
+                        <MenuItem mnemonicParsing="false" onAction="#fontSize10pxSelected" text="10px" />
+                  </items>
+                </Menu>
+              </menus>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </MenuBar>
+            <Label fx:id="passwordAgainLabel" prefHeight="18.0" prefWidth="263.0" text="Podaj haslo ponownie" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+            <Label fx:id="passwordLabel" prefHeight="18.0" prefWidth="317.0" text="Podaj haslo szyfrujące" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+            <TextField GridPane.columnIndex="3" GridPane.rowIndex="6" />
+            <TextField GridPane.columnIndex="3" GridPane.rowIndex="7" />
+            <Button fx:id="chooseDestinationFolder" alignment="CENTER" cache="true" contentDisplay="TEXT_ONLY" mnemonicParsing="false" onMouseClicked="#chooseDestinationFolderClick" prefHeight="32.0" prefWidth="225.0" style="-fx-background-color: #673ab7; -fx-border-style: solid; -fx-border-color: #673ab7; -fx-border-width: 1;" text="Wybierz folder docelowy" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="4">
+               <font>
+                  <Font name="Calibri" size="16.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <effect>
+                  <DropShadow blurType="GAUSSIAN" color="#00000080" height="10.0" offsetX="2.0" offsetY="2.0" radius="4.5" width="10.0" />
+               </effect>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Label fx:id="encryptionSpeedLabel" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="104.0" text="Szybkość szyfrowania " GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <RadioButton fx:id="slowEncSpeed" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="30.0" prefWidth="169.0" text="wolna" GridPane.columnIndex="3" GridPane.rowIndex="5" GridPane.valignment="TOP" />
+            <RadioButton fx:id="defaultEncSpeed" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="30.0" text="domyślna" GridPane.columnIndex="3" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+            <RadioButton fx:id="fastEncSpeed" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="30.0" text="szybka" GridPane.columnIndex="3" GridPane.rowIndex="5" GridPane.valignment="BOTTOM" />
+            <RadioButton fx:id="addHintLabel" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addHintClick" text="Dodaj podpowiedź" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+            <TextField fx:id="hintTextField" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+            <Button fx:id="clearSelection" maxWidth="1.7976931348623157E308" minWidth="140.0" mnemonicParsing="false" onAction="#clearSelectionClick" prefHeight="26.0" prefWidth="140.0" text="Wyczyść wybór" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+            <Button fx:id="showChoosenFolderPath" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showChoosenFolderPathClick" text="Pokaż wybrany folder" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+            <Button fx:id="undoSelection" maxWidth="1.7976931348623157E308" minWidth="140.0" mnemonicParsing="false" onAction="#undoSelectionClick" prefHeight="26.0" prefWidth="140.0" text="Cofnij wybór" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="3.0" right="3.0" />
+         </padding>
+      </GridPane>
+   </children>
+</AnchorPane>
