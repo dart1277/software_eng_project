@@ -6,12 +6,13 @@ import java.io.*;
 
 public class FileProvider implements FileProviderInterface {
 
-    private ArrayList<File> file_list = new ArrayList<File>();
+    private ArrayList<File> file_list = new ArrayList<>();
     private int bytesSaved;
     private Iterator<File> iter;
     private File current_file;
     private File fileToSave;
     private File destDir;
+    private String destName;
     private FileOutputStream fos;
 
     public void closeOutputFile() {
@@ -27,15 +28,22 @@ public class FileProvider implements FileProviderInterface {
             file_list.add(new File(path));
         }
         iter = file_list.iterator();
+        this.destName = "CopyFolder/";
     }
 
-    public File getNext() {
-        if (this.fos != null)
-            this.closeOutputFile();
+    public FileProvider(ArrayList<String> files_path, String destDriName) {
+        for (String path : files_path) {
+            file_list.add(new File(path));
+        }
+        iter = file_list.iterator();
+        this.destName = destDriName;
+    }
+
+     public File getNext() {
         if (this.hasNext()) {
             current_file = iter.next();
             bytesSaved = 0;
-            fileToSave = new File("CopyFolder/" + current_file.getPath());
+            fileToSave = new File(this.destName + current_file.getPath());
             destDir = fileToSave.getParentFile();
             destDir.mkdirs();
 

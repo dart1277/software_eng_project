@@ -14,12 +14,29 @@ public class CryptoException extends Exception {
      * @param message String message included in exception
      * @param throwable Throwable object the exception is built on
      */
-    public CryptoException(String message, Throwable throwable) {
+    CryptoException(String message, Throwable throwable) {
         super(message, throwable);
     }
 
-    public CryptoException(String message){
+    CryptoException(String message){
         super(message);
     }
+
+    /**
+     * Creates instance of CryptoException
+     *
+     * @param message String message included in exception
+     * @param filename String name of the file processed during ciphering process
+     */
+    CryptoException(String message, String filename){
+        super(message);
+        this.filename = filename;
+    }
+
+    public String getFileName(){
+        return this.filename;
+    }
+
+    private String filename;
 
 }

@@ -42,7 +42,7 @@ public class CryptoModule {
      *                   values 3, 2 and 1 [iterations]
      * @param inputBytes array of bytes to cipher
      * @return ciphered array of bytes
-     * @throws CryptoException
+     * @throws CryptoException when error in ciphering process occurs
      */
     public static byte[] encrypt(String key, int complexity, byte[] inputBytes)
             throws CryptoException, InvalidAlgorithmParameterException {
@@ -60,7 +60,7 @@ public class CryptoModule {
      *                   values 3, 2 and 1 [iterations]
      * @param inputBytes array of bytes to cipher
      * @return ciphered array of bytes
-     * @throws CryptoException
+     * @throws CryptoException when error in ciphering process occurs
      */
     public static byte[] decrypt(String key, int complexity, byte[] inputBytes)
             throws CryptoException, InvalidAlgorithmParameterException {
@@ -81,7 +81,7 @@ public class CryptoModule {
      *                   values 3, 2 and 1 [iterations]
      * @param inputBytes array of bytes to cipher
      * @return ciphered array of bytes
-     * @throws CryptoException
+     * @throws CryptoException when error in ciphering process occurs
      */
     private static byte[] doCrypto(int cipherMode, String key, int complexity, byte[] inputBytes)
             throws CryptoException, InvalidAlgorithmParameterException {
@@ -110,7 +110,7 @@ public class CryptoModule {
      * @param algorithmName Name of the key generation algorithm to use
      * @param transformName Name of the transformation algorithm to use
      * @return Cipher class instance
-     * @throws CryptoException
+     * @throws CryptoException when error in ciphering process occurs
      */
     private static Cipher createCipherInstance(int cipherMode, String key,
                                                String algorithmName, String transformName)

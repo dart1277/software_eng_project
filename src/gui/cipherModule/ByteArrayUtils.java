@@ -28,17 +28,17 @@ public class ByteArrayUtils {
      * @param array byte array the header is being attached to
      *
      * @return byte array with attached header
-     * @throws UnsupportedEncodingException
+     * @throws UnsupportedEncodingException when there's unsupported encoding in headers message
      */
     public static byte[] addHeader(Header header, byte[] array)
             throws UnsupportedEncodingException{
 
         String helpMessage = header.getHelpMessage();
-        String padding = header.getRawPadding().toString();
+        String padding = header.getRawPadding();
         String complexity = header.getComplexity();
 
         if(helpMessage.length() > maxMessageLength){
-            //it goes wrong
+            //IT SHOULD GO WRONG
         }
 
         Integer length = helpMessage.getBytes("UTF-8").length;
@@ -77,7 +77,7 @@ public class ByteArrayUtils {
      * @param array array to get the header from
      *
      * @return Header instance being the header of the byte array given
-     * @throws UnsupportedEncodingException
+     * @throws UnsupportedEncodingException when there's unsupported encoding in headers message
      * @throws CryptoException whenever array hasn't got encryption denotation
      */
     public static Header getHeader(byte[] array)
@@ -151,12 +151,7 @@ public class ByteArrayUtils {
 
         System.arraycopy(array, 0, denotationInArray, 0, denotation.length);
 
-
-        if(ByteArrayUtils.cipheredDenotation.equals(new String(denotationInArray))){
-           return true;
-        }
-
-        return false;
+        return ByteArrayUtils.cipheredDenotation.equals(new String(denotationInArray));
 
     }
 
@@ -166,7 +161,7 @@ public class ByteArrayUtils {
      * @param header header to check
      *
      * @return integer value being the length of a header
-     * @throws CryptoException
+     * @throws CryptoException whenever there is unsupported encoding in header's message
      */
     public static int getHeaderBytesSize(Header header) throws CryptoException{
         byte[] arr = new byte[0];
@@ -179,7 +174,16 @@ public class ByteArrayUtils {
         return arr.length;
     }
 
-
+    /**
+     * Creates header as byte array with padding
+     *
+     * @param header the Header object to use
+     * @param headingBlockSize outgoing block size
+     *
+     * @return byte array being header as bytes with padding attached
+     * @throws CryptoException whenever there is unsupported encoding in header's message
+     * @throws UnsupportedEncodingException whenever there is unsupported encoding in header's message
+     */
     public static byte[] createHeadingBlock(Header header, int headingBlockSize)
             throws CryptoException, UnsupportedEncodingException{
         int headerSize = ByteArrayUtils.getHeaderBytesSize(header);
@@ -191,6 +195,15 @@ public class ByteArrayUtils {
     }
 
 
+    /**
+     * Returns padding size required to denote in header for specified size of
+     * cipher block and specific file length
+     *
+     * @param blockSize size of single ciphering block [bytes]
+     * @param totalFileLength size of the file [bytes]
+     *
+     * @return integer being required padding to attach
+     */
     public static int getPaddingSize(int blockSize, long totalFileLength){
         while(totalFileLength - blockSize > 0){
             totalFileLength -= blockSize;
@@ -198,7 +211,15 @@ public class ByteArrayUtils {
         return blockSize - (int)totalFileLength;
     }
 
-
+    /**
+     * Extends an byte array to specified size with zeroes
+     *
+     * @param array byte array to extend
+     * @param blockSize required size of output
+     *
+     * @return byte array extended to required size
+     * @throws IOException whenever there is memory access violation during stream-based array concatenation
+     */
     public static byte[] fillArrayToBlockSize(byte[] array, int blockSize)
     throws IOException{
 
@@ -217,11 +238,17 @@ public class ByteArrayUtils {
         return outputStream.toByteArray();
     }
 
-
+    /**
+     * Removes padding from byte array
+     *
+     * @param array byte array with padding to be removed
+     * @param paddingSize padding size to be removed
+     *
+     * @return byte array with padding removed
+     */
     public static byte[] removePadding(byte[] array, int paddingSize){
         byte[] cleanArr = new byte[array.length - paddingSize];
-        for(int i = 0; i < cleanArr.length; i++)
-            cleanArr[i] = array[i];
+        System.arraycopy(array, 0, cleanArr, 0, cleanArr.length);
         return cleanArr;
     }
 
