@@ -61,7 +61,7 @@ public class FileEncryptor {
      * @param complexity Integer complexity of AES meaning number of iterations
      *                   (affects encryption time complexity)
      *                   Can be used with inner static fields
-     *                   SLOW_MODE, REGULAR_MODE, FAST_MODE of
+     *                   SLOW_MODE, REGULAR_MODE, FAST_MODE of CryptoModule
      * @param allowMultiEncryptions boolean denoting if multiencryption is allowed
      */
     public void configure(String key, Integer complexity, boolean allowMultiEncryptions) {
@@ -77,7 +77,7 @@ public class FileEncryptor {
      * @param complexity Integer complexity of AES meaning number of iterations
      *                   (affects encryption time complexity)
      *                   Can be used with inner static fields
-     *                   SLOW_MODE, REGULAR_MODE, FAST_MODE of
+     *                   SLOW_MODE, REGULAR_MODE, FAST_MODE of CryptoModule
      * @param allowMultiEncryptions boolean denoting if multiencryption is allowed
      * @param helpMessage message to attach to added header
      */
@@ -133,7 +133,7 @@ public class FileEncryptor {
      *
      * @param path path to get message from
      * @return
-     * @throws CryptoException
+     * @throws CryptoException when something goes wrong.
      */
     public String getHelpMessage(String path) throws CryptoException{
         if(!this.allowStandardMethodAccess) {
