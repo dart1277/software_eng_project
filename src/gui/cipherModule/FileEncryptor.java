@@ -16,8 +16,8 @@ public class FileEncryptor {
 
 
     /**
-     * Not safe, use only with FileProvider's getNextPrimitive() and addNextPrimitive()
-     * methods!
+     * Not safe, use only with encrypt(String, String), decrypt(String, String) and getHelpMessage(String)
+     * methods, any other usage can result with runtime errors
      *
      */
     public FileEncryptor(){
