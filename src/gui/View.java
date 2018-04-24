@@ -54,7 +54,7 @@ public class View {
         m_controller.fastEncSpeed.setText(getDisplayString("fastEncSpeed"));
         m_controller.passwordLabel.setText(getDisplayString("passwordLabel"));
         m_controller.passwordAgainLabel.setText(getDisplayString("passwordAgainLabel"));
-        m_controller.addHintLabel.setText(getDisplayString("addHintLabel"));
+        m_controller.addHint.setText(getDisplayString("addHintLabel"));
         m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("encryptFiles"));
         m_controller.help.setText(getDisplayString("help"));
         m_controller.polish.setText(getDisplayString("polish"));
@@ -95,20 +95,30 @@ public class View {
 
     /**
      * Handles situation when encode radioButton is clicked.
-     * Changes button text, background color, and fonts.
+     * Changes changes text in proper controls, background color, and fonts.
+     * Sets selection of add hint RadioButton to false.
      */
     public void encodeRadioClick(){
+        m_controller.addHint.setSelected(false);
+        setHintTextFieldVisibility(false);
+
         m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("encryptFiles"));
+        m_controller.addHint.setText(getDisplayString("addHintLabel"));
         setFonts(m_fontSize);
         setBackgroundColor("#FFFFFF");
     }
 
     /**
      * Handles situation when decode radioButton is clicked.
-     * Changes button text, background color, and fonts.
+     * Changes changes text in proper controls, background color, and fonts.
+     * Sets selection of add hint RadioButton to false.
      */
     public void decodeRadioClick(){
+        m_controller.addHint.setSelected(false);
+        setHintTextFieldVisibility(false);
+
         m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("decryptFiles"));
+        m_controller.addHint.setText(getDisplayString("showHintLabel"));
         setFonts(m_fontSize);
         setBackgroundColor("#90EE90");
     }
@@ -289,6 +299,13 @@ public class View {
         alertRootNode.setStyle(String.format("-fx-font-size: %dpt;", m_fontSize.intValue()));
     }
 
+    /**
+     * Displays hint. It is done when decryptFiles RadioButton is selected.
+     */
+    public void displayHint(){
+        m_controller.hintTextField.setDisable(true);
+        m_controller.hintTextField.setText("HINT"); //TODO: use getHelpMessage from FileEncryptor
+    }
 
     private Controller m_controller;
     private Map<String, String> m_translationMap;

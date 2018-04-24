@@ -38,6 +38,7 @@
   "passwordLabel":"Provide password",
   "passwordAgainLabel":"Provide password again",
   "addHintLabel":"Add hint",
+  "showHintLabel": "Show hint",
   "encryptFilesBtn":"Encrypt files",
   "help":"Help",
   "exit":"Exit",

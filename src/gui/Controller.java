@@ -44,7 +44,7 @@ public class Controller  implements Initializable {
     public RadioButton fastEncSpeed;
     public Label passwordLabel;
     public Label passwordAgainLabel;
-    public RadioButton addHintLabel;
+    public RadioButton addHint;
     public Button encryptOrDecryptFilesBtn;
     public MenuItem help;
     public MenuItem polish;
@@ -330,8 +330,16 @@ public class Controller  implements Initializable {
     public void  clearSelectionClick(){
         chosenFilesTree.getChildren().clear();
     }
+
+    /**
+     * Handles add hint RadioButton click.
+     */
     public void addHintClick(){
-        view.setHintTextFieldVisibility(addHintLabel.isSelected());
+        view.setHintTextFieldVisibility(addHint.isSelected());
+
+        if(decryptFiles.isSelected()){
+            view.displayHint();
+        }
     }
 
     /**

@@ -37,6 +37,7 @@
   "passwordLabel":"Podaj hasło",
   "passwordAgainLabel":"Podaj hasło ponownie",
   "addHintLabel":"Dodaj podpowiedź",
+  "showHintLabel": "Pokaż podpowiedź",
   "encryptFilesBtn":"Zaszyfruj pliki",
   "help":"Pomoc",
   "exit":"Wyjście",

@@ -127,7 +127,7 @@
             <RadioButton fx:id="slowEncSpeed" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="30.0" prefWidth="169.0" text="wolna" GridPane.columnIndex="3" GridPane.rowIndex="5" GridPane.valignment="TOP" />
             <RadioButton fx:id="defaultEncSpeed" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="30.0" text="domyślna" GridPane.columnIndex="3" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
             <RadioButton fx:id="fastEncSpeed" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="30.0" text="szybka" GridPane.columnIndex="3" GridPane.rowIndex="5" GridPane.valignment="BOTTOM" />
-            <RadioButton fx:id="addHintLabel" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addHintClick" text="Dodaj podpowiedź" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+            <RadioButton fx:id="addHint" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addHintClick" text="Dodaj podpowiedź" GridPane.columnIndex="2" GridPane.rowIndex="8" />
             <TextField fx:id="hintTextField" GridPane.columnIndex="3" GridPane.rowIndex="8" />
             <Button fx:id="clearSelection" maxWidth="1.7976931348623157E308" minWidth="140.0" mnemonicParsing="false" onAction="#clearSelectionClick" prefHeight="26.0" prefWidth="140.0" text="Wyczyść wybór" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
             <Button fx:id="showChoosenFolderPath" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showChoosenFolderPathClick" text="Pokaż wybrany folder" GridPane.columnIndex="3" GridPane.rowIndex="4" />
