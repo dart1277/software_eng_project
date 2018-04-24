@@ -28,6 +28,7 @@ public class FileEncryptor {
         this.key = FileEncryptor.defaultKey;
         this.complexity = FileEncryptor.defaultComplexity;
         this.allowMultiEncryptions = true;
+        this.header = new Header("", this.complexity.toString(), "000000");
     }
 
 
