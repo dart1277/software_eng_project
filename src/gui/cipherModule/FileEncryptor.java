@@ -376,7 +376,6 @@ public class FileEncryptor {
                 throw new CryptoException(ex.getMessage(), current.getName());
             } finally {
                 if (currIn != null) currIn.close();
-                fileProvider.closeOutputFile();
                 this.bufferedFile = null;
             }
         }
@@ -447,7 +446,6 @@ public class FileEncryptor {
                 throw new CryptoException(ex.getMessage(), current.getName());
             }
             currIn.close();
-            fileProvider.closeOutputFile();
             this.bufferedFile = null;
         }
         else{

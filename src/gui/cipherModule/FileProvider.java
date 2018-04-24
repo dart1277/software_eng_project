@@ -17,6 +17,7 @@ public class FileProvider implements FileProviderInterface {
 
     public void closeOutputFile() {
         try {
+            if(this.fos != null)
             fos.close();
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
@@ -55,7 +56,7 @@ public class FileProvider implements FileProviderInterface {
             try {
                 fos = new FileOutputStream(fileToSave);
             } catch (FileNotFoundException e) {
-                //System.out.println(e.getMessage() + " File not found primitive");
+                System.out.println(e.getMessage() + " File not found primitive");
             }
             return current_file;
         }

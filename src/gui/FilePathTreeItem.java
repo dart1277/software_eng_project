@@ -1,12 +1,16 @@
 package gui;
 
 
+import gui.cipherModule.CryptoException;
+import gui.cipherModule.CryptoModule;
+import gui.cipherModule.FileEncryptor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,6 +20,8 @@ public class FilePathTreeItem extends TreeItem<String>
         public static Image folderCollapseImage = new Image("file:img/folder.png");
         public static Image folderExpandImage = new Image("file:img/folder-open.png");
         public static Image fileImage = new Image("file:img/text-x-generic.png");
+
+        private final FileEncryptor fileEncryptor;
 
         private boolean isLeaf;
         private boolean isFirstTimeChildren=true;
@@ -32,7 +38,9 @@ public class FilePathTreeItem extends TreeItem<String>
 
         public FilePathTreeItem(File file){
             super(file.toString());
-            this.file=file;
+            this.fileEncryptor = new FileEncryptor();
+            String key = "masło_hasło";
+            this.fileEncryptor.configure(key, CryptoModule.REGULAR_MODE, true, "Masełko");            this.file=file;
             this.absolutePath=file.getAbsolutePath();
             this.isDirectory=file.isDirectory();
 
@@ -187,8 +195,15 @@ public class FilePathTreeItem extends TreeItem<String>
         {
             String newFilePath=newPathFile+"\\"+toEncrypt.getName();
             System.out.println("--encrytping:"+toEncrypt+ " --> "+newFilePath);
-            //encrypt here
-
+            try {
+                this.fileEncryptor.encrypt(toEncrypt.toString(), newPathFile);
+            }
+            catch(IOException ex){
+                System.out.println("IO error");
+            }
+            catch(CryptoException ex){
+                System.out.println("enc error");
+            }
         }
 
     }

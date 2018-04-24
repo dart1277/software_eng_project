@@ -22,9 +22,9 @@ public class CryptoTest {
 
         enc.configure(key, CryptoModule.REGULAR_MODE, true, "Masełko pizdełko");
         try {
-            enc.encrypt("software_eng_project.iml", "CopyFolder/software_eng_project.iml");
-            System.out.println(enc.getHelpMessage("CopyFolder/software_eng_project.iml"));
-            enc.decrypt("CopyFolder/software_eng_project.iml", "CopyFolder/software_eng_projectD.iml");
+            enc.encrypt("C:\\Users\\wajda\\Desktop\\pypy\\ProgramSzyfrujaceDane.odt", "C:\\Users\\wajda\\Desktop\\pypy\\ProgramSzyfrujaceDane.odt");
+            System.out.println(enc.getHelpMessage("C:/Users/wajda/Desktop/software_eng_project-master/software_eng_project-master/CopyFolder/software_eng_project.iml"));
+            enc.decrypt("C:/Users/wajda/Desktop/software_eng_project-master/software_eng_project-master/CopyFolder/software_eng_project.iml", "C:/Users/wajda/Desktop/software_eng_project-master/software_eng_project-master/CopyFolder/software_eng_projectD.iml");
 
         } catch (IOException | CryptoException ex) {
             System.out.println("!" + ex.getMessage());
