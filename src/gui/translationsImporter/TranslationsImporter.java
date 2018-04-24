@@ -31,6 +31,7 @@ public abstract class TranslationsImporter {
         }
     }
 
+    @SuppressWarnings("unchecked")
     Map<String, String> parseTranslations(String translationPath) {
         String entireJson = "{}";
         try {
