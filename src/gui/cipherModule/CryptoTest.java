@@ -16,11 +16,11 @@ import java.util.List;
 public class CryptoTest {
     public static void main(String[] args) {
 
-        String key = "Dowolnej dlugosci kurwa jego mać zadziałą";
+        String key = "Dowolnej dlugosci hasło";
 
         FileEncryptor enc = new FileEncryptor();
 
-        enc.configure(key, CryptoModule.REGULAR_MODE, true, "Masełko pizdełko");
+        enc.configure(key, CryptoModule.REGULAR_MODE, true, "Podpowiedź do hasła");
         try {
             enc.encrypt("C:\\Users\\wajda\\Desktop\\pypy\\ProgramSzyfrujaceDane.odt", "C:\\Users\\wajda\\Desktop\\pypy\\ProgramSzyfrujaceDane.odt");
             System.out.println(enc.getHelpMessage("C:/Users/wajda/Desktop/software_eng_project-master/software_eng_project-master/CopyFolder/software_eng_project.iml"));
@@ -31,7 +31,7 @@ public class CryptoTest {
         }
 
         /*
-        String key = "Dowolnej dlugosci kurwa jego mać zadziałą";
+        String key = "Dowolnej dlugosci hasło";
         File inputFile = new File("document.txt");
         File encryptedFile = new File("document_encrypted.jpg");
         File decryptedFile = new File("document_decrypted.jpg");
