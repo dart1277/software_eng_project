@@ -55,7 +55,13 @@ public class View {
         m_controller.fastEncSpeed.setText(getDisplayString("fastEncSpeed"));
         m_controller.passwordLabel.setText(getDisplayString("passwordLabel"));
         m_controller.passwordAgainLabel.setText(getDisplayString("passwordAgainLabel"));
-        m_controller.addHint.setText(getDisplayString("addHintLabel"));
+
+        if(m_controller.decryptFiles.isSelected()){
+            m_controller.addHint.setText(getDisplayString("showHintLabel"));
+        }else{
+            m_controller.addHint.setText(getDisplayString("addHintLabel"));
+        }
+        
         m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("encryptFiles"));
         m_controller.help.setText(getDisplayString("help"));
         m_controller.polish.setText(getDisplayString("polish"));
