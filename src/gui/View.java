@@ -98,6 +98,7 @@ public class View {
      * Handles situation when encode radioButton is clicked.
      * Changes changes text in proper controls, background color, and fonts.
      * Sets selection of add hint RadioButton to false.
+     * Enables hintTextField and sets its content to empty string.
      */
     public void encodeRadioClick(){
         m_controller.addHint.setSelected(false);
@@ -107,6 +108,9 @@ public class View {
         m_controller.addHint.setText(getDisplayString("addHintLabel"));
         setFonts(m_fontSize);
         setBackgroundColor("#FFFFFF");
+
+        m_controller.hintTextField.setDisable(false);
+        m_controller.hintTextField.setText("");
     }
 
     /**
