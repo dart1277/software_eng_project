@@ -20,6 +20,8 @@ public class FilePathTreeItem extends TreeItem<String>
         public static Image folderCollapseImage = new Image("file:img/folder.png");
         public static Image folderExpandImage = new Image("file:img/folder-open.png");
         public static Image fileImage = new Image("file:img/text-x-generic.png");
+        private final String extension = "chr";
+        private final String slash = System.getProperty("os.name").startsWith("Windows") ? "\\" : "/";
 
         private final FileEncryptor fileEncryptor;
 
@@ -161,7 +163,7 @@ public class FilePathTreeItem extends TreeItem<String>
                 String plik=f.getAbsolutePath();
                 if(localPath.isEmpty())
                 {
-                    plik=plik.substring(plik.lastIndexOf("\\"),plik.length());
+                    plik=plik.substring(plik.lastIndexOf(slash),plik.length());
                 }
                 else
                 {
@@ -193,10 +195,11 @@ public class FilePathTreeItem extends TreeItem<String>
         }
         public void encrypt(File toEncrypt,String newPathFile)        //encrypting function
         {
-            String newFilePath=newPathFile+"\\"+toEncrypt.getName();
+            String name = toEncrypt.getName();
+            String newFilePath=newPathFile+slash+name.substring(0,name.lastIndexOf('.')+1) + extension;
             System.out.println("--encrytping:"+toEncrypt+ " --> "+newFilePath);
             try {
-                this.fileEncryptor.encrypt(toEncrypt.toString(), newPathFile);
+                this.fileEncryptor.encrypt(toEncrypt.toString(), newFilePath);
             }
             catch(IOException ex){
                 System.out.println("IO error");
