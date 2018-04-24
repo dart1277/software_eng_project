@@ -376,6 +376,7 @@ public class FileEncryptor {
     public void encrypt(String source, String destination)
             throws IOException, CryptoException{
         if(!this.allowStandardMethodAccess) {
+            destination += FileEncryptor.extension;
             FileInputStream currIn = null;
             File current;
             this.fileProvider.addNextPrimitive(source, destination);
@@ -454,6 +455,8 @@ public class FileEncryptor {
     public void decrypt(String source, String destination)
             throws IOException, CryptoException{
         if(!this.allowStandardMethodAccess) {
+            destination = destination.substring(0,
+                    destination.length() - FileEncryptor.extension.length());
             File current;
             this.fileProvider.addNextPrimitive(source, destination);
             current = this.fileProvider.getNextPrimitive();
@@ -518,6 +521,7 @@ public class FileEncryptor {
     private String key;
     private Integer complexity;
     private Header header;
+    private static final String extension = ".chr";
     private boolean allowStandardMethodAccess;
     private boolean allowMultiEncryptions;
     private static final String defaultKey = "INSECURE_PASS";

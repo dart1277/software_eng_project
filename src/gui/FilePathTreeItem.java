@@ -196,7 +196,7 @@ public class FilePathTreeItem extends TreeItem<String>
         public void encrypt(File toEncrypt,String newPathFile)        //encrypting function
         {
             String name = toEncrypt.getName();
-            String newFilePath=newPathFile+slash+name.substring(0,name.lastIndexOf('.')+1) + extension;
+            String newFilePath=newPathFile+slash+name;
             System.out.println("--encrytping:"+toEncrypt+ " --> "+newFilePath);
             try {
                 this.fileEncryptor.encrypt(toEncrypt.toString(), newFilePath);
