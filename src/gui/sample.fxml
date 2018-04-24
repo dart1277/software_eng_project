@@ -60,7 +60,7 @@
                </padding>
             </Button>
             <StackPane fx:id="selectedFileBrowserPane" prefHeight="219.0" prefWidth="380.0" style="-fx-border-color: blue;" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-            <Label fx:id="fileSelectedLabel" prefHeight="18.0" prefWidth="122.0" text="Wybrane pliki" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Label fx:id="fileSelectedLabel" prefHeight="18.0" prefWidth="162.0" text="Wybrane pliki" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <RadioButton fx:id="encryptFiles" mnemonicParsing="false" onMouseClicked="#encodeRadioClick" prefHeight="17.0" prefWidth="196.0" text="Zaszyfruj pliki" GridPane.rowIndex="1" />
             <RadioButton fx:id="decryptFiles" mnemonicParsing="false" onMouseClicked="#decodeRadioClick" prefHeight="17.0" prefWidth="187.0" text="Odszyfruj pliki" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Button fx:id="encryptOrDecryptFilesBtn" alignment="CENTER" cache="true" contentDisplay="TEXT_ONLY" mnemonicParsing="false" onMouseClicked="#encryptOrDecryptFilesClick" prefHeight="30.0" prefWidth="288.0" style="-fx-background-color: #673ab7; -fx-border-style: solid; -fx-border-color: #673ab7; -fx-border-width: 1;" text="Zaszyfruj pliki" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="9">

@@ -92,6 +92,7 @@ public class View {
         m_fontSize = fontSize;
         String fontSizeFormat = String.format("-fx-font-size: %dpt;", m_fontSize.intValue());
         m_controller.mainGrid.setStyle(fontSizeFormat);
+        setButtonStyle(fontSize,true);
     }
     /**
      * Gets font size.

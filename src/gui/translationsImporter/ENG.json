@@ -30,7 +30,7 @@
   "program": "Program",
   "chooseLanguage":"Choose language",
   "fontSize":"Font size",
-  "chooseDestinationFolder":"Choose destination folder",
+  "chooseDestinationFolder":"Output folder",
   "encryptionSpeedLabel":"Encryption speed",
   "slowEncSpeed":"Slow",
   "defaultEncSpeed":"Default",
