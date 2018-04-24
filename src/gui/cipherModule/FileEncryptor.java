@@ -25,6 +25,9 @@ public class FileEncryptor {
         this.bufferedFile = null;
         ArrayList<String> arr = new ArrayList<>();
         this.fileProvider = new FileProvider(arr, "");
+        this.key = FileEncryptor.defaultKey;
+        this.complexity = FileEncryptor.defaultComplexity;
+        this.allowMultiEncryptions = true;
     }
 
 
@@ -36,6 +39,9 @@ public class FileEncryptor {
     public FileEncryptor(ArrayList<String> filePathArray) {
         this.fileProvider = new FileProvider(filePathArray);
         this.bufferedFile = null;
+        this.key = FileEncryptor.defaultKey;
+        this.complexity = FileEncryptor.defaultComplexity;
+        this.allowMultiEncryptions = true;
     }
 
 
@@ -51,6 +57,9 @@ public class FileEncryptor {
     public FileEncryptor(ArrayList<String> filePathArray, String destDirName){
         this.fileProvider = new FileProvider(filePathArray, destDirName);
         this.bufferedFile = null;
+        this.key = FileEncryptor.defaultKey;
+        this.complexity = FileEncryptor.defaultComplexity;
+        this.allowMultiEncryptions = true;
     }
 
 
@@ -87,6 +96,53 @@ public class FileEncryptor {
         this.complexity = complexity;
         this.header = new Header(helpMessage, complexity.toString(), "000000");
         this.allowMultiEncryptions = allowMultiEncryptions;
+    }
+
+
+    /**
+     * Sets the password required to process in file ciphering
+     *
+     * @param key String password used in ciphering process
+     */
+    public void setKey(String key){
+        this.key = key;
+    }
+
+
+    /**
+     * Sets the algorithm complexity
+     *
+     * @param complexity Integer parameter in range from 1 to 3
+     *                   Can be marked as CryptoModule.FAST_MODE
+     *                                                .REGULAR_MODE
+     *                                                .SLOW_MODE
+     */
+    public void setComplexity(Integer complexity){
+        this.complexity = complexity;
+        this.header.setComplexity(complexity);
+    }
+
+
+    /**
+     * Sets denotation whether already encrypted file can be encrypted another time
+     * (has nothing to do with complexity, because complexity affects lower level CryptoModule
+     * class, which operates on raw byte arrays, without checking headers, for what upper level
+     * classes are responsible
+     *
+     * @param allowMultiEncryptions boolean value denoting if multiple encryption is allowed for files
+     */
+    public void setMultiEncryptions(boolean allowMultiEncryptions){
+        this.allowMultiEncryptions = allowMultiEncryptions;
+    }
+
+
+    /**
+     * Sets message to attach to header, after that it can be retrieved with getHelpMessage from the file,
+     *
+     * @param helpMessage String being the message to attach
+     */
+    public void setHelpMessage(String helpMessage){
+        this.header.setHelpMessage(helpMessage);
     }
 
 
@@ -132,7 +188,9 @@ public class FileEncryptor {
      * Returns help message for specific filepath
      *
      * @param path path to get message from
-     * @return
+     *
+     * @return String message contained in file's header
+     *
      * @throws CryptoException when something goes wrong.
      */
     public String getHelpMessage(String path) throws CryptoException{
@@ -462,5 +520,7 @@ public class FileEncryptor {
     private Header header;
     private boolean allowStandardMethodAccess;
     private boolean allowMultiEncryptions;
+    private static final String defaultKey = "INSECURE_PASS";
+    private static final Integer defaultComplexity = CryptoModule.REGULAR_MODE;
 
 }

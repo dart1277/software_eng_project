@@ -16,7 +16,7 @@ public class Header {
      * @param complexity  complexity of the ciphering process used
      * @param padding     padding size added after the file
      */
-    public Header(String helpMessage, String complexity, String padding) {
+    Header(String helpMessage, String complexity, String padding) {
         this.helpMessage = helpMessage;
         if (complexity.length() != 1) {
             throw new IllegalArgumentException("Complexity string must contain single character");
@@ -28,6 +28,28 @@ public class Header {
         this.padding = padding;
     }
 
+
+    /**
+     * Sets hinting message value in the header
+     *
+     * @param helpMessage String being the message to attach
+     */
+    public void setHelpMessage(String helpMessage){
+        this.helpMessage = helpMessage;
+    }
+
+
+    /**
+     * Sets String complexity field in header based on integer complexity given
+     * Complexity should be an Integer from 1 to 3
+     *
+     * @param complexity Integer in the range from 1 to 3
+     */
+    public void setComplexity(Integer complexity){
+        this.complexity = complexity.toString();
+    }
+
+
     /**
      * Simple getter for complexity
      *
@@ -37,6 +59,7 @@ public class Header {
         return complexity;
     }
 
+
     /**
      * Simple getter for helpMessage
      *
@@ -45,6 +68,7 @@ public class Header {
     public String getHelpMessage() {
         return helpMessage;
     }
+
 
     /**
      * Simple getter for version
@@ -56,11 +80,21 @@ public class Header {
     }
 
 
+    /**
+     * Returns padding field as it is
+     *
+     * @return String padding field value
+     */
     public String getRawPadding() {
         return padding;
     }
 
 
+    /**
+     * Sets padding String value depending on int input
+     *
+     * @param padding length of padding block
+     */
     public void setPadding(int padding) {
         String paddPrim = Integer.toString(padding);
         if (padding < 10)
@@ -76,13 +110,15 @@ public class Header {
         this.padding = paddPrim;
     }
 
+
     @Override
     public String toString() {
         return "Complexity: " + getComplexity() + "\nPadding: " + getPadding() + "\nMSG: " + getHelpMessage();
     }
 
-    private final String helpMessage;
-    private final String complexity;
+
+    private String helpMessage;
+    private String complexity;
     private String padding;
 
 }
