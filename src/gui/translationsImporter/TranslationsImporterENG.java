@@ -31,7 +31,7 @@ public class TranslationsImporterENG extends TranslationsImporter {
 
     public Boolean translate(){
         String basePath = new File("").getAbsolutePath();
-        String translationPath = basePath + "\\src\\gui\\translationsImporter\\ENG.json";
+        String translationPath = basePath + getPathSuffix("ENG.json");
 
         m_translationsMap = super.parseTranslations(translationPath);
         return m_translationsMap != null;
