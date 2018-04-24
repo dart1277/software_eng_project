@@ -5,6 +5,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
+import javafx.scene.layout.Region;
 
 import java.util.Map;
 import java.util.Optional;
@@ -249,6 +250,7 @@ public class View {
      */
     public void showChosenFolderPathClick(String folderChosenPath){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         setActualFontsSizeForAlert(alert);
         alert.setTitle(getDisplayString("informationDialogMsg"));
         alert.setHeaderText(null);
