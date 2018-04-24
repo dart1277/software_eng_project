@@ -54,8 +54,8 @@ public class Controller  implements Initializable {
     public Button clearSelection;
     public TextField hintTextField;
 
-    public final ToggleGroup groupEncryptOrDecrypt = new ToggleGroup();
-    public final ToggleGroup encyptSpeed = new ToggleGroup();
+    public final ToggleGroup operationToPerformGroup = new ToggleGroup();
+    public final ToggleGroup encyptSpeedGroup = new ToggleGroup();
 
     private String currentObjectClickedFullPath; // file or folder
     private TreeItem<String> chosenFilesTree=new TreeItem<>("", new ImageView(new Image("file:img/computer.jpg")));
@@ -119,6 +119,8 @@ public class Controller  implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setToggleGroups();
+        setDefaultSelectedOperations();
         isEncrypt=true;
         folderChoosenPath="";
         setUpFileBrowser();
@@ -155,7 +157,7 @@ public class Controller  implements Initializable {
             return;
         }
         if(folderChoosenPath.isEmpty()){
-            view.folderChoosenPathEmptyAlert();
+            view.folderChosenPathEmptyAlert();
             return;
         }
 
@@ -169,14 +171,14 @@ public class Controller  implements Initializable {
 
     private void encryptFiles(){
         System.out.println("encryptFiles");
-        view.encryptFilesAlert();
+        view.encryptFilesStatusAlert();
 
         startEncryptingProcedure();
     }
 
     private void decryptFiles(){
         System.out.println("decryptFiles");
-        view.decryptFilesAlert();
+        view.decryptFilesStatusAlert();
 
         startDecryptingProcedure();
     }
@@ -208,7 +210,7 @@ public class Controller  implements Initializable {
             return;
         }
 
-        Optional<ButtonType> confirmResult = view.confirmAction(currentObjectClickedFullPath);
+        Optional<ButtonType> confirmResult = view.confirmAddFileOrFolder(currentObjectClickedFullPath);
         if (confirmResult.isPresent() && confirmResult.get() == ButtonType.OK) {
             boolean result = true; // temporary
 
@@ -218,7 +220,7 @@ public class Controller  implements Initializable {
             if(result){
                 view.successMsg();
             }else{
-                view.cannotSelectFileMsg();
+                view.cannotSelectFileOrFolderMsg();
             }
         }
     }
@@ -288,10 +290,10 @@ public class Controller  implements Initializable {
 
     private void setBackgroundStyle(){
         if(isEncrypt) {
-            view.setBackgroundStyle("#FFFFFF");
+            view.setBackgroundColor("#FFFFFF");
         }
         else{
-            view.setBackgroundStyle("#90EE90");
+            view.setBackgroundColor("#90EE90");
         }
     }
 
@@ -314,11 +316,11 @@ public class Controller  implements Initializable {
     }
 
     public void helpMenuSelected(){
-        view.helpMenuSelected();
+        view.displayHelpMenu();
     }
 
     public void showChoosenFolderPathClick(){
-        view.showChoosenFolderPathClick(folderChoosenPath);
+        view.showChosenFolderPathClick(folderChoosenPath);
     }
     public void undoSelectionClick(){
         int last_item_index=chosenFilesTree.getChildren().size()-1;
@@ -330,6 +332,26 @@ public class Controller  implements Initializable {
     }
     public void addHintClick(){
         view.setHintTextFieldVisibility(addHintLabel.isSelected());
+    }
+
+    /**
+     * Sets default selected operations
+     */
+    private void setDefaultSelectedOperations(){
+        defaultEncSpeed.setSelected(true);
+        encryptFiles.setSelected(true);
+    }
+
+    /**
+     * Sets toggle groups.
+     */
+    private void setToggleGroups(){
+        slowEncSpeed.setToggleGroup(encyptSpeedGroup);
+        defaultEncSpeed.setToggleGroup(encyptSpeedGroup);
+        fastEncSpeed.setToggleGroup(encyptSpeedGroup);
+
+        encryptFiles.setToggleGroup(operationToPerformGroup);
+        decryptFiles.setToggleGroup(operationToPerformGroup);
     }
 
 }

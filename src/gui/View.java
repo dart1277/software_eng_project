@@ -3,47 +3,36 @@ package gui;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Class that handles user interface.
+ *
+ */
 public class View {
-    private Controller m_controller;
-    private Map<String, String> m_translationMap;
-    private Double m_fontSize;
-    private DialogPane alertRootNode;
 
+    /**
+     * Creates an view with controller and translationsMap.
+     * Sets by default font size to 10.0.
+     * @param controller main controller.
+     * @param translationMap map with translations for all GUI elements.
+     */
     View(Controller controller, Map<String, String> translationMap){
         m_controller = controller;
         m_translationMap = translationMap;
         m_fontSize = 10.0;
-        handleRadioButtons();
-    }
-
-    public void setTranslationsMap(Map<String, String> translationsMap){
-        m_translationMap = translationsMap;
-    }
-    private void styleAlert(Alert alert){
-        alertRootNode = alert.getDialogPane();
-        alertRootNode.setStyle(String.format("-fx-font-size: %dpt;", getFontSize().intValue()));
     }
 
     /**
-     * Sets toggle groups and default selected operations.
-     *
+     * Sets traslation map.
+     * @param translationsMap map to set.
      */
-    private void handleRadioButtons(){
-        m_controller.slowEncSpeed.setToggleGroup(m_controller.encyptSpeed);
-        m_controller.defaultEncSpeed.setToggleGroup(m_controller.encyptSpeed);
-        m_controller.fastEncSpeed.setToggleGroup(m_controller.encyptSpeed);
-
-        m_controller.defaultEncSpeed.setSelected(true);
-
-        m_controller.encryptFiles.setToggleGroup(m_controller.groupEncryptOrDecrypt);
-        m_controller.decryptFiles.setToggleGroup(m_controller.groupEncryptOrDecrypt);
-
-        m_controller.encryptFiles.setSelected(true);
+    public void setTranslationsMap(Map<String, String> translationsMap){
+        m_translationMap = translationsMap;
     }
 
     /**
@@ -76,8 +65,8 @@ public class View {
     }
 
     /**
-     * Function that provides String to be displayed.
-     * @param displayStr String that we want to display.
+     * Provides proper string to be displayed(using translation map).
+     * @param displayStr string that we want to display.
      * @return String to display in proper translation if found - empty String otherwise.
      */
     public String getDisplayString(String displayStr){
@@ -94,21 +83,184 @@ public class View {
         m_controller.mainGrid.setStyle(fontSizeFormat);
         setButtonStyle(fontSize,true);
     }
+
     /**
-     * Gets font size.
-     * @return Double font size.
+     * Sets background color
+     * @param backgroundColor color to set.
      */
-    public Double getFontSize(){
-        return m_fontSize;
+    public void setBackgroundColor(String backgroundColor){
+        String currentStyle = m_controller.mainGrid.getStyle();
+        m_controller.mainGrid.setStyle(currentStyle + " -fx-background-color: " + backgroundColor);
     }
 
+    /**
+     * Handles situation when encode radioButton is clicked.
+     * Changes button text, background color, and fonts.
+     */
+    public void encodeRadioClick(){
+        m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("encryptFiles"));
+        setFonts(m_fontSize);
+        setBackgroundColor("#FFFFFF");
+    }
+
+    /**
+     * Handles situation when decode radioButton is clicked.
+     * Changes button text, background color, and fonts.
+     */
+    public void decodeRadioClick(){
+        m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("decryptFiles"));
+        setFonts(m_fontSize);
+        setBackgroundColor("#90EE90");
+    }
+
+    /**
+     * Displays alert when there are no files to encrypt or decrypt.
+     */
+    public void noFilesToEncryptOrDecryptAlert(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        setActualFontsSizeForAlert(alert);
+        alert.setTitle(getDisplayString("failureMsg"));
+        alert.setHeaderText(null);
+        alert.setContentText(getDisplayString("noFilesFailureMsg"));
+        alert.showAndWait();
+    }
+
+    /**
+     * Displays alert when there is empty path for chosen folder.
+     */
+    public void folderChosenPathEmptyAlert(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        setActualFontsSizeForAlert(alert);
+        alert.setTitle(getDisplayString("failureMsg"));
+        alert.setHeaderText(null);
+        alert.setContentText(getDisplayString("noDestinationFolderMsg"));
+        alert.showAndWait();
+    }
+
+    /**
+     * Displays alert with encrypt files status.
+     */
+    public void encryptFilesStatusAlert(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        setActualFontsSizeForAlert(alert);
+        alert.setTitle(getDisplayString("informationDialogMsg"));
+        alert.setHeaderText(null);
+        alert.setContentText(getDisplayString("encryptFilesStatusMsg"));
+        alert.showAndWait();
+    }
+
+    /**
+     * Displays alert with decrypt files status.
+     */
+    public void decryptFilesStatusAlert(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        setActualFontsSizeForAlert(alert);
+        alert.setTitle(getDisplayString("informationDialogMsg"));
+        alert.setHeaderText(null);
+        alert.setContentText(getDisplayString("decryptFilesStatusMsg"));
+
+        alert.showAndWait();
+    }
+
+    /**
+     * Changes destination folder color and enables button to show chosen folder path.
+     */
+    public void destinationFolderClick(){
+        m_controller.chooseDestinationFolder.setStyle("-fx-background-color: #006400");
+        m_controller.showChoosenFolderPath.setDisable(false);
+    }
+
+    /**
+     * Displays alert when no object is clicked.
+     */
+    public void noObjectClicked(){
+        Alert alert = new Alert(Alert.AlertType.WARNING, getDisplayString("selectFileOrFolderWarning"));
+        setActualFontsSizeForAlert(alert);
+        alert.setTitle(getDisplayString("warningMsg"));
+        alert.setHeaderText("");
+        alert.showAndWait();
+    }
+
+    /**
+     * Displays alert that waits for confirmation to add file or folder.
+     * @param currentObjectClickedFullPath full path to object(file or folder) to be added.
+     *
+     * @return An {@link Optional} that contains the result.
+     * Refer to the {@link Dialog} class documentation for more detail.
+     */
+    public Optional<ButtonType> confirmAddFileOrFolder(String currentObjectClickedFullPath){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, getDisplayString("encryptionDecryptionConfirmationMsg") + currentObjectClickedFullPath + " ?");
+        setActualFontsSizeForAlert(alert);
+
+        alert.setTitle(getDisplayString("confirmationMsg"));
+        alert.setHeaderText("");
+        return alert.showAndWait();
+    }
+
+    /**
+     * Displays success message.
+     */
+    public void successMsg(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, getDisplayString("successMsg"));
+        setActualFontsSizeForAlert(alert);
+        alert.setTitle(getDisplayString("successMsg"));
+        alert.setHeaderText("");
+        alert.showAndWait();
+    }
+
+
+    /**
+     * Displays alert that informs us about the fact that we can not select a file or folder.
+     */
+    public void cannotSelectFileOrFolderMsg(){
+        Alert alert = new Alert(Alert.AlertType.ERROR, getDisplayString("cannotSelectFile"));
+        setActualFontsSizeForAlert(alert);
+        alert.setTitle(getDisplayString("cannotSelectFile"));
+        alert.setHeaderText("");
+        alert.showAndWait();
+    }
+
+    /**
+     * Displays help menu.
+     */
+    public void displayHelpMenu(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        setActualFontsSizeForAlert(alert);
+        alert.setTitle(getDisplayString("helpMenuTitle"));
+        alert.setHeaderText(null);
+        alert.setContentText(getDisplayString("helpMenuCotext"));
+
+        alert.showAndWait();
+    }
+
+    /**
+     * Displays path to chosen folder.
+     * @param folderChosenPath path to chosen folder.
+     */
+    public void showChosenFolderPathClick(String folderChosenPath){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        setActualFontsSizeForAlert(alert);
+        alert.setTitle(getDisplayString("informationDialogMsg"));
+        alert.setHeaderText(null);
+        alert.setContentText(folderChosenPath);
+
+        alert.showAndWait();
+    }
+
+    /**
+     * Sets hint text visibility.
+     * @param setVisible value that indicates if we want to set it visible or not.
+     */
+    public void setHintTextFieldVisibility(Boolean setVisible){
+        m_controller.hintTextField.setVisible(setVisible);
+    }
 
     /**
      * Sets buttons size.
      * @param fontSize Double font size to set.
      * @param isEncrypt Is Encryption value
      */
-    public void setButtonStyle(Double fontSize,Boolean isEncrypt){
+    private void setButtonStyle(Double fontSize,Boolean isEncrypt){
         m_fontSize = fontSize;
         String fontSizeFormat = String.format("-fx-font-size: %dpt;", m_fontSize.intValue());
 
@@ -128,120 +280,18 @@ public class View {
         m_controller.addBtn.setStyle(buttonsStyle);
     }
 
-    public void setBackgroundStyle(String backgroundColor){
-        String currentStyle = m_controller.mainGrid.getStyle();
-        m_controller.mainGrid.setStyle(currentStyle + " -fx-background-color: " + backgroundColor);
-    }
-
-    public void encodeRadioClick(){
-        setFonts(m_fontSize);
-        m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("encryptFiles"));
-        setBackgroundStyle("#FFFFFF");
-    }
-    public void decodeRadioClick(){
-        setFonts(m_fontSize);
-        m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("decryptFiles"));
-        setBackgroundStyle("#90EE90");
-    }
-
-    public void noFilesToEncryptOrDecryptAlert(){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        styleAlert(alert);
-        alert.setTitle(getDisplayString("failureMsg"));
-        alert.setHeaderText(null);
-        alert.setContentText(getDisplayString("noFilesFailureMsg"));
-        alert.showAndWait();
-    }
-
-    public void folderChoosenPathEmptyAlert(){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        styleAlert(alert);
-        alert.setTitle(getDisplayString("failureMsg"));
-        alert.setHeaderText(null);
-        alert.setContentText(getDisplayString("noDestinationFolderMsg"));
-        alert.showAndWait();
-    }
-
-    public void encryptFilesAlert(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        styleAlert(alert);
-        alert.setTitle(getDisplayString("informationDialogMsg"));
-        alert.setHeaderText(null);
-        alert.setContentText(getDisplayString("encryptFilesStatusMsg"));
-        alert.showAndWait();
-    }
-
-    public void decryptFilesAlert(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        styleAlert(alert);
-        alert.setTitle(getDisplayString("informationDialogMsg"));
-        alert.setHeaderText(null);
-        alert.setContentText(getDisplayString("decryptFilesStatusMsg"));
-
-        alert.showAndWait();
-    }
-
-    public void destinationFolderClick(){
-        m_controller.chooseDestinationFolder.setStyle("-fx-background-color: #006400");
-        m_controller.showChoosenFolderPath.setDisable(false);
-    }
-
-    public void noObjectClicked(){
-        Alert alert = new Alert(Alert.AlertType.WARNING, getDisplayString("selectFileOrFolderWarning"));
-        styleAlert(alert);
-        alert.setTitle(getDisplayString("warningMsg"));
-        alert.setHeaderText("");
-        alert.showAndWait();
-    }
-
-    public Optional<ButtonType> confirmAction(String currentObjectClickedFullPath){
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, getDisplayString("encryptionDecryptionConfirmationMsg") + currentObjectClickedFullPath + " ?");
-        styleAlert(alert);
-
-        alert.setTitle(getDisplayString("confirmationMsg"));
-        alert.setHeaderText("");
-        return alert.showAndWait();
-    }
-
-    public void successMsg(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, getDisplayString("successMsg"));
-        styleAlert(alert);
-        alert.setTitle(getDisplayString("successMsg"));
-        alert.setHeaderText("");
-        alert.showAndWait();
-    }
-
-    public void cannotSelectFileMsg(){
-        Alert alert = new Alert(Alert.AlertType.ERROR, getDisplayString("cannotSelectFile"));
-        styleAlert(alert);
-        alert.setTitle(getDisplayString("cannotSelectFile"));
-        alert.setHeaderText("");
-        alert.showAndWait();
-    }
-
-    public void helpMenuSelected(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        styleAlert(alert);
-        alert.setTitle(getDisplayString("helpMenuTitle"));
-        alert.setHeaderText(null);
-        alert.setContentText(getDisplayString("helpMenuCotext"));
-
-        alert.showAndWait();
-    }
-
-    public void showChoosenFolderPathClick(String folderChoosenPath){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        styleAlert(alert);
-        alert.setTitle(getDisplayString("informationDialogMsg"));
-        alert.setHeaderText(null);
-        alert.setContentText(folderChoosenPath);
-
-        alert.showAndWait();
-    }
-    public void setHintTextFieldVisibility(Boolean isSelected){
-        m_controller.hintTextField.setVisible(isSelected);
+    /**
+     * Sets actual fonts size for alert.
+     * @param alert An alert which we want to set fonts size.
+     */
+    private void setActualFontsSizeForAlert(Alert alert){
+        alertRootNode = alert.getDialogPane();
+        alertRootNode.setStyle(String.format("-fx-font-size: %dpt;", m_fontSize.intValue()));
     }
 
 
-
+    private Controller m_controller;
+    private Map<String, String> m_translationMap;
+    private Double m_fontSize;
+    private DialogPane alertRootNode;
 }
