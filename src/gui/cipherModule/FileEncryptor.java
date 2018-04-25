@@ -400,8 +400,7 @@ public class FileEncryptor {
                 byte[] arrayToCipher = new byte[(int) currentBytes];
                 currIn.read(arrayToCipher, 0, (int) currentBytes);
 
-                boolean proceedEncryption = ((this.allowMultiEncryptions) ||
-                        (!ByteArrayUtils.hasCipheredDenotation(arrayToCipher)));
+                boolean proceedEncryption = true;
 
                 if (proceedEncryption) {
 
