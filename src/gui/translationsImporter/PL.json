@@ -30,7 +30,7 @@
   "program": "Program",
   "chooseLanguage":"Wybierz język",
   "fontSize":"Rozmiar czcionki",
-  "chooseDestinationFolder":"Wybierz folder docelowy",
+  "chooseDestinationFolder":"Folder docelowy",
   "folderChoosen": "Wybrany folder: ",
   "encryptionSpeedLabel":"Szybkość szyfrowania",
   "slowEncSpeed":"Wolna",
