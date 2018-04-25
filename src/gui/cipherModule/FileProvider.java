@@ -75,8 +75,10 @@ public class FileProvider implements FileProviderInterface {
     }
 
     public void cleanBrokenDestination(){
+        if(this.fos != null)
+            this.closeOutputFile();
         if(this.fileToSave.exists()){
-            this.fileToSave.deleteOnExit();
+            this.fileToSave.delete();
         }
     }
 
