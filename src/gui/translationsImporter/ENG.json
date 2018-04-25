@@ -48,7 +48,8 @@
   "english":"English",
   "showChoosenFolderPath": "Show choosen folder",
   "undoSelection": "Undo",
-  "clearSelection": "Clear list"
+  "clearSelection": "Clear list",
+  "confirmMultipleEncryption": "Confirm multiple encryption of listed files"
 
 }
 

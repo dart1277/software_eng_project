@@ -15,6 +15,8 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FilePathTreeItem extends TreeItem<String>
 {
@@ -266,6 +268,33 @@ public class FilePathTreeItem extends TreeItem<String>
         catch(CryptoException ex){
             System.out.println("enc error");
         }
+    }
+
+    private static List<String> selectedFilesList;
+
+    private void generateSelectedFilesList(){
+        File f=this.file;
+        if(f!=null && f.isDirectory())  // this is file ->keep digging deeper...
+        {
+            File[] files=f.listFiles();
+            if (files != null)
+            {
+                for(File childFile : files)
+                {
+                    new FilePathTreeItem(childFile).generateSelectedFilesList();
+                }
+            }
+        }
+        else if(f.isFile())       //this is file ->encode
+        {
+            selectedFilesList.add(f.toString());
+        }
+    }
+
+    public List<String> getSelectedFilesList(){
+        selectedFilesList = new ArrayList<>();
+        generateSelectedFilesList();
+        return selectedFilesList;
     }
 
     }

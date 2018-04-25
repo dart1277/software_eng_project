@@ -47,5 +47,6 @@
   "english":"Angielski",
   "showChoosenFolderPath": "Pokaż wybrany folder",
   "undoSelection": "Cofnij wybór",
-  "clearSelection": "Wyczyść listę"
+  "clearSelection": "Wyczyść listę",
+  "confirmMultipleEncryption": "Potwierdz wielokrotne szyfrowanie plikow"
 }

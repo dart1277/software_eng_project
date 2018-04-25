@@ -1,12 +1,11 @@
 package gui;
 
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 
+import javax.xml.soap.Text;
 import java.util.Map;
 import java.util.Optional;
 
@@ -252,6 +251,15 @@ public class View {
      */
     public Optional<ButtonType> confirmAddFileOrFolder(String currentObjectClickedFullPath){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, getDisplayString("encryptionDecryptionConfirmationMsg") + currentObjectClickedFullPath + " ?");
+        setActualFontsSizeForAlert(alert);
+
+        alert.setTitle(getDisplayString("confirmationMsg"));
+        alert.setHeaderText("");
+        return alert.showAndWait();
+    }
+
+    public Optional<ButtonType> showConfirmationAlert(String alertContent){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, alertContent);
         setActualFontsSizeForAlert(alert);
 
         alert.setTitle(getDisplayString("confirmationMsg"));

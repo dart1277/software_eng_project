@@ -1,6 +1,5 @@
 package gui;
 
-import gui.cipherModule.CryptoModule;
 import gui.cipherModule.FileEncryptor;
 import gui.translationsImporter.TranslationsImporter;
 import gui.translationsImporter.TranslationsImporterFactory;
@@ -23,8 +22,11 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class Controller  implements Initializable {
     public StackPane fileBrowserPane;
@@ -190,9 +192,34 @@ public class Controller  implements Initializable {
 
     private void encryptFiles(){
         System.out.println("encryptFiles");
-        view.encryptFilesStatusAlert();
+        List<String> list = generateSelectedFilesList();
+        List<String> chrFilesList = list.stream()
+                .filter(s -> s.endsWith(".chr"))
+                .collect(Collectors.toList());
+        if(chrFilesList.isEmpty()){
+            view.encryptFilesStatusAlert();
+            startEncryptingProcedure();
+        }
+        else
+        {
+            StringBuilder alertBuilder = new StringBuilder();
+            alertBuilder.append(view.getDisplayString("confirmMultipleEncryption") + "\n");
+            for(String file : chrFilesList){
+                alertBuilder.append(file + "\n");
+            }
 
-        startEncryptingProcedure();
+            //TODO: jak ogarniecie scroll bary, to tutaj bedzie musial byc zamiast alerta
+            Optional<ButtonType> confirmResult =  view.showConfirmationAlert(alertBuilder.toString());
+            if (confirmResult.isPresent() && confirmResult.get() == ButtonType.OK) {
+                view.encryptFilesStatusAlert();
+                startEncryptingProcedure();
+            }
+
+        }
+
+        //view.encryptFilesStatusAlert();
+
+        //startEncryptingProcedure();
     }
 
     private void decryptFiles(){
@@ -286,6 +313,24 @@ public class Controller  implements Initializable {
         else{
             System.out.println("THERE ARE NO FILES IN HERE");
         }
+    }
+
+    private List<String> generateSelectedFilesList(){
+        List<String> result = new ArrayList<>();
+        if(!chosenFilesTree.getChildren().isEmpty()) {
+            Object []chosenFilesArr=chosenFilesTree.getChildren().toArray();
+            for(Object chosenFile:chosenFilesArr)
+            {
+                String fileName=chosenFile.toString();
+
+                FilePathTreeItem fileTree=new FilePathTreeItem(new File(fileName));
+                result.addAll(fileTree.getSelectedFilesList());
+            }
+        }
+        else{
+            System.out.println("THERE ARE NO FILES IN HERE");
+        }
+        return result;
     }
 
     private void startDecryptingProcedure(){
