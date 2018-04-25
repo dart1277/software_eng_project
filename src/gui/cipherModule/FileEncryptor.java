@@ -1,5 +1,6 @@
 package gui.cipherModule;
 
+import javax.crypto.BadPaddingException;
 import java.io.*;
 import java.security.InvalidAlgorithmParameterException;
 import java.util.ArrayList;
@@ -174,8 +175,8 @@ public class FileEncryptor {
                 byte[] headingArray = new byte[FileEncryptor.headingBlockSize];
                 stream.read(headingArray, 0, FileEncryptor.headingBlockSize);
                 return ByteArrayUtils.getHeader(headingArray).getHelpMessage();
-            } catch (Exception ex) {
-                throw new CryptoException(ex.getMessage(), this.bufferedFile.getName());
+            } catch (IOException ex) {
+                throw new CryptoException(ex.getMessage(), this.bufferedFile.getPath());
             }
         }
         else{
@@ -197,14 +198,14 @@ public class FileEncryptor {
     public String getHelpMessage(String path) throws CryptoException{
         if(!this.allowStandardMethodAccess) {
             fileProvider.addNextPrimitive(path, "");
-            File msgBuffer = fileProvider.getNextPrimitive();
+            File msgBuffer = fileProvider.getNextPrimitiveNoStream();
             try {
                 FileInputStream stream = new FileInputStream(msgBuffer);
                 byte[] headingArray = new byte[FileEncryptor.headingBlockSize];
                 stream.read(headingArray, 0, FileEncryptor.headingBlockSize);
                 return ByteArrayUtils.getHeader(headingArray).getHelpMessage();
-            } catch (Exception ex) {
-                throw new CryptoException(ex.getMessage(), msgBuffer.getName());
+            } catch (IOException ex) {
+                throw new CryptoException(ex.getMessage(), msgBuffer.getPath());
             }
         }
         else{
@@ -281,8 +282,8 @@ public class FileEncryptor {
                         this.fileProvider.saveNextBytes(arrayToCipher);
                     }
                 }
-            } catch (Exception ex) {
-                throw new CryptoException(ex.getMessage(), current.getName());
+            } catch (IOException | InvalidAlgorithmParameterException ex) {
+                throw new CryptoException(ex.getMessage(), current.getPath());
             } finally {
                 if (currIn != null) currIn.close();
                 fileProvider.closeOutputFile();
@@ -353,8 +354,8 @@ public class FileEncryptor {
                         this.fileProvider.saveNextBytes(arrayToCipher);
                     }
                 }
-            } catch (Exception ex) {
-                throw new CryptoException(ex.getMessage(), current.getName());
+            } catch (BadPaddingException | IOException | InvalidAlgorithmParameterException ex) {
+                throw new CryptoException(ex.getMessage(), current.getPath());
             }
             currIn.close();
             fileProvider.closeOutputFile();
@@ -432,8 +433,8 @@ public class FileEncryptor {
                         this.fileProvider.saveNextBytes(arrayToCipher);
                     }
                 }
-            } catch (Exception ex) {
-                throw new CryptoException(ex.getMessage(), current.getName());
+            } catch (IOException | InvalidAlgorithmParameterException ex) {
+                throw new CryptoException(ex.getMessage(), current.getPath());
             } finally {
                 if (currIn != null) currIn.close();
                 this.bufferedFile = null;
@@ -480,9 +481,9 @@ public class FileEncryptor {
                 System.out.println(arrayToCipher.length);
                 System.out.println(ByteArrayUtils.getHeader(arrayToCipher));
 
-                boolean proceedDecryption = ByteArrayUtils.hasCipheredDenotation(arrayToCipher) &&
-                        ByteArrayUtils.getHeader(arrayToCipher).getComplexity().equals(this.complexity.toString());
+                this.complexity = new Integer(ByteArrayUtils.getHeader(arrayToCipher).getComplexity());
 
+                boolean proceedDecryption = ByteArrayUtils.hasCipheredDenotation(arrayToCipher);
 
                 int paddingSize = ByteArrayUtils.getHeader(arrayToCipher).getPadding();
 
@@ -501,11 +502,13 @@ public class FileEncryptor {
                         arrayToCipher = CryptoModule.decrypt(this.key, this.complexity, arrayToCipher);
                         if (remainingBytes == 0)
                             arrayToCipher = ByteArrayUtils.removePadding(arrayToCipher, paddingSize);
+
                         this.fileProvider.saveNextBytes(arrayToCipher);
                     }
                 }
-            } catch (Exception ex) {
-                throw new CryptoException(ex.getMessage(), current.getName());
+            } catch (BadPaddingException | IOException | InvalidAlgorithmParameterException ex) {
+                fileProvider.cleanBrokenDestination();
+                throw new CryptoException(ex.getMessage(), current.getPath());
             }
             currIn.close();
             this.bufferedFile = null;

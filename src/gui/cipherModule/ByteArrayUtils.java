@@ -1,4 +1,5 @@
 package gui.cipherModule;
+import javax.crypto.BadPaddingException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ByteArrayUtils {
 
     private static final Integer maxMessageLength = 99;
+    private static final Integer defaultPadding = 64;
     private static final String cipheredDenotation = "2654435769/1640531527";
 
     /**
@@ -208,7 +210,8 @@ public class ByteArrayUtils {
         while(totalFileLength - blockSize > 0){
             totalFileLength -= blockSize;
         }
-        return blockSize - (int)totalFileLength;
+        int padding = blockSize - (int)totalFileLength;
+        return padding;
     }
 
     /**
@@ -226,7 +229,9 @@ public class ByteArrayUtils {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         outputStream.write(array);
 
-        byte[] padding = new byte[blockSize - array.length];
+        int padding_size = blockSize - array.length;
+
+        byte[] padding = new byte[padding_size];
         for(int i = 0; i < padding.length; i++){
             padding[i] = 0;
         }
@@ -246,9 +251,15 @@ public class ByteArrayUtils {
      *
      * @return byte array with padding removed
      */
-    public static byte[] removePadding(byte[] array, int paddingSize){
+    public static byte[] removePadding(byte[] array, int paddingSize)
+    throws BadPaddingException{
         byte[] cleanArr = new byte[array.length - paddingSize];
+        byte[] paddingArr = new byte[paddingSize];
         System.arraycopy(array, 0, cleanArr, 0, cleanArr.length);
+        System.arraycopy(array, array.length - paddingSize, paddingArr,0, paddingSize);
+        for(byte k : paddingArr)
+            if(k != 0)
+                throw new BadPaddingException();
         return cleanArr;
     }
 
