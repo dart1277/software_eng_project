@@ -1,5 +1,7 @@
 package gui;
 
+import gui.cipherModule.CryptoModule;
+import gui.cipherModule.FileEncryptor;
 import gui.translationsImporter.TranslationsImporter;
 import gui.translationsImporter.TranslationsImporterFactory;
 import gui.translationsImporter.TranslationsImporterType;
@@ -53,6 +55,8 @@ public class Controller  implements Initializable {
     public Button undoSelection;
     public Button clearSelection;
     public TextField hintTextField;
+    public TextField passwordText;
+    public TextField passwordTextRepeat;
 
     public final ToggleGroup operationToPerformGroup = new ToggleGroup();
     public final ToggleGroup encyptSpeedGroup = new ToggleGroup();
@@ -142,16 +146,21 @@ public class Controller  implements Initializable {
     }
 
     public void encodeRadioClick(){
+        if(!isEncrypt)       //if changed
+            clearSelectionClick();
         isEncrypt=true;
         view.encodeRadioClick();
     }
 
     public void decodeRadioClick(){
+        if(isEncrypt)       //if changed
+            clearSelectionClick();
         isEncrypt=false;
         view.decodeRadioClick();
     }
 
     public void encryptOrDecryptFilesClick(){
+        //failure cases
         if(chosenFilesTree.getChildren().isEmpty()) {
             view.noFilesToEncryptOrDecryptAlert();
             return;
@@ -160,7 +169,17 @@ public class Controller  implements Initializable {
             view.folderChosenPathEmptyAlert();
             return;
         }
-
+        if(passwordText.getText().isEmpty())
+        {
+            view.noPasswordProvided();
+            return;
+        }
+        if(isEncrypt && !passwordText.getText().equals(passwordTextRepeat.getText()))
+        {
+            view.passwordsNotEqual();
+            return;
+        }
+        //start procedure
         if (isEncrypt){
             encryptFiles();
         }
@@ -224,8 +243,36 @@ public class Controller  implements Initializable {
             }
         }
     }
+    public int getEncryptionSpeedValue()
+    {
+        //get speed value from encryption speed controls on gui
+        int x=encyptSpeedGroup.getSelectedToggle().selectedProperty().toString().lastIndexOf("id=");
+        int y=encyptSpeedGroup.getSelectedToggle().selectedProperty().toString().indexOf(",",x);
+        String speedText=encyptSpeedGroup.getSelectedToggle().selectedProperty().toString().substring(x+3,y);
+        switch (speedText) {
+            case "fastEncSpeed":
+                return 1;
+            case "defaultEncSpeed":
+                return 2;
+            case "slowEncSpeed":
+                return 3;
+        }
+        return 2;
+    }
     private void startEncryptingProcedure()
     {
+        String pass=passwordText.getText();
+        String hint="";
+
+        int speed=getEncryptionSpeedValue();
+        if(hintTextField.getText().isEmpty())
+            hint="no hint specified";
+        else
+            hint=hintTextField.getText();
+
+        FileEncryptor fileEncryptor = new FileEncryptor();
+        fileEncryptor.configure(pass, speed, true, hint);
+
         if(!chosenFilesTree.getChildren().isEmpty()) {
             Object []chosenFilesArr=chosenFilesTree.getChildren().toArray();
             for(Object chosenFile:chosenFilesArr)
@@ -233,7 +280,7 @@ public class Controller  implements Initializable {
                 String fileName=chosenFile.toString();
 
                 FilePathTreeItem fileTree=new FilePathTreeItem(new File(fileName));
-                fileTree.encryptFileTree(folderChoosenPath,"");
+                fileTree.encryptFileTree(fileEncryptor,folderChoosenPath,"");
             }
         }
         else{
@@ -242,7 +289,26 @@ public class Controller  implements Initializable {
     }
 
     private void startDecryptingProcedure(){
-        System.out.println("Decrypting procedure. ");
+        String pass=passwordText.getText();
+
+        FileEncryptor fileEncryptor = new FileEncryptor();
+        fileEncryptor.setKey(pass);
+        //fileEncryptor.configure(pass, CryptoModule.REGULAR_MODE, true, "Masełko");
+
+
+        if(!chosenFilesTree.getChildren().isEmpty()) {
+            Object []chosenFilesArr=chosenFilesTree.getChildren().toArray();
+            for(Object chosenFile:chosenFilesArr)
+            {
+                String fileName=chosenFile.toString();
+
+                FilePathTreeItem fileTree=new FilePathTreeItem(new File(fileName));
+                fileTree.decryptFileTree(fileEncryptor,folderChoosenPath,"");
+            }
+        }
+        else{
+            System.out.println("THERE ARE NO FILES IN HERE");
+        }
     }
 
     private boolean checkIfNodeAlreadyAdded(String newPath)

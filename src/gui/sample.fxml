@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
    <children>
       <GridPane fx:id="mainGrid" hgap="10.0" layoutX="43.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" vgap="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
@@ -40,6 +40,7 @@
             <RowConstraints maxHeight="24.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
+            <TextField fx:id="passwordText" GridPane.columnIndex="3" GridPane.rowIndex="6" />
             <StackPane fx:id="fileBrowserPane" prefHeight="419.0" prefWidth="380.0" style="-fx-border-color: blue;" GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.rowSpan="6" />
             <Label fx:id="fileBrowserLabel" prefHeight="17.0" prefWidth="198.0" text="Przeglądaj pliki" GridPane.rowIndex="2" />
             <Button fx:id="addBtn" alignment="CENTER" cache="true" contentDisplay="TEXT_ONLY" mnemonicParsing="false" onMouseClicked="#addFileOrFolderClick" prefHeight="30.0" prefWidth="288.0" style="-fx-background-color: #673ab7; -fx-border-style: solid; -fx-border-color: #673ab7; -fx-border-width: 1;" text="Dodaj plik/folder" textAlignment="CENTER" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="9">
@@ -107,8 +108,7 @@
             </MenuBar>
             <Label fx:id="passwordAgainLabel" prefHeight="18.0" prefWidth="263.0" text="Podaj haslo ponownie" GridPane.columnIndex="2" GridPane.rowIndex="7" />
             <Label fx:id="passwordLabel" prefHeight="18.0" prefWidth="317.0" text="Podaj haslo szyfrujące" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-            <TextField GridPane.columnIndex="3" GridPane.rowIndex="6" />
-            <TextField GridPane.columnIndex="3" GridPane.rowIndex="7" />
+            <TextField fx:id="passwordTextRepeat" GridPane.columnIndex="3" GridPane.rowIndex="7" />
             <Button fx:id="chooseDestinationFolder" alignment="CENTER" cache="true" contentDisplay="TEXT_ONLY" mnemonicParsing="false" onMouseClicked="#chooseDestinationFolderClick" prefHeight="32.0" prefWidth="225.0" style="-fx-background-color: #673ab7; -fx-border-style: solid; -fx-border-color: #673ab7; -fx-border-width: 1;" text="Wybierz folder docelowy" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="4">
                <font>
                   <Font name="Calibri" size="16.0" />

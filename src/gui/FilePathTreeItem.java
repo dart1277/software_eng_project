@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,7 +24,7 @@ public class FilePathTreeItem extends TreeItem<String>
         private final String extension = "chr";
         private final String slash = System.getProperty("os.name").startsWith("Windows") ? "\\" : "/";
 
-        private final FileEncryptor fileEncryptor;
+        //private final FileEncryptor fileEncryptor;
 
         private boolean isLeaf;
         private boolean isFirstTimeChildren=true;
@@ -40,9 +41,10 @@ public class FilePathTreeItem extends TreeItem<String>
 
         public FilePathTreeItem(File file){
             super(file.toString());
-            this.fileEncryptor = new FileEncryptor();
-            String key = "masło_hasło";
-            this.fileEncryptor.configure(key, CryptoModule.REGULAR_MODE, true, "Masełko");            this.file=file;
+            //this.fileEncryptor = new FileEncryptor();   //to remove
+            //String key = "masło_hasło";                 //to remove
+            //this.fileEncryptor.configure(key, CryptoModule.REGULAR_MODE, true, "Masełko");//to remove
+            this.file=file;
             this.absolutePath=file.getAbsolutePath();
             this.isDirectory=file.isDirectory();
 
@@ -152,14 +154,13 @@ public class FilePathTreeItem extends TreeItem<String>
 
             return false;
         }
-        public void encryptFileTree(String mainPath,String localPath)
+        public void encryptFileTree(FileEncryptor fileEncryptor,String mainPath,String localPath)   //<-- old working version
         {
             File f=this.file;
             String newLocalPath="";
 
             if(f!=null && f.isDirectory())  // this is file ->keep digging deeper...
             {
-                //experimental:
                 String plik=f.getAbsolutePath();
                 if(localPath.isEmpty())
                 {
@@ -174,7 +175,8 @@ public class FilePathTreeItem extends TreeItem<String>
                 //System.out.println("creating: "+mainPath+plik);
                 Path newDirPath = Paths.get(mainPath+plik);
                 try {
-                    Files.createDirectory(newDirPath);
+                    if(!Files.exists(newDirPath))
+                        Files.createDirectory(newDirPath);
                 }catch(Exception e){ e.printStackTrace(); }
 
                 newLocalPath=plik;
@@ -183,23 +185,23 @@ public class FilePathTreeItem extends TreeItem<String>
                 {
                     for(File childFile : files)
                     {
-                        new FilePathTreeItem(childFile).encryptFileTree(mainPath,newLocalPath);
+                        new FilePathTreeItem(childFile).encryptFileTree(fileEncryptor,mainPath,newLocalPath);
                     }
                 }
             }
-            else if(f.isFile())       //this is file ->encode
+            else if(f.isFile())       //this is file --> encode
             {
                 newLocalPath=mainPath+localPath;
-                encrypt(f,newLocalPath);
+                encrypt(fileEncryptor,f,newLocalPath);
             }
         }
-        public void encrypt(File toEncrypt,String newPathFile)        //encrypting function
+        public void encrypt(FileEncryptor fileEncryptor,File toEncrypt,String newPathFile)        //encrypting function
         {
             String name = toEncrypt.getName();
             String newFilePath=newPathFile+slash+name;
             System.out.println("--encrytping:"+toEncrypt+ " --> "+newFilePath);
             try {
-                this.fileEncryptor.encrypt(toEncrypt.toString(), newFilePath);
+                fileEncryptor.encrypt(toEncrypt.toString(), newFilePath);
             }
             catch(IOException ex){
                 System.out.println("IO error");
@@ -208,5 +210,62 @@ public class FilePathTreeItem extends TreeItem<String>
                 System.out.println("enc error");
             }
         }
+    public void decryptFileTree(FileEncryptor fileEncryptor,String mainPath,String localPath)   //<-- old working version
+    {
+        File f=this.file;
+        String newLocalPath="";
+
+        if(f!=null && f.isDirectory())  // this is file ->keep digging deeper...
+        {
+            String plik=f.getAbsolutePath();
+            if(localPath.isEmpty())
+            {
+                plik=plik.substring(plik.lastIndexOf(slash),plik.length());
+            }
+            else
+            {
+                plik=plik.substring(plik.lastIndexOf(localPath),plik.length());
+            }
+
+            //--------------
+            //System.out.println("creating: "+mainPath+plik);
+            Path newDirPath = Paths.get(mainPath+plik);
+            try {
+                if(!Files.exists(newDirPath))
+                    Files.createDirectory(newDirPath);
+            }catch(Exception e){ e.printStackTrace(); }
+
+            newLocalPath=plik;
+            File[] files=f.listFiles();
+            if (files != null)
+            {
+                for(File childFile : files)
+                {
+                    new FilePathTreeItem(childFile).decryptFileTree(fileEncryptor,mainPath,newLocalPath);
+                }
+            }
+        }
+        else if(f.isFile())       //this is file --> encode
+        {
+            newLocalPath=mainPath+localPath;
+            if(f.getName().lastIndexOf(".chr")!=-1)
+                decrypt(fileEncryptor,f,newLocalPath);
+        }
+    }
+    public void decrypt(FileEncryptor fileEncryptor,File toDecrypt,String newPathFile)        //encrypting function
+    {
+        String name = toDecrypt.getName();
+        String newFilePath=newPathFile+slash+name;
+        System.out.println("--decrytping:"+toDecrypt+ " --> "+newFilePath);
+        try {
+            fileEncryptor.decrypt(toDecrypt.toString(), newFilePath);
+        }
+        catch(IOException ex){
+            System.out.println("IO error");
+        }
+        catch(CryptoException ex){
+            System.out.println("enc error");
+        }
+    }
 
     }

@@ -105,6 +105,7 @@ public class View {
      * Changes changes text in proper controls, background color, and fonts.
      * Sets selection of add hint RadioButton to false.
      * Enables hintTextField and sets its content to empty string.
+     * Shows all only encryption fields
      */
     public void encodeRadioClick(){
         m_controller.addHint.setSelected(false);
@@ -117,12 +118,21 @@ public class View {
 
         m_controller.hintTextField.setDisable(false);
         m_controller.hintTextField.setText("");
+
+        m_controller.passwordAgainLabel.setDisable(false);
+        m_controller.passwordTextRepeat.setDisable(false);
+        m_controller.encryptionSpeedLabel.setDisable(false);
+        m_controller.slowEncSpeed.setDisable(false);
+        m_controller.defaultEncSpeed.setDisable(false);
+        m_controller.fastEncSpeed.setDisable(false);
+
     }
 
     /**
      * Handles situation when decode radioButton is clicked.
      * Changes changes text in proper controls, background color, and fonts.
      * Sets selection of add hint RadioButton to false.
+     * hide all only encryption fields
      */
     public void decodeRadioClick(){
         m_controller.addHint.setSelected(false);
@@ -132,6 +142,16 @@ public class View {
         m_controller.addHint.setText(getDisplayString("showHintLabel"));
         setFonts(m_fontSize);
         setBackgroundColor("#90EE90");
+
+        m_controller.passwordAgainLabel.setDisable(true);
+        m_controller.passwordTextRepeat.setDisable(true);
+        m_controller.passwordTextRepeat.clear();
+        m_controller.encryptionSpeedLabel.setDisable(true);
+        m_controller.slowEncSpeed.setDisable(true);
+        m_controller.defaultEncSpeed.setDisable(true);
+        m_controller.fastEncSpeed.setDisable(true);
+
+
     }
 
     /**
@@ -167,7 +187,7 @@ public class View {
         alert.setTitle(getDisplayString("informationDialogMsg"));
         alert.setHeaderText(null);
         alert.setContentText(getDisplayString("encryptFilesStatusMsg"));
-        alert.showAndWait();
+        alert.show();
     }
 
     /**
@@ -179,7 +199,28 @@ public class View {
         alert.setTitle(getDisplayString("informationDialogMsg"));
         alert.setHeaderText(null);
         alert.setContentText(getDisplayString("decryptFilesStatusMsg"));
-
+        alert.show();
+    }
+    /**
+     * Displays alert when there is no password provided.
+     */
+    public void noPasswordProvided(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        setActualFontsSizeForAlert(alert);
+        alert.setTitle(getDisplayString("failureMsg"));
+        alert.setHeaderText(null);
+        alert.setContentText(getDisplayString("noPasswordProvided"));
+        alert.showAndWait();
+    }
+    /**
+     * Displays alert when the passwords are not equal.
+     */
+    public void passwordsNotEqual(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        setActualFontsSizeForAlert(alert);
+        alert.setTitle(getDisplayString("failureMsg"));
+        alert.setHeaderText(null);
+        alert.setContentText(getDisplayString("passwordsNotEqual"));
         alert.showAndWait();
     }
 

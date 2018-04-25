@@ -20,6 +20,8 @@
   "noFilesFailureMsg": "There are no files selected.",
   "cannotSelectFile": "Can not chose this file because it's already selected",
   "noDestinationFolderMsg": "Please choose destination folder",
+  "noPasswordProvided": "Please provide password for encryption",
+  "passwordsNotEqual": "Passwords are not equal",
 
 
   "addBtn": "Add file/folder",

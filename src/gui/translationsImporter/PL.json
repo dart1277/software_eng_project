@@ -19,6 +19,8 @@
   "noFilesFailureMsg": "Nie wybrano żadnych plików.",
   "cannotSelectFile": "Nie można wybrać tego pliku ponieważ już został wybrany",
   "noDestinationFolderMsg": "Proszę wybrać folder docelowy",
+  "noPasswordProvided": "Proszę podać hasło",
+  "passwordsNotEqual": "Podane hasła nie są takie same",
 
   "addBtn": "Dodaj plik/folder",
   "fileSelectedLabel": "Wybrane pliki",
