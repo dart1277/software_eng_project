@@ -64,6 +64,22 @@ public class FileProvider implements FileProviderInterface {
         return null;
     }
 
+    public File getNextPrimitiveNoStream(){
+        if (this.hasNext()) {
+            current_file = file_list.get(0);
+            bytesSaved = 0;
+            return current_file;
+        }
+
+        return null;
+    }
+
+    public void cleanBrokenDestination(){
+        if(this.fileToSave.exists()){
+            this.fileToSave.deleteOnExit();
+        }
+    }
+
      public File getNext() {
         if (this.hasNext()) {
             current_file = iter.next();
