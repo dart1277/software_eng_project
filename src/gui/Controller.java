@@ -298,6 +298,9 @@ public class Controller implements Initializable {
         String pass = passwordText.getText();
         String hint = "";
 
+        ArrayList<String> successList = new ArrayList<>();
+        ArrayList<String> failedList = new ArrayList<>();
+
         int speed = getEncryptionSpeedValue();
         if (hintTextField.getText().isEmpty())
             hint = "no hint specified";
@@ -313,8 +316,10 @@ public class Controller implements Initializable {
                 String fileName = chosenFile.toString();
 
                 FilePathTreeItem fileTree = new FilePathTreeItem(new File(fileName));
-                fileTree.encryptFileTree(fileEncryptor, folderChoosenPath, "");
+                fileTree.encryptFileTree(fileEncryptor, folderChoosenPath, "", successList, failedList);
+
             }
+            view.cipheringResultAlert(successList, failedList);
         } else {
             System.out.println("THERE ARE NO FILES IN HERE");
         }
@@ -341,6 +346,8 @@ public class Controller implements Initializable {
 
         FileEncryptor fileEncryptor = new FileEncryptor();
         fileEncryptor.setKey(pass);
+        ArrayList<String> successList = new ArrayList<>();
+        ArrayList<String> failedList = new ArrayList<>();
         //fileEncryptor.configure(pass, CryptoModule.REGULAR_MODE, true, "Masełko");
 
 
@@ -350,8 +357,10 @@ public class Controller implements Initializable {
                 String fileName = chosenFile.toString();
 
                 FilePathTreeItem fileTree = new FilePathTreeItem(new File(fileName));
-                fileTree.decryptFileTree(fileEncryptor, folderChoosenPath, "");
+                fileTree.decryptFileTree(fileEncryptor, folderChoosenPath, "", successList, failedList);
+
             }
+            view.cipheringResultAlert(successList, failedList);
         } else {
             System.out.println("THERE ARE NO FILES IN HERE");
         }

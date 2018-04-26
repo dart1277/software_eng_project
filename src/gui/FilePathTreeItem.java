@@ -160,7 +160,8 @@ public class FilePathTreeItem extends TreeItem<String> {
         return false;
     }
 
-    public void encryptFileTree(FileEncryptor fileEncryptor, String mainPath, String localPath)   //<-- old working version
+    public void encryptFileTree(FileEncryptor fileEncryptor, String mainPath, String localPath,
+                                ArrayList<String> successList, ArrayList<String> failedList)   //<-- old working version
     {
         File f = this.file;
         String newLocalPath = "";
@@ -188,31 +189,37 @@ public class FilePathTreeItem extends TreeItem<String> {
             File[] files = f.listFiles();
             if (files != null) {
                 for (File childFile : files) {
-                    new FilePathTreeItem(childFile).encryptFileTree(fileEncryptor, mainPath, newLocalPath);
+                    new FilePathTreeItem(childFile).encryptFileTree(fileEncryptor, mainPath, newLocalPath,
+                            successList, failedList);
                 }
             }
         } else if (f.isFile())       //this is file --> encode
         {
             newLocalPath = mainPath + localPath;
-            encrypt(fileEncryptor, f, newLocalPath);
+            encrypt(fileEncryptor, f, newLocalPath, successList, failedList);
         }
     }
 
-    public void encrypt(FileEncryptor fileEncryptor, File toEncrypt, String newPathFile)        //encrypting function
+    public void encrypt(FileEncryptor fileEncryptor, File toEncrypt, String newPathFile,
+                        ArrayList<String> successList, ArrayList<String> failedList)        //encrypting function
     {
         String name = toEncrypt.getName();
         String newFilePath = newPathFile + slash + name;
         System.out.println("--encrytping:" + toEncrypt + " --> " + newFilePath);
         try {
             fileEncryptor.encrypt(toEncrypt.toString(), newFilePath);
+            successList.add(toEncrypt.toString());
         } catch (IOException ex) {
             System.out.println("IO error");
+            failedList.add(toEncrypt.toString());
         } catch (CryptoException ex) {
             System.out.println("enc error");
+            failedList.add(toEncrypt.toString());
         }
     }
 
-    public void decryptFileTree(FileEncryptor fileEncryptor, String mainPath, String localPath)   //<-- old working version
+    public void decryptFileTree(FileEncryptor fileEncryptor, String mainPath, String localPath,
+                                ArrayList<String> successList, ArrayList<String> failedList)   //<-- old working version
     {
         File f = this.file;
         String newLocalPath = "";
@@ -240,29 +247,33 @@ public class FilePathTreeItem extends TreeItem<String> {
             File[] files = f.listFiles();
             if (files != null) {
                 for (File childFile : files) {
-                    new FilePathTreeItem(childFile).decryptFileTree(fileEncryptor, mainPath, newLocalPath);
+                    new FilePathTreeItem(childFile).decryptFileTree(fileEncryptor, mainPath, newLocalPath,
+                            successList, failedList);
                 }
             }
         } else if (f.isFile())       //this is file --> encode
         {
             newLocalPath = mainPath + localPath;
             if (f.getName().lastIndexOf(".chr") != -1)
-                decrypt(fileEncryptor, f, newLocalPath);
+                decrypt(fileEncryptor, f, newLocalPath, successList, failedList);
         }
     }
 
-    public void decrypt(FileEncryptor fileEncryptor, File toDecrypt, String newPathFile)        //encrypting function
+    public void decrypt(FileEncryptor fileEncryptor, File toDecrypt, String newPathFile,
+                        ArrayList<String> successList, ArrayList<String> failedList)        //encrypting function
     {
         String name = toDecrypt.getName();
         String newFilePath = newPathFile + slash + name;
         System.out.println("--decrytping:" + toDecrypt + " --> " + newFilePath);
         try {
-                fileEncryptor.decrypt(toDecrypt.toString(), newFilePath);
-
+            fileEncryptor.decrypt(toDecrypt.toString(), newFilePath);
+            successList.add(toDecrypt.toString());
         } catch (IOException ex) {
             System.out.println("IO error");
+            failedList.add(toDecrypt.toString());
         } catch (CryptoException ex) {
             System.out.println("enc error");
+            failedList.add(toDecrypt.toString());
         }
     }
 

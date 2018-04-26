@@ -5,25 +5,30 @@ import gui.cipherModule.CryptoException;
 import gui.cipherModule.FileEncryptor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 
 import javax.xml.soap.Text;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 
 /**
  * Class that handles user interface.
- *
  */
 public class View {
 
     /**
      * Creates an view with controller and translationsMap.
      * Sets by default font size to 10.0.
-     * @param controller main controller.
+     *
+     * @param controller     main controller.
      * @param translationMap map with translations for all GUI elements.
      */
-    View(Controller controller, Map<String, String> translationMap){
+    View(Controller controller, Map<String, String> translationMap) {
         m_controller = controller;
         m_translationMap = translationMap;
         m_fontSize = 10.0;
@@ -31,16 +36,17 @@ public class View {
 
     /**
      * Sets traslation map.
+     *
      * @param translationsMap map to set.
      */
-    public void setTranslationsMap(Map<String, String> translationsMap){
+    public void setTranslationsMap(Map<String, String> translationsMap) {
         m_translationMap = translationsMap;
     }
 
     /**
      * Sets translations for all GUI elements.
      */
-    public void setTranslationsForGuiElements(){
+    public void setTranslationsForGuiElements() {
         m_controller.addBtn.setText(getDisplayString("addBtn"));
         m_controller.fileSelectedLabel.setText(getDisplayString("fileSelectedLabel"));
         m_controller.fileBrowserLabel.setText(getDisplayString("fileBrowserLabel"));
@@ -57,10 +63,10 @@ public class View {
         m_controller.passwordLabel.setText(getDisplayString("passwordLabel"));
         m_controller.passwordAgainLabel.setText(getDisplayString("passwordAgainLabel"));
 
-        if(m_controller.decryptFiles.isSelected()){
+        if (m_controller.decryptFiles.isSelected()) {
             m_controller.addHint.setText(getDisplayString("showHintLabel"));
             m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("decryptFiles"));
-        }else{
+        } else {
             m_controller.addHint.setText(getDisplayString("addHintLabel"));
             m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("encryptFiles"));
         }
@@ -75,29 +81,32 @@ public class View {
 
     /**
      * Provides proper string to be displayed(using translation map).
+     *
      * @param displayStr string that we want to display.
      * @return String to display in proper translation if found - empty String otherwise.
      */
-    public String getDisplayString(String displayStr){
+    public String getDisplayString(String displayStr) {
         return m_translationMap.getOrDefault(displayStr, "");
     }
 
     /**
      * Sets font size.
+     *
      * @param fontSize Double font size to set.
      */
-    public void setFonts(Double fontSize){
+    public void setFonts(Double fontSize) {
         m_fontSize = fontSize;
         String fontSizeFormat = String.format("-fx-font-size: %dpt;", m_fontSize.intValue());
         m_controller.mainGrid.setStyle(fontSizeFormat);
-        setButtonStyle(fontSize,true);
+        setButtonStyle(fontSize, true);
     }
 
     /**
      * Sets background color
+     *
      * @param backgroundColor color to set.
      */
-    public void setBackgroundColor(String backgroundColor){
+    public void setBackgroundColor(String backgroundColor) {
         String currentStyle = m_controller.mainGrid.getStyle();
         m_controller.mainGrid.setStyle(currentStyle + " -fx-background-color: " + backgroundColor);
     }
@@ -109,7 +118,7 @@ public class View {
      * Enables hintTextField and sets its content to empty string.
      * Shows all only encryption fields
      */
-    public void encodeRadioClick(){
+    public void encodeRadioClick() {
         m_controller.addHint.setSelected(false);
         setHintTextFieldVisibility(false);
 
@@ -136,7 +145,7 @@ public class View {
      * Sets selection of add hint RadioButton to false.
      * hide all only encryption fields
      */
-    public void decodeRadioClick(){
+    public void decodeRadioClick() {
         m_controller.addHint.setSelected(false);
         setHintTextFieldVisibility(false);
 
@@ -159,7 +168,7 @@ public class View {
     /**
      * Displays alert when there are no files to encrypt or decrypt.
      */
-    public void noFilesToEncryptOrDecryptAlert(){
+    public void noFilesToEncryptOrDecryptAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         setActualFontsSizeForAlert(alert);
         alert.setTitle(getDisplayString("failureMsg"));
@@ -171,7 +180,7 @@ public class View {
     /**
      * Displays alert when there is empty path for chosen folder.
      */
-    public void folderChosenPathEmptyAlert(){
+    public void folderChosenPathEmptyAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         setActualFontsSizeForAlert(alert);
         alert.setTitle(getDisplayString("failureMsg"));
@@ -183,7 +192,7 @@ public class View {
     /**
      * Displays alert with encrypt files status.
      */
-    public void encryptFilesStatusAlert(){
+    public void encryptFilesStatusAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         setActualFontsSizeForAlert(alert);
         alert.setTitle(getDisplayString("informationDialogMsg"));
@@ -195,7 +204,7 @@ public class View {
     /**
      * Displays alert with decrypt files status.
      */
-    public void decryptFilesStatusAlert(){
+    public void decryptFilesStatusAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         setActualFontsSizeForAlert(alert);
         alert.setTitle(getDisplayString("informationDialogMsg"));
@@ -203,10 +212,11 @@ public class View {
         alert.setContentText(getDisplayString("decryptFilesStatusMsg"));
         alert.show();
     }
+
     /**
      * Displays alert when there is no password provided.
      */
-    public void noPasswordProvided(){
+    public void noPasswordProvided() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         setActualFontsSizeForAlert(alert);
         alert.setTitle(getDisplayString("failureMsg"));
@@ -214,10 +224,11 @@ public class View {
         alert.setContentText(getDisplayString("noPasswordProvided"));
         alert.showAndWait();
     }
+
     /**
      * Displays alert when the passwords are not equal.
      */
-    public void passwordsNotEqual(){
+    public void passwordsNotEqual() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         setActualFontsSizeForAlert(alert);
         alert.setTitle(getDisplayString("failureMsg"));
@@ -229,7 +240,7 @@ public class View {
     /**
      * Changes destination folder color and enables button to show chosen folder path.
      */
-    public void destinationFolderClick(){
+    public void destinationFolderClick() {
         m_controller.chooseDestinationFolder.setStyle("-fx-background-color: #006400");
         m_controller.showChoosenFolderPath.setDisable(false);
     }
@@ -237,7 +248,7 @@ public class View {
     /**
      * Displays alert when no object is clicked.
      */
-    public void noObjectClicked(){
+    public void noObjectClicked() {
         Alert alert = new Alert(Alert.AlertType.WARNING, getDisplayString("selectFileOrFolderWarning"));
         setActualFontsSizeForAlert(alert);
         alert.setTitle(getDisplayString("warningMsg"));
@@ -247,12 +258,12 @@ public class View {
 
     /**
      * Displays alert that waits for confirmation to add file or folder.
-     * @param currentObjectClickedFullPath full path to object(file or folder) to be added.
      *
+     * @param currentObjectClickedFullPath full path to object(file or folder) to be added.
      * @return An {@link Optional} that contains the result.
      * Refer to the {@link Dialog} class documentation for more detail.
      */
-    public Optional<ButtonType> confirmAddFileOrFolder(String currentObjectClickedFullPath){
+    public Optional<ButtonType> confirmAddFileOrFolder(String currentObjectClickedFullPath) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, getDisplayString("encryptionDecryptionConfirmationMsg") + currentObjectClickedFullPath + " ?");
         setActualFontsSizeForAlert(alert);
 
@@ -261,7 +272,7 @@ public class View {
         return alert.showAndWait();
     }
 
-    public Optional<ButtonType> showConfirmationAlert(String alertContent){
+    public Optional<ButtonType> showConfirmationAlert(String alertContent) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, alertContent);
         setActualFontsSizeForAlert(alert);
 
@@ -273,7 +284,7 @@ public class View {
     /**
      * Displays success message.
      */
-    public void successMsg(){
+    public void successMsg() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, getDisplayString("successMsg"));
         setActualFontsSizeForAlert(alert);
         alert.setTitle(getDisplayString("successMsg"));
@@ -282,10 +293,54 @@ public class View {
     }
 
 
+    public void cipheringResultAlert(ArrayList<String> successList, ArrayList<String> failedList) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+        alert.setTitle("Wynik przetwarzania plików");
+        alert.setHeaderText("");
+        alert.setContentText("");
+        Label label = new Label("Przetwarzanie dało następujące wyniki");
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("POWODZENIE" + ":\n");
+        for (String s : successList) {
+            sb.append(s);
+            sb.append("\n");
+        }
+
+        sb.append("NIEPOWODZENIE" + ":\n");
+        for (String s : failedList) {
+            sb.append(s);
+            sb.append("\n");
+        }
+
+        String resultText = sb.toString();
+
+        TextArea textArea = new TextArea(resultText);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(label, 0, 0);
+        expContent.add(textArea, 0, 1);
+
+        alert.getDialogPane().setExpandableContent(expContent);
+
+        alert.showAndWait();
+    }
+
+
     /**
      * Displays alert that informs us about the fact that we can not select a file or folder.
      */
-    public void cannotSelectFileOrFolderMsg(){
+    public void cannotSelectFileOrFolderMsg() {
         Alert alert = new Alert(Alert.AlertType.ERROR, getDisplayString("cannotSelectFile"));
         setActualFontsSizeForAlert(alert);
         alert.setTitle(getDisplayString("cannotSelectFile"));
@@ -296,7 +351,7 @@ public class View {
     /**
      * Displays help menu.
      */
-    public void displayHelpMenu(){
+    public void displayHelpMenu() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         setActualFontsSizeForAlert(alert);
         alert.setTitle(getDisplayString("helpMenuTitle"));
@@ -308,9 +363,10 @@ public class View {
 
     /**
      * Displays path to chosen folder.
+     *
      * @param folderChosenPath path to chosen folder.
      */
-    public void showChosenFolderPathClick(String folderChosenPath){
+    public void showChosenFolderPathClick(String folderChosenPath) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         setActualFontsSizeForAlert(alert);
@@ -323,28 +379,30 @@ public class View {
 
     /**
      * Sets hint text visibility.
+     *
      * @param setVisible value that indicates if we want to set it visible or not.
      */
-    public void setHintTextFieldVisibility(Boolean setVisible){
+    public void setHintTextFieldVisibility(Boolean setVisible) {
         m_controller.hintTextField.setVisible(setVisible);
     }
 
     /**
      * Sets buttons size.
-     * @param fontSize Double font size to set.
+     *
+     * @param fontSize  Double font size to set.
      * @param isEncrypt Is Encryption value
      */
-    private void setButtonStyle(Double fontSize,Boolean isEncrypt){
+    private void setButtonStyle(Double fontSize, Boolean isEncrypt) {
         m_fontSize = fontSize;
         String fontSizeFormat = String.format("-fx-font-size: %dpt;", m_fontSize.intValue());
 
-        String buttonBackgroundColor="#673ab7;"; //default for encryption
-        if(!isEncrypt)
-            buttonBackgroundColor="#ccccff;";     //for decryption
+        String buttonBackgroundColor = "#673ab7;"; //default for encryption
+        if (!isEncrypt)
+            buttonBackgroundColor = "#ccccff;";     //for decryption
 
-        String buttonsStyle = "-fx-background-color: "+buttonBackgroundColor +
+        String buttonsStyle = "-fx-background-color: " + buttonBackgroundColor +
                 " -fx-border-style: solid;" +
-                " -fx-border-color: "+buttonBackgroundColor +
+                " -fx-border-color: " + buttonBackgroundColor +
                 " -fx-border-width: 1;" +
                 fontSizeFormat +
                 "-fx-font-family: \"Arial\";";
@@ -356,9 +414,10 @@ public class View {
 
     /**
      * Sets actual fonts size for alert.
+     *
      * @param alert An alert which we want to set fonts size.
      */
-    private void setActualFontsSizeForAlert(Alert alert){
+    private void setActualFontsSizeForAlert(Alert alert) {
         alertRootNode = alert.getDialogPane();
         alertRootNode.setStyle(String.format("-fx-font-size: %dpt;", m_fontSize.intValue()));
     }
@@ -366,7 +425,7 @@ public class View {
     /**
      * Displays hint. It is done when decryptFiles RadioButton is selected.
      */
-    public void displayHintFromFile(String path){
+    public void displayHintFromFile(String path) {
         m_controller.hintTextField.setDisable(true);
         FileEncryptor encryptor = new FileEncryptor();
         String hint = "No hint";
