@@ -1,6 +1,8 @@
 package gui;
 
 
+import gui.cipherModule.CryptoException;
+import gui.cipherModule.FileEncryptor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
@@ -363,9 +365,16 @@ public class View {
     /**
      * Displays hint. It is done when decryptFiles RadioButton is selected.
      */
-    public void displayHint(){
+    public void displayHintFromFile(String path){
         m_controller.hintTextField.setDisable(true);
-        m_controller.hintTextField.setText("HINT"); //TODO: use getHelpMessage from FileEncryptor
+        FileEncryptor encryptor = new FileEncryptor();
+        String hint = "No hint";
+        try {
+            hint = encryptor.getHelpMessage(path);
+        } catch (CryptoException e) {
+            //e.printStackTrace();
+        }
+        m_controller.hintTextField.setText(hint);
     }
 
     private Controller m_controller;

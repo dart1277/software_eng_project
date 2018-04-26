@@ -449,7 +449,14 @@ public class Controller  implements Initializable {
         view.setHintTextFieldVisibility(addHint.isSelected());
 
         if(decryptFiles.isSelected()){
-            view.displayHint();
+            List<String> selectedFiles = generateSelectedFilesList();
+            String randomFilePath = "";
+            for(String filePath : selectedFiles)
+                if(filePath.contains(".")){
+                    randomFilePath = filePath;
+                    break;
+                }
+            view.displayHintFromFile(randomFilePath);
         }
     }
 
