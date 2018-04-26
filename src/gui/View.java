@@ -59,11 +59,12 @@ public class View {
 
         if(m_controller.decryptFiles.isSelected()){
             m_controller.addHint.setText(getDisplayString("showHintLabel"));
+            m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("decryptFiles"));
         }else{
             m_controller.addHint.setText(getDisplayString("addHintLabel"));
+            m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("encryptFiles"));
         }
-        
-        m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("encryptFiles"));
+
         m_controller.help.setText(getDisplayString("help"));
         m_controller.polish.setText(getDisplayString("polish"));
         m_controller.english.setText(getDisplayString("english"));
