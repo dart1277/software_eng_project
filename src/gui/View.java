@@ -424,11 +424,13 @@ public class View {
 
     /**
      * Displays hint. It is done when decryptFiles RadioButton is selected.
+     *
+     * @param path path to get message from.
      */
     public void displayHintFromFile(String path) {
         m_controller.hintTextField.setDisable(true);
         FileEncryptor encryptor = new FileEncryptor();
-        String hint = "No hint";
+        String hint = getDisplayString("noHintMsg");
         try {
             hint = encryptor.getHelpMessage(path);
         } catch (CryptoException e) {
