@@ -305,14 +305,14 @@ public class View {
 
         StringBuilder sb = new StringBuilder();
 
-        if(!successList.isEmpty())
+        if (!successList.isEmpty())
             sb.append(getDisplayString("successWord") + ":\n");
         for (String s : successList) {
             sb.append(s);
             sb.append("\n");
         }
 
-        if(!failedList.isEmpty())
+        if (!failedList.isEmpty())
             sb.append(getDisplayString("failureWord") + ":\n");
         for (String s : failedList) {
             sb.append(s);

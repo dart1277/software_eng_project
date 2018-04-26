@@ -1,4 +1,5 @@
 package gui.cipherModule;
+
 /**
  * Exception thrown by CryptoModule
  *
@@ -11,29 +12,29 @@ public class CryptoException extends Exception {
     /**
      * Creates instance of CryptoException
      *
-     * @param message String message included in exception
+     * @param message   String message included in exception
      * @param throwable Throwable object the exception is built on
      */
     CryptoException(String message, Throwable throwable) {
         super(message, throwable);
     }
 
-    CryptoException(String message){
+    CryptoException(String message) {
         super(message);
     }
 
     /**
      * Creates instance of CryptoException
      *
-     * @param message String message included in exception
+     * @param message  String message included in exception
      * @param filename String name of the file processed during ciphering process
      */
-    CryptoException(String message, String filename){
+    CryptoException(String message, String filename) {
         super(message);
         this.filename = filename;
     }
 
-    public String getFileName(){
+    public String getFileName() {
         return this.filename;
     }
 

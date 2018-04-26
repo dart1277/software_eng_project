@@ -34,7 +34,7 @@ public class Header {
      *
      * @param helpMessage String being the message to attach
      */
-    public void setHelpMessage(String helpMessage){
+    public void setHelpMessage(String helpMessage) {
         this.helpMessage = helpMessage;
     }
 
@@ -45,7 +45,7 @@ public class Header {
      *
      * @param complexity Integer in the range from 1 to 3
      */
-    public void setComplexity(Integer complexity){
+    public void setComplexity(Integer complexity) {
         this.complexity = complexity.toString();
     }
 
