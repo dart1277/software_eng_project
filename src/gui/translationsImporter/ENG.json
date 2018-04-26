@@ -49,7 +49,11 @@
   "showChoosenFolderPath": "Show choosen folder",
   "undoSelection": "Undo",
   "clearSelection": "Clear list",
-  "confirmMultipleEncryption": "Confirm multiple encryption of listed files"
+  "confirmMultipleEncryption": "Confirm multiple encryption of listed files",
+  "successWord": "Success",
+  "failureWord": "Failure",
+  "processingResult": "File processing result",
+  "processingResultNote": "These are the results of file processing:"
 
 }
 

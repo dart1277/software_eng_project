@@ -193,24 +193,24 @@ public class View {
      * Displays alert with encrypt files status.
      */
     public void encryptFilesStatusAlert() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        setActualFontsSizeForAlert(alert);
-        alert.setTitle(getDisplayString("informationDialogMsg"));
-        alert.setHeaderText(null);
-        alert.setContentText(getDisplayString("encryptFilesStatusMsg"));
-        alert.show();
+        this.processingAlert = new Alert(Alert.AlertType.INFORMATION);
+        setActualFontsSizeForAlert(this.processingAlert);
+        this.processingAlert.setTitle(getDisplayString("informationDialogMsg"));
+        this.processingAlert.setHeaderText(null);
+        this.processingAlert.setContentText(getDisplayString("encryptFilesStatusMsg"));
+        this.processingAlert.show();
     }
 
     /**
      * Displays alert with decrypt files status.
      */
     public void decryptFilesStatusAlert() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        setActualFontsSizeForAlert(alert);
-        alert.setTitle(getDisplayString("informationDialogMsg"));
-        alert.setHeaderText(null);
-        alert.setContentText(getDisplayString("decryptFilesStatusMsg"));
-        alert.show();
+        this.processingAlert = new Alert(Alert.AlertType.INFORMATION);
+        setActualFontsSizeForAlert(this.processingAlert);
+        this.processingAlert.setTitle(getDisplayString("informationDialogMsg"));
+        this.processingAlert.setHeaderText(null);
+        this.processingAlert.setContentText(getDisplayString("decryptFilesStatusMsg"));
+        this.processingAlert.show();
     }
 
     /**
@@ -294,24 +294,26 @@ public class View {
 
 
     public void cipheringResultAlert(ArrayList<String> successList, ArrayList<String> failedList) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
-        alert.setTitle("Wynik przetwarzania plików");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        this.processingAlert.close();
+
+        alert.setTitle(getDisplayString("processingResult"));
         alert.setHeaderText("");
         alert.setContentText("");
-        Label label = new Label("Przetwarzanie dało następujące wyniki");
+        Label label = new Label(getDisplayString("processingResultNote"));
 
         StringBuilder sb = new StringBuilder();
 
-        if (!successList.isEmpty())
-            sb.append("POWODZENIE" + ":\n");
+        if(!successList.isEmpty())
+            sb.append(getDisplayString("successWord") + ":\n");
         for (String s : successList) {
             sb.append(s);
             sb.append("\n");
         }
 
-        if (!failedList.isEmpty())
-            sb.append("NIEPOWODZENIE" + ":\n");
+        if(!failedList.isEmpty())
+            sb.append(getDisplayString("failureWord") + ":\n");
         for (String s : failedList) {
             sb.append(s);
             sb.append("\n");
@@ -439,6 +441,7 @@ public class View {
         m_controller.hintTextField.setText(hint);
     }
 
+    private Alert processingAlert;
     private Controller m_controller;
     private Map<String, String> m_translationMap;
     private Double m_fontSize;

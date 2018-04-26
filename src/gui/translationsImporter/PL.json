@@ -48,5 +48,9 @@
   "showChoosenFolderPath": "Pokaż wybrany folder",
   "undoSelection": "Cofnij wybór",
   "clearSelection": "Wyczyść listę",
-  "confirmMultipleEncryption": "Potwierdz wielokrotne szyfrowanie plikow"
+  "confirmMultipleEncryption": "Potwierdz wielokrotne szyfrowanie plikow",
+  "successWord": "Powodzenie",
+  "failureWord": "Niepowodzenie",
+  "processingResult": "Wynik przetwarzania plików",
+  "processingResultNote": "Przetwarzanie dało następujące wyniki"
 }
