@@ -54,7 +54,8 @@
   "successWord": "Success",
   "failureWord": "Failure",
   "processingResult": "File processing result",
-  "processingResultNote": "These are the results of file processing:"
+  "processingResultNote": "These are the results of file processing:",
+  "noHintMsg": "No hint"
 
 }
 
