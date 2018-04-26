@@ -268,14 +268,16 @@ public class View {
         return alert.showAndWait();
     }
 
-    public Optional<ButtonType> showConfirmationAlert(String alertContent) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, alertContent);
-        setActualFontsSizeForAlert(alert);
 
-        alert.setTitle(getDisplayString("confirmationMsg"));
-        alert.setHeaderText("");
-        return alert.showAndWait();
-    }
+    //redundant
+//    public Optional<ButtonType> showConfirmationAlert(String alertContent) {
+//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, alertContent);
+//        setActualFontsSizeForAlert(alert);
+//
+//        alert.setTitle(getDisplayString("confirmationMsg"));
+//        alert.setHeaderText("");
+//        return alert.showAndWait();
+//    }
 
     /**
      * Displays success message.
@@ -286,6 +288,33 @@ public class View {
         alert.setTitle(getDisplayString("successMsg"));
         alert.setHeaderText("");
         alert.showAndWait();
+    }
+
+    public Optional<ButtonType> showMultipleEncryptionConfirmation(String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        alert.setTitle(getDisplayString("confirmMultipleEncryptionTitle"));
+        alert.setHeaderText("");
+        alert.setContentText("");
+        Label label = new Label(getDisplayString("confirmMultipleEncryptionNote"));
+
+        TextArea textArea = new TextArea(message);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(label, 0, 0);
+        expContent.add(textArea, 0, 1);
+
+        alert.getDialogPane().setExpandableContent(expContent);
+
+        return alert.showAndWait();
     }
 
 

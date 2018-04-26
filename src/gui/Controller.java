@@ -210,13 +210,11 @@ public class Controller implements Initializable {
             startEncryptingProcedure();
         } else {
             StringBuilder alertBuilder = new StringBuilder();
-            alertBuilder.append(view.getDisplayString("confirmMultipleEncryption") + "\n");
             for (String file : chrFilesList) {
                 alertBuilder.append(file + "\n");
             }
 
-            //TODO: jak ogarniecie scroll bary, to tutaj bedzie musial byc zamiast alerta
-            Optional<ButtonType> confirmResult = view.showConfirmationAlert(alertBuilder.toString());
+            Optional<ButtonType> confirmResult = view.showMultipleEncryptionConfirmation(alertBuilder.toString());
             if (confirmResult.isPresent() && confirmResult.get() == ButtonType.OK) {
                 view.encryptFilesStatusAlert();
                 startEncryptingProcedure();
