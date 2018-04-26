@@ -132,6 +132,8 @@ public class Controller implements Initializable {
         chosenFilesTree.setExpanded(true);
         TreeView<String> treeView = new TreeView<>(chosenFilesTree);
         selectedFileBrowserPane.getChildren().add(treeView);
+        showChoosenFolderPath.setDisable(true);
+        setHeadNodeName("");
     }
 
     @Override
