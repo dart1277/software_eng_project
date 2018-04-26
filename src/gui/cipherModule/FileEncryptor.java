@@ -371,7 +371,7 @@ public class FileEncryptor {
             destination += FileEncryptor.extension;
             FileInputStream currIn = null;
             File current;
-            this.fileProvider.addNextPrimitive(source, destination);
+            if (!this.fileProvider.addNextPrimitive(source, destination)) return; // or throw exception to fail here
             current = this.fileProvider.getNextPrimitive();
             try {
                 currIn = new FileInputStream(current);
@@ -449,7 +449,7 @@ public class FileEncryptor {
             destination = destination.substring(0,
                     destination.length() - FileEncryptor.extension.length());
             File current;
-            if (!this.fileProvider.addNextPrimitive(source, destination)) return;
+            if (!this.fileProvider.addNextPrimitive(source, destination)) return; // or throw exception to fail here
             current = this.fileProvider.getNextPrimitive();
 
             FileInputStream currIn;
