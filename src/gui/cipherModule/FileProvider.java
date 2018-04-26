@@ -40,12 +40,15 @@ public class FileProvider implements FileProviderInterface {
         this.destName = destDriName;
     }
 
-    public void addNextPrimitive(String path, String dst){
+    public boolean addNextPrimitive(String path, String dst){
         if(this.fos != null)
             closeOutputFile();
         file_list.clear();
-        file_list.add(new File(path));
         fileToSave = new File(dst);
+        if(fileToSave.exists())return false;
+        file_list.add(new File(path));
+        return true;
+
     }
 
     public File getNextPrimitive(){

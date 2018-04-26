@@ -11,7 +11,6 @@ import java.util.ArrayList;
  * @author Paweł Talaga
  * @version 1.4
  * @since 2018-18-04
- *
  */
 public class FileEncryptor {
 
@@ -19,9 +18,8 @@ public class FileEncryptor {
     /**
      * Not safe, use only with encrypt(String, String), decrypt(String, String) and getHelpMessage(String)
      * methods, any other usage can result with runtime errors
-     *
      */
-    public FileEncryptor(){
+    public FileEncryptor() {
         this.allowStandardMethodAccess = false;
         this.bufferedFile = null;
         ArrayList<String> arr = new ArrayList<>();
@@ -53,10 +51,9 @@ public class FileEncryptor {
      * given as 'DirName/' not a 'DirName'
      *
      * @param filePathArray String ArrayList of file paths to process
-     * @param destDirName String being destination directory name/path
-     *
+     * @param destDirName   String being destination directory name/path
      */
-    public FileEncryptor(ArrayList<String> filePathArray, String destDirName){
+    public FileEncryptor(ArrayList<String> filePathArray, String destDirName) {
         this.fileProvider = new FileProvider(filePathArray, destDirName);
         this.bufferedFile = null;
         this.key = FileEncryptor.defaultKey;
@@ -68,11 +65,11 @@ public class FileEncryptor {
     /**
      * Used to configure ciphering password, algorithm complexity and denote if multiencryption is allowed
      *
-     * @param key String password to use
-     * @param complexity Integer complexity of AES meaning number of iterations
-     *                   (affects encryption time complexity)
-     *                   Can be used with inner static fields
-     *                   SLOW_MODE, REGULAR_MODE, FAST_MODE of CryptoModule
+     * @param key                   String password to use
+     * @param complexity            Integer complexity of AES meaning number of iterations
+     *                              (affects encryption time complexity)
+     *                              Can be used with inner static fields
+     *                              SLOW_MODE, REGULAR_MODE, FAST_MODE of CryptoModule
      * @param allowMultiEncryptions boolean denoting if multiencryption is allowed
      */
     public void configure(String key, Integer complexity, boolean allowMultiEncryptions) {
@@ -84,13 +81,13 @@ public class FileEncryptor {
      * Used to configure ciphering password, algorithm complexity and denote if multiencryption is allowed,
      * and message added to header during encryption process
      *
-     * @param key String password to use
-     * @param complexity Integer complexity of AES meaning number of iterations
-     *                   (affects encryption time complexity)
-     *                   Can be used with inner static fields
-     *                   SLOW_MODE, REGULAR_MODE, FAST_MODE of CryptoModule
+     * @param key                   String password to use
+     * @param complexity            Integer complexity of AES meaning number of iterations
+     *                              (affects encryption time complexity)
+     *                              Can be used with inner static fields
+     *                              SLOW_MODE, REGULAR_MODE, FAST_MODE of CryptoModule
      * @param allowMultiEncryptions boolean denoting if multiencryption is allowed
-     * @param helpMessage message to attach to added header
+     * @param helpMessage           message to attach to added header
      */
     public void configure(String key, Integer complexity,
                           boolean allowMultiEncryptions, String helpMessage) {
@@ -106,7 +103,7 @@ public class FileEncryptor {
      *
      * @param key String password used in ciphering process
      */
-    public void setKey(String key){
+    public void setKey(String key) {
         this.key = key;
     }
 
@@ -116,10 +113,10 @@ public class FileEncryptor {
      *
      * @param complexity Integer parameter in range from 1 to 3
      *                   Can be marked as CryptoModule.FAST_MODE
-     *                                                .REGULAR_MODE
-     *                                                .SLOW_MODE
+     *                   .REGULAR_MODE
+     *                   .SLOW_MODE
      */
-    public void setComplexity(Integer complexity){
+    public void setComplexity(Integer complexity) {
         this.complexity = complexity;
         this.header.setComplexity(complexity);
     }
@@ -133,7 +130,7 @@ public class FileEncryptor {
      *
      * @param allowMultiEncryptions boolean value denoting if multiple encryption is allowed for files
      */
-    public void setMultiEncryptions(boolean allowMultiEncryptions){
+    public void setMultiEncryptions(boolean allowMultiEncryptions) {
         this.allowMultiEncryptions = allowMultiEncryptions;
     }
 
@@ -143,7 +140,7 @@ public class FileEncryptor {
      *
      * @param helpMessage String being the message to attach
      */
-    public void setHelpMessage(String helpMessage){
+    public void setHelpMessage(String helpMessage) {
         this.header.setHelpMessage(helpMessage);
     }
 
@@ -153,7 +150,7 @@ public class FileEncryptor {
      *
      * @return boolean value denoting whether there are still files to process
      */
-    public boolean hasNext(){
+    public boolean hasNext() {
         return fileProvider.hasNext();
     }
 
@@ -162,12 +159,11 @@ public class FileEncryptor {
      * Returns message attached to header for next file in the list
      *
      * @return String being the message attached to next files header
-     *
      * @throws CryptoException containing information on which file caused exception
      *                         (use CryptoException's getFileName() method)
      */
-    public String getHelpMessage() throws CryptoException{
-        if(this.allowStandardMethodAccess) {
+    public String getHelpMessage() throws CryptoException {
+        if (this.allowStandardMethodAccess) {
             if (this.fileProvider.hasNext())
                 this.bufferedFile = fileProvider.getNext();
             try {
@@ -178,8 +174,7 @@ public class FileEncryptor {
             } catch (IOException ex) {
                 throw new CryptoException(ex.getMessage(), this.bufferedFile.getPath());
             }
-        }
-        else{
+        } else {
             System.out.println("Standard method access blocked due to empty constructor usage");
             return "";
         }
@@ -190,13 +185,11 @@ public class FileEncryptor {
      * Returns help message for specific filepath
      *
      * @param path path to get message from
-     *
      * @return String message contained in file's header
-     *
      * @throws CryptoException when something goes wrong.
      */
-    public String getHelpMessage(String path) throws CryptoException{
-        if(!this.allowStandardMethodAccess) {
+    public String getHelpMessage(String path) throws CryptoException {
+        if (!this.allowStandardMethodAccess) {
             fileProvider.addNextPrimitive(path, "");
             File msgBuffer = fileProvider.getNextPrimitiveNoStream();
             try {
@@ -207,8 +200,7 @@ public class FileEncryptor {
             } catch (IOException ex) {
                 throw new CryptoException(ex.getMessage(), msgBuffer.getPath());
             }
-        }
-        else{
+        } else {
             System.out.println("Can access standard method getHelpMessage() only - use empty constructor to access this");
             return "";
         }
@@ -218,14 +210,14 @@ public class FileEncryptor {
     /**
      * Encrypts next file from the list
      *
-     * @throws IOException when file is nonexistent, it's not users fault to choose nonexistent file
-     *                     because he shouldn't can do it using GUI
+     * @throws IOException     when file is nonexistent, it's not users fault to choose nonexistent file
+     *                         because he shouldn't can do it using GUI
      * @throws CryptoException the only one you should worry about, contains file name
-     *                          (use getFileName method to get file for which error has occured);
+     *                         (use getFileName method to get file for which error has occured);
      */
     public void encryptNext()
-            throws IOException, CryptoException{
-        if(this.allowStandardMethodAccess) {
+            throws IOException, CryptoException {
+        if (this.allowStandardMethodAccess) {
             FileInputStream currIn = null;
             File current;
             if (this.bufferedFile == null)
@@ -289,8 +281,7 @@ public class FileEncryptor {
                 fileProvider.closeOutputFile();
                 this.bufferedFile = null;
             }
-        }
-        else{
+        } else {
             System.out.println("Standard method access blocked due to empty constructor usage");
         }
     }
@@ -299,14 +290,14 @@ public class FileEncryptor {
     /**
      * Decrypts next file from the list
      *
-     * @throws IOException when file is nonexistent, it's not users fault to choose nonexistent file
-     *                     because he shouldn't can do it using GUI
+     * @throws IOException     when file is nonexistent, it's not users fault to choose nonexistent file
+     *                         because he shouldn't can do it using GUI
      * @throws CryptoException the only one you should worry about, contains file name
-     *                          (use getFileName method to get file for which error has occured);
+     *                         (use getFileName method to get file for which error has occured);
      */
     public void decryptNext()
-            throws IOException, CryptoException{
-        if(this.allowStandardMethodAccess) {
+            throws IOException, CryptoException {
+        if (this.allowStandardMethodAccess) {
             File current;
             if (this.bufferedFile == null)
                 current = this.fileProvider.getNext();
@@ -360,8 +351,7 @@ public class FileEncryptor {
             currIn.close();
             fileProvider.closeOutputFile();
             this.bufferedFile = null;
-        }
-        else{
+        } else {
             System.out.println("Standard method access blocked due to empty constructor usage");
         }
     }
@@ -370,14 +360,14 @@ public class FileEncryptor {
     /**
      * Encrypts file from source and saves it to destination
      *
-     * @throws IOException when file is nonexistent, it's not users fault to choose nonexistent file
-     *                     because he shouldn't can do it using GUI
+     * @throws IOException     when file is nonexistent, it's not users fault to choose nonexistent file
+     *                         because he shouldn't can do it using GUI
      * @throws CryptoException the only one you should worry about, contains file name
-     *                          (use getFileName method to get file for which error has occured);
+     *                         (use getFileName method to get file for which error has occured);
      */
     public void encrypt(String source, String destination)
-            throws IOException, CryptoException{
-        if(!this.allowStandardMethodAccess) {
+            throws IOException, CryptoException {
+        if (!this.allowStandardMethodAccess) {
             destination += FileEncryptor.extension;
             FileInputStream currIn = null;
             File current;
@@ -439,8 +429,7 @@ public class FileEncryptor {
                 fileProvider.closeOutputFile();
                 this.bufferedFile = null;
             }
-        }
-        else{
+        } else {
             System.out.println("Can use only standard method encryptNext() - use empty constructor to access this");
         }
     }
@@ -449,18 +438,18 @@ public class FileEncryptor {
     /**
      * Decrypts next file from source and saves it to destination
      *
-     * @throws IOException when file is nonexistent, it's not users fault to choose nonexistent file
-     *                     because he shouldn't can do it using GUI
+     * @throws IOException     when file is nonexistent, it's not users fault to choose nonexistent file
+     *                         because he shouldn't can do it using GUI
      * @throws CryptoException the only one you should worry about, contains file name
-     *                          (use getFileName method to get file for which error has occured);
+     *                         (use getFileName method to get file for which error has occured);
      */
     public void decrypt(String source, String destination)
-            throws IOException, CryptoException{
-        if(!this.allowStandardMethodAccess) {
+            throws IOException, CryptoException {
+        if (!this.allowStandardMethodAccess) {
             destination = destination.substring(0,
                     destination.length() - FileEncryptor.extension.length());
             File current;
-            this.fileProvider.addNextPrimitive(source, destination);
+            if (!this.fileProvider.addNextPrimitive(source, destination)) return;
             current = this.fileProvider.getNextPrimitive();
 
             FileInputStream currIn;
@@ -513,8 +502,7 @@ public class FileEncryptor {
             currIn.close();
             fileProvider.closeOutputFile();
             this.bufferedFile = null;
-        }
-        else{
+        } else {
             System.out.println("Can use only standard method decryptNext() - use empty constructor to access this");
         }
     }
