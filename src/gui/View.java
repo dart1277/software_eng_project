@@ -3,15 +3,11 @@ package gui;
 
 import gui.cipherModule.CryptoException;
 import gui.cipherModule.FileEncryptor;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 
-import javax.xml.soap.Text;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;

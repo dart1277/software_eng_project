@@ -57,8 +57,8 @@ public class Controller implements Initializable {
     public Button undoSelection;
     public Button clearSelection;
     public TextField hintTextField;
-    public TextField passwordText;
-    public TextField passwordTextRepeat;
+    public PasswordField passwordText;
+    public PasswordField passwordTextRepeat;
 
     public final ToggleGroup operationToPerformGroup = new ToggleGroup();
     public final ToggleGroup encyptSpeedGroup = new ToggleGroup();
