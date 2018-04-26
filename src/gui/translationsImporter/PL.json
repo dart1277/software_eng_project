@@ -14,7 +14,7 @@
   "encryptFilesStatusMsg": "Szyfrowanie trwa, proszę czekać...",
   "decryptFilesStatusMsg": "Deszyfrowanie trwa, proszę czekać...",
   "helpMenuTitle": "Pomoc",
-  "helpMenuCotext": "Aplikację obsługuje się w następujący sposób........... ",
+  "helpMenuCotext": "Szyfrowanie:\n1. Wybierz tryb \"zaszyfruj pliki\".\n2. Dodaj pliki na listę.\n3. Wybierz folder docelowy.\n4. Wybierz szybkość szyfrowania.\n5. Wprowadź hasło.\n6. Powtórz hasło.\n7. Opcjonalnie dodaj podpowiedź.\n8. Kliknij \"Zaszyfruj pliki\"\n\nDeszyfrowanie:\n1. Wybierz tryb \"odszyfruj pliki\".\n2. Dodaj pliki na listę.\n3. Wybierz folder docelowy.\n4. Wyświetl podpowiedź jeśli nie pamiętasz hasła.\n5. Wprowadź hasło.\n6. Kliknij \"Odszyfruj pliki\".",
   "directoryChooserTitle": "Wybierz folder",
   "noFilesFailureMsg": "Nie wybrano żadnych plików.",
   "cannotSelectFile": "Nie można wybrać tego pliku ponieważ już został wybrany",

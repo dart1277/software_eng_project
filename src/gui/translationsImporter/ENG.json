@@ -14,7 +14,7 @@
   "encryptFilesStatusMsg": "Encrypting files, please wait...",
   "decryptFilesStatusMsg": "Decrypting files, please wait...",
   "helpMenuTitle": "Help",
-  "helpMenuCotext": "To use application first you have to........... ",
+  "helpMenuCotext": "Encryption:\n1. Select \"encrypt files\" mode.\n2. Add files to the list.\n3. Select output folder.\n4. Enter password.\n5. Provide password.\n6. Provide password again.\n7. Select encryption speed.\n8. Click \"encrypt files\".\n\nDecryption:\n1. Select \"decrypt files\" mode.\n2. Add files to the list.\n3. Select output folder.\n4. Show hint if you forgot password.\n5. Enter password.\n6. Click \"decrypt files\".",
   "directoryChooserTitle": "Choose directory",
   "folderChoosen": "Directory choosen: ",
   "noFilesFailureMsg": "There are no files selected.",
