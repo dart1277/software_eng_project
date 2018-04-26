@@ -303,13 +303,15 @@ public class View {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("POWODZENIE" + ":\n");
+        if (!successList.isEmpty())
+            sb.append("POWODZENIE" + ":\n");
         for (String s : successList) {
             sb.append(s);
             sb.append("\n");
         }
 
-        sb.append("NIEPOWODZENIE" + ":\n");
+        if (!failedList.isEmpty())
+            sb.append("NIEPOWODZENIE" + ":\n");
         for (String s : failedList) {
             sb.append(s);
             sb.append("\n");
