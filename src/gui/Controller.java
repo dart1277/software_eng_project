@@ -301,7 +301,7 @@ public class Controller implements Initializable {
 
         int speed = getEncryptionSpeedValue();
         if (hintTextField.getText().isEmpty())
-            hint = "no hint specified";
+            hint = view.getDisplayString("noHintMsg");
         else
             hint = hintTextField.getText();
 
