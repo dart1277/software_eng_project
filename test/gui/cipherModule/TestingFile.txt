@@ -1,0 +1,4 @@
+TestFile for testing FileEncryptor 
+encrypt
+decrypt
+12345
