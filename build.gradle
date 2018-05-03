@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'jacoco'
 
 repositories {
     mavenCentral()
@@ -52,3 +53,11 @@ jar{
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
+}
+
+check.dependsOn jacocoTestReport
