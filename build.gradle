@@ -1,0 +1,54 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/']
+
+        }
+        resources{
+            srcDirs = ['resources/']
+            includes = ['**/*.fxml','**/*.css','**/*.json']
+        }
+
+    }
+
+    test {
+        java {
+            srcDirs = ['test/']
+        }
+
+    }
+
+
+}
+
+dependencies {
+    compile 'com.owlike:genson:1.4'
+    testCompile 'junit:junit:4.12'
+
+}
+
+test{
+
+    testLogging.showStandardStreams = true
+}
+
+
+jar{
+
+    manifest {
+        attributes(
+
+                'Main-Class': 'gui.Main',
+                "Class-Path": configurations.compile.collect { it.getName() }.join(' ')
+        )
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+

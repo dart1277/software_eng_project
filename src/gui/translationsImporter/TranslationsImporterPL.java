@@ -29,8 +29,7 @@ public class TranslationsImporterPL extends TranslationsImporter {
     }
 
     public Boolean translate() {
-        String basePath = new File("").getAbsolutePath();
-        String translationPath = basePath + getPathSuffix("PL.json");
+        String translationPath = getPathSuffix("PL.json");
 
         m_translationsMap = super.parseTranslations(translationPath);
         return m_translationsMap != null;

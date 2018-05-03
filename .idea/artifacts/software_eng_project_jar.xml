@@ -2,10 +2,9 @@
   <artifact type="jar" name="software_eng_project:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/software_eng_project_jar</output-path>
     <root id="archive" name="software_eng_project.jar">
-      <element id="module-output" name="software_eng_project" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/owlike/genson/1.4/genson-1.4.jar" path-in-jar="/" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+      </element>
     </root>
   </artifact>
 </component>

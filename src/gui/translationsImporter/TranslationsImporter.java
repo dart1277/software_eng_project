@@ -3,7 +3,9 @@ package gui.translationsImporter;
 import com.owlike.genson.Genson;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -17,7 +19,7 @@ public abstract class TranslationsImporter {
     /**
      * Abstract function to get translations.
      *
-     * @return Map<String   ,       String> with required string as key and its translation as value.
+     * @return Map<String                                                                                                                               ,                                                                                                                                                                                                                                                               String> with required string as key and its translation as value.
      */
     abstract public Map<String, String> getTranslations();
 
@@ -25,21 +27,18 @@ public abstract class TranslationsImporter {
 
     public String getPathSuffix(String configFileName) {
         if (System.getProperty("os.name").startsWith("Windows")) {
-            return "\\src\\gui\\translationsImporter\\" + configFileName;
+            return configFileName;
         } else {
-            return "/src/gui/translationsImporter/" + configFileName;
+            return configFileName;
         }
     }
 
     @SuppressWarnings("unchecked")
     Map<String, String> parseTranslations(String translationPath) {
         String entireJson = "{}";
-        try {
-            entireJson = new Scanner(new File(translationPath)).useDelimiter("\\A").next();
-        } catch (FileNotFoundException e) {
-            System.out.println("Configuration file not found!");
-        }
-
+        Scanner scn = new Scanner(getClass().getResourceAsStream(translationPath));
+        entireJson = scn.useDelimiter("\\A").next();
+        scn.close();
         Genson genson = new Genson();
         return genson.deserialize(entireJson, Map.class);
     }

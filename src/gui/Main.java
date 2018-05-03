@@ -13,7 +13,7 @@ import java.nio.charset.Charset;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         double width = 1024;
         double height = 600;
@@ -27,12 +27,12 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    private static void correctEncoding(){
+    private static void correctEncoding() {
         try {
-            System.setProperty("file.encoding","UTF-8");
+            System.setProperty("file.encoding", "UTF-8");
             Field charset = Charset.class.getDeclaredField("defaultCharset");
             charset.setAccessible(true);
-            charset.set(null,null);
+            charset.set(null, null);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
