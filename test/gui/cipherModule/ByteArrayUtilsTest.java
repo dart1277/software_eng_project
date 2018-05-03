@@ -26,8 +26,9 @@ public class ByteArrayUtilsTest {
     @Test
     public void addHeader() throws UnsupportedEncodingException, CryptoException  {
 
-
-       assertEquals(head,ByteArrayUtils.getHeader(withHeader));
+       assertNotEquals(byteArr, withHeader);
+       assertNotNull(ByteArrayUtils.getHeader(withHeader));
+       assertEquals(head,ByteArrayUtils.getHeader(withHeader));//Problem
     }
 
     @Test
@@ -36,18 +37,33 @@ public class ByteArrayUtilsTest {
 
         byte[] withoutHeader = ByteArrayUtils.removeHeader(withHeader);
 
+        assertEquals(Arrays.toString(byteArr),Arrays.toString(withoutHeader));//Problem
+
+        withoutHeader = ByteArrayUtils.addHeader(head,withoutHeader);
+        withoutHeader = ByteArrayUtils.removeHeader(withoutHeader);
         assertEquals(Arrays.toString(byteArr),Arrays.toString(withoutHeader));
+
+        try {
+            byte[] withoutHeader2 = ByteArrayUtils.removeHeader(withoutHeader);
+            fail("Excetion was not thrown!");
+        }
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+            System.out.println("withoutHeader  does not have header to remove!");
+        }
     }
 
     @Test
     public void hasCipheredDenotation()   {
 
         assertTrue(ByteArrayUtils.hasCipheredDenotation(withHeader));
+
     }
 
     @Test
     public void getHeaderBytesSize() throws CryptoException, UnsupportedEncodingException {
         assertEquals(withHeader.length - byteArr.length, ByteArrayUtils.getHeaderBytesSize(head));
+        
     }
 
     @Test
