@@ -53,7 +53,7 @@ public class TranslationsImporterTest {
 
     @Test
     public void getPathSuffix() {
-
+/*
         String pathToFile = "";
         if (System.getProperty("os.name").startsWith("Windows")) {
             pathToFile = "\\src\\gui\\translationsImporter\\SomeFile.txt";
@@ -66,6 +66,9 @@ public class TranslationsImporterTest {
         assertNotNull(instancePl1.getPathSuffix("SomeFile.txt"));
         assertEquals(pathToFile, instanceEng1.getPathSuffix("SomeFile.txt"));
         assertEquals(pathToFile, instancePl1.getPathSuffix("SomeFile.txt"));
+        */
+        assertEquals("SomeName", instanceEng1.getPathSuffix("SomeName"));
+        assertEquals("SomeNamePL", instancePl1.getPathSuffix("SomeNamePL"));
     }
 
     @Test
@@ -75,6 +78,8 @@ public class TranslationsImporterTest {
         testMap.put("secondKey","secondValue");
         testMap.put("thirdKey","thirdValue");
 
+        String testJsonFile = "TestJSON.json";
+        /*
         String basePath = new File("").getAbsolutePath();
         String pathToFile = "";
         if (System.getProperty("os.name").startsWith("Windows")) {
@@ -83,12 +88,18 @@ public class TranslationsImporterTest {
         else {
             pathToFile = "/test/gui/translationsImporter/TestJSON.json";
         }
+        */
+        assertEquals(testMap, instanceEng1.parseTranslations(testJsonFile));
+        assertEquals(testMap, instancePl1.parseTranslations(testJsonFile));
 
-        assertEquals(testMap, instanceEng1.parseTranslations(basePath + pathToFile));
-        assertEquals(testMap, instancePl1.parseTranslations(basePath + pathToFile));
-
-
-        assertEquals("{}",instanceEng1.parseTranslations(basePath + "test/gui/NotExistingFile.json").toString());
+        try {
+            assertEquals("{}", instanceEng1.parseTranslations("NotExistig.json"));
+            fail("Exception was not thrown!");
+        }
+        catch (NullPointerException e)
+        {
+            System.out.println(e.getCause());
+        }
     }
 
 
