@@ -23,11 +23,26 @@ public class EncryptorTask extends Task{
         processList.add(new Pair<>(src, dst));
     }
 
+    public void setLists(ArrayList successList, ArrayList failedList){
+        this.succList = successList;
+        this.failList = failedList;
+    }
+
 
     @Override
-    public Void call() throws IOException, CryptoException{
+    public Void call(){
         for(Pair processed : this.processList){
-            this.methodCall(processed.getKey().toString(), processed.getValue().toString());
+            try {
+                this.methodCall(processed.getKey().toString(), processed.getValue().toString());
+                this.succList.add(processed.getKey().toString());
+            }
+            catch (IOException ex) {
+                System.out.println("IO error");
+                this.failList.add(processed.getKey().toString());
+            } catch (CryptoException ex) {
+                System.out.println("enc error");
+                this.failList.add(processed.getKey().toString());
+            }
         }
         return null;
     }
@@ -51,6 +66,8 @@ public class EncryptorTask extends Task{
     private int mode;
     private Task<Void> processingTask;
     private volatile ArrayList<Pair<String, String>> processList;
+    private volatile ArrayList<String> succList;
+    private volatile ArrayList<String> failList;
     private FileEncryptor encryptor;
 
 }
