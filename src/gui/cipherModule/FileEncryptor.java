@@ -61,22 +61,6 @@ public class FileEncryptor {
         this.allowMultiEncryptions = true;
     }
 
-
-    /**
-     * Used to configure ciphering password, algorithm complexity and denote if multiencryption is allowed
-     *
-     * @param key                   String password to use
-     * @param complexity            Integer complexity of AES meaning number of iterations
-     *                              (affects encryption time complexity)
-     *                              Can be used with inner static fields
-     *                              SLOW_MODE, REGULAR_MODE, FAST_MODE of CryptoModule
-     * @param allowMultiEncryptions boolean denoting if multiencryption is allowed
-     */
-    public void configure(String key, Integer complexity, boolean allowMultiEncryptions) {
-        this.configure(key, complexity, allowMultiEncryptions, "");
-    }
-
-
     /**
      * Used to configure ciphering password, algorithm complexity and denote if multiencryption is allowed,
      * and message added to header during encryption process
@@ -142,32 +126,6 @@ public class FileEncryptor {
      */
     public void setHelpMessage(String helpMessage) {
         this.header.setHelpMessage(helpMessage);
-    }
-
-
-    /**
-     * Returns message attached to header for next file in the list
-     *
-     * @return String being the message attached to next files header
-     * @throws CryptoException containing information on which file caused exception
-     *                         (use CryptoException's getFileName() method)
-     */
-    public String getHelpMessage() throws CryptoException {
-        if (this.allowStandardMethodAccess) {
-            if (this.fileProvider.hasNext())
-                this.bufferedFile = fileProvider.getNext();
-            try {
-                FileInputStream stream = new FileInputStream(this.bufferedFile);
-                byte[] headingArray = new byte[FileEncryptor.headingBlockSize];
-                stream.read(headingArray, 0, FileEncryptor.headingBlockSize);
-                return ByteArrayUtils.getHeader(headingArray).getHelpMessage();
-            } catch (IOException ex) {
-                throw new CryptoException(ex.getMessage(), this.bufferedFile.getPath());
-            }
-        } else {
-            System.out.println("Standard method access blocked due to empty constructor usage");
-            return "";
-        }
     }
 
 
