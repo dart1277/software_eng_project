@@ -8,7 +8,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -318,7 +318,7 @@ public class View {
     }
 
 
-    public void cipheringResultAlert(ArrayList<String> successList, ArrayList<String> failedList) {
+    public void cipheringResultAlert(List<String> successList, List<String> failedList) {
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         this.processingAlert.close();

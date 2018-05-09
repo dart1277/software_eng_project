@@ -3,6 +3,7 @@ package gui;
 
 import gui.cipherModule.CryptoException;
 import gui.cipherModule.CryptoModule;
+import gui.cipherModule.EncryptorTask;
 import gui.cipherModule.FileEncryptor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -160,8 +161,8 @@ public class FilePathTreeItem extends TreeItem<String> {
         return false;
     }
 
-    public void encryptFileTree(FileEncryptor fileEncryptor, String mainPath, String localPath,
-                                ArrayList<String> successList, ArrayList<String> failedList)   //<-- old working version
+    public void encryptFileTree(EncryptorTask encryptorTask, String mainPath, String localPath,
+                                List<String> successList, List<String> failedList)   //<-- old working version
     {
         File f = this.file;
         String newLocalPath = "";
@@ -189,24 +190,25 @@ public class FilePathTreeItem extends TreeItem<String> {
             File[] files = f.listFiles();
             if (files != null) {
                 for (File childFile : files) {
-                    new FilePathTreeItem(childFile).encryptFileTree(fileEncryptor, mainPath, newLocalPath,
+                    new FilePathTreeItem(childFile).encryptFileTree(encryptorTask, mainPath, newLocalPath,
                             successList, failedList);
                 }
             }
-        } else if (f.isFile())       //this is file --> encode
+        } else if (f != null && f.isFile())       //this is file --> encode
         {
             newLocalPath = mainPath + localPath;
-            encrypt(fileEncryptor, f, newLocalPath, successList, failedList);
+            encrypt(encryptorTask, f, newLocalPath, successList, failedList);
         }
     }
 
-    public void encrypt(FileEncryptor fileEncryptor, File toEncrypt, String newPathFile,
-                        ArrayList<String> successList, ArrayList<String> failedList)        //encrypting function
+    public void encrypt(EncryptorTask encryptorTask, File toEncrypt, String newPathFile,
+                        List<String> successList, List<String> failedList)        //encrypting function
     {
         String name = toEncrypt.getName();
         String newFilePath = newPathFile + slash + name;
         System.out.println("--encrytping:" + toEncrypt + " --> " + newFilePath);
-        try {
+        encryptorTask.add(toEncrypt.toString(), newFilePath);
+        /*try {
             fileEncryptor.encrypt(toEncrypt.toString(), newFilePath);
             successList.add(toEncrypt.toString());
         } catch (IOException ex) {
@@ -215,11 +217,11 @@ public class FilePathTreeItem extends TreeItem<String> {
         } catch (CryptoException ex) {
             System.out.println("enc error");
             failedList.add(toEncrypt.toString());
-        }
+        }*/
     }
 
-    public void decryptFileTree(FileEncryptor fileEncryptor, String mainPath, String localPath,
-                                ArrayList<String> successList, ArrayList<String> failedList)   //<-- old working version
+    public void decryptFileTree(EncryptorTask encryptorTask, String mainPath, String localPath,
+                                List<String> successList, List<String> failedList)   //<-- old working version
     {
         File f = this.file;
         String newLocalPath = "";
@@ -247,25 +249,26 @@ public class FilePathTreeItem extends TreeItem<String> {
             File[] files = f.listFiles();
             if (files != null) {
                 for (File childFile : files) {
-                    new FilePathTreeItem(childFile).decryptFileTree(fileEncryptor, mainPath, newLocalPath,
+                    new FilePathTreeItem(childFile).decryptFileTree(encryptorTask, mainPath, newLocalPath,
                             successList, failedList);
                 }
             }
-        } else if (f.isFile())       //this is file --> encode
+        } else if (f != null && f.isFile())       //this is file --> encode
         {
             newLocalPath = mainPath + localPath;
             if (f.getName().lastIndexOf(".chr") != -1)
-                decrypt(fileEncryptor, f, newLocalPath, successList, failedList);
+                decrypt(encryptorTask, f, newLocalPath, successList, failedList);
         }
     }
 
-    public void decrypt(FileEncryptor fileEncryptor, File toDecrypt, String newPathFile,
-                        ArrayList<String> successList, ArrayList<String> failedList)        //encrypting function
+    public void decrypt(EncryptorTask encryptorTask, File toDecrypt, String newPathFile,
+                        List<String> successList, List<String> failedList)        //encrypting function
     {
         String name = toDecrypt.getName();
         String newFilePath = newPathFile + slash + name;
         System.out.println("--decrytping:" + toDecrypt + " --> " + newFilePath);
-        try {
+        encryptorTask.add(toDecrypt.toString(), newFilePath);
+        /*try {
             fileEncryptor.decrypt(toDecrypt.toString(), newFilePath);
             successList.add(toDecrypt.toString());
         } catch (IOException ex) {
@@ -274,7 +277,7 @@ public class FilePathTreeItem extends TreeItem<String> {
         } catch (CryptoException ex) {
             System.out.println("enc error");
             failedList.add(toDecrypt.toString());
-        }
+        }*/
     }
 
     private static List<String> selectedFilesList;

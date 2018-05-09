@@ -1,9 +1,11 @@
 package gui;
 
+import gui.cipherModule.EncryptorTask;
 import gui.cipherModule.FileEncryptor;
 import gui.translationsImporter.TranslationsImporter;
 import gui.translationsImporter.TranslationsImporterFactory;
 import gui.translationsImporter.TranslationsImporterType;
+import javafx.application.Platform;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -22,10 +24,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Controller implements Initializable {
@@ -296,8 +295,8 @@ public class Controller implements Initializable {
         String pass = passwordText.getText();
         String hint = "";
 
-        ArrayList<String> successList = new ArrayList<>();
-        ArrayList<String> failedList = new ArrayList<>();
+        List<String> successList = Collections.synchronizedList(new ArrayList<>());
+        List<String> failedList = Collections.synchronizedList(new ArrayList<>());
 
         int speed = getEncryptionSpeedValue();
         if (hintTextField.getText().isEmpty())
@@ -307,17 +306,18 @@ public class Controller implements Initializable {
 
         FileEncryptor fileEncryptor = new FileEncryptor();
         fileEncryptor.configure(pass, speed, true, hint);
-
+        EncryptorTask encryptorTask = new EncryptorTask(fileEncryptor, 0, this::freezeGUI, this::unfreezeGUI);
+        encryptorTask.setLists(successList, failedList);
         if (!chosenFilesTree.getChildren().isEmpty()) {
             Object[] chosenFilesArr = chosenFilesTree.getChildren().toArray();
             for (Object chosenFile : chosenFilesArr) {
                 String fileName = chosenFile.toString();
 
                 FilePathTreeItem fileTree = new FilePathTreeItem(new File(fileName));
-                fileTree.encryptFileTree(fileEncryptor, folderChoosenPath, "", successList, failedList);
+                fileTree.encryptFileTree(encryptorTask, folderChoosenPath, "", successList, failedList);
 
             }
-            view.cipheringResultAlert(successList, failedList);
+            encryptorTask.process();
         } else {
             System.out.println("THERE ARE NO FILES IN HERE");
         }
@@ -339,13 +339,35 @@ public class Controller implements Initializable {
         return result;
     }
 
+    public void freezeGUI() {
+        Platform.runLater(() -> {
+            chooseDestinationFolder.setDisable(true);
+            encryptOrDecryptFilesBtn.setDisable(true)
+            ;
+        });
+    }
+
+    public void unfreezeGUI(List<String> successList, List<String> failedList) {
+        Platform.runLater(() -> {
+            encryptOrDecryptFilesBtn.setDisable(false);
+            chooseDestinationFolder.setDisable(false);
+            view.cipheringResultAlert(successList, failedList);
+        });
+
+
+    }
+
+
     private void startDecryptingProcedure() {
         String pass = passwordText.getText();
 
+
+        List<String> successList = Collections.synchronizedList(new ArrayList<>());
+        List<String> failedList = Collections.synchronizedList(new ArrayList<>());
         FileEncryptor fileEncryptor = new FileEncryptor();
         fileEncryptor.setKey(pass);
-        ArrayList<String> successList = new ArrayList<>();
-        ArrayList<String> failedList = new ArrayList<>();
+        EncryptorTask encryptorTask = new EncryptorTask(fileEncryptor, 1, this::freezeGUI, this::unfreezeGUI);
+        encryptorTask.setLists(successList, failedList);
         //fileEncryptor.configure(pass, CryptoModule.REGULAR_MODE, true, "Masełko");
 
 
@@ -355,10 +377,10 @@ public class Controller implements Initializable {
                 String fileName = chosenFile.toString();
 
                 FilePathTreeItem fileTree = new FilePathTreeItem(new File(fileName));
-                fileTree.decryptFileTree(fileEncryptor, folderChoosenPath, "", successList, failedList);
+                fileTree.decryptFileTree(encryptorTask, folderChoosenPath, "", successList, failedList);
 
             }
-            view.cipheringResultAlert(successList, failedList);
+            encryptorTask.process();
         } else {
             System.out.println("THERE ARE NO FILES IN HERE");
         }
