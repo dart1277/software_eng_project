@@ -1,5 +1,6 @@
 package gui;
 
+import gui.cipherModule.CryptoTask;
 import gui.cipherModule.DecryptorTask;
 import gui.cipherModule.EncryptorTask;
 import gui.cipherModule.FileEncryptor;
@@ -307,18 +308,18 @@ public class Controller implements Initializable {
 
         FileEncryptor fileEncryptor = new FileEncryptor();
         fileEncryptor.configure(pass, speed, true, hint);
-        EncryptorTask encryptorTask = new EncryptorTask(fileEncryptor, this::freezeGUI, this::unfreezeGUI);
-        encryptorTask.setLists(successList, failedList);
+        CryptoTask cryptoTask = new EncryptorTask(fileEncryptor, this::freezeGUI, this::unfreezeGUI);
+        cryptoTask.setLists(successList, failedList);
         if (!chosenFilesTree.getChildren().isEmpty()) {
             Object[] chosenFilesArr = chosenFilesTree.getChildren().toArray();
             for (Object chosenFile : chosenFilesArr) {
                 String fileName = chosenFile.toString();
 
                 FilePathTreeItem fileTree = new FilePathTreeItem(new File(fileName));
-                fileTree.encryptFileTree(encryptorTask, folderChoosenPath, "", successList, failedList);
+                fileTree.encryptFileTree(cryptoTask, folderChoosenPath, "", successList, failedList);
 
             }
-            encryptorTask.process();
+            cryptoTask.process();
         } else {
             System.out.println("THERE ARE NO FILES IN HERE");
         }
@@ -367,8 +368,8 @@ public class Controller implements Initializable {
         List<String> failedList = Collections.synchronizedList(new ArrayList<>());
         FileEncryptor fileEncryptor = new FileEncryptor();
         fileEncryptor.setKey(pass);
-        DecryptorTask decryptorTask = new DecryptorTask(fileEncryptor, this::freezeGUI, this::unfreezeGUI);
-        decryptorTask.setLists(successList, failedList);
+        CryptoTask cryptoTask = new DecryptorTask(fileEncryptor, this::freezeGUI, this::unfreezeGUI);
+        cryptoTask.setLists(successList, failedList);
         //fileEncryptor.configure(pass, CryptoModule.REGULAR_MODE, true, "Masełko");
 
 
@@ -378,10 +379,10 @@ public class Controller implements Initializable {
                 String fileName = chosenFile.toString();
 
                 FilePathTreeItem fileTree = new FilePathTreeItem(new File(fileName));
-                fileTree.decryptFileTree(decryptorTask, folderChoosenPath, "", successList, failedList);
+                fileTree.decryptFileTree(cryptoTask, folderChoosenPath, "", successList, failedList);
 
             }
-            decryptorTask.process();
+            cryptoTask.process();
         } else {
             System.out.println("THERE ARE NO FILES IN HERE");
         }

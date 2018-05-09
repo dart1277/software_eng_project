@@ -158,7 +158,7 @@ public class FilePathTreeItem extends TreeItem<String> {
         return false;
     }
 
-    public void encryptFileTree(EncryptorTask encryptorTask, String mainPath, String localPath,
+    public void encryptFileTree(CryptoTask cryptoTask, String mainPath, String localPath,
                                 List<String> successList, List<String> failedList)   //<-- old working version
     {
         File f = this.file;
@@ -187,24 +187,24 @@ public class FilePathTreeItem extends TreeItem<String> {
             File[] files = f.listFiles();
             if (files != null) {
                 for (File childFile : files) {
-                    new FilePathTreeItem(childFile).encryptFileTree(encryptorTask, mainPath, newLocalPath,
+                    new FilePathTreeItem(childFile).encryptFileTree(cryptoTask, mainPath, newLocalPath,
                             successList, failedList);
                 }
             }
         } else if (f != null && f.isFile())       //this is file --> encode
         {
             newLocalPath = mainPath + localPath;
-            encrypt(encryptorTask, f, newLocalPath, successList, failedList);
+            encrypt(cryptoTask, f, newLocalPath, successList, failedList);
         }
     }
 
-    public void encrypt(EncryptorTask encryptorTask, File toEncrypt, String newPathFile,
+    public void encrypt(CryptoTask cryptoTask, File toEncrypt, String newPathFile,
                         List<String> successList, List<String> failedList)        //encrypting function
     {
         String name = toEncrypt.getName();
         String newFilePath = newPathFile + slash + name;
         System.out.println("--encrytping:" + toEncrypt + " --> " + newFilePath);
-        encryptorTask.add(toEncrypt.toString(), newFilePath);
+        cryptoTask.add(toEncrypt.toString(), newFilePath);
         /*try {
             fileEncryptor.encrypt(toEncrypt.toString(), newFilePath);
             successList.add(toEncrypt.toString());
@@ -217,7 +217,7 @@ public class FilePathTreeItem extends TreeItem<String> {
         }*/
     }
 
-    public void decryptFileTree(DecryptorTask decryptorTask, String mainPath, String localPath,
+    public void decryptFileTree(CryptoTask cryptoTask, String mainPath, String localPath,
                                 List<String> successList, List<String> failedList)   //<-- old working version
     {
         File f = this.file;
@@ -246,7 +246,7 @@ public class FilePathTreeItem extends TreeItem<String> {
             File[] files = f.listFiles();
             if (files != null) {
                 for (File childFile : files) {
-                    new FilePathTreeItem(childFile).decryptFileTree(decryptorTask, mainPath, newLocalPath,
+                    new FilePathTreeItem(childFile).decryptFileTree(cryptoTask, mainPath, newLocalPath,
                             successList, failedList);
                 }
             }
@@ -254,17 +254,17 @@ public class FilePathTreeItem extends TreeItem<String> {
         {
             newLocalPath = mainPath + localPath;
             if (f.getName().lastIndexOf(".chr") != -1)
-                decrypt(decryptorTask, f, newLocalPath, successList, failedList);
+                decrypt(cryptoTask, f, newLocalPath, successList, failedList);
         }
     }
 
-    public void decrypt(DecryptorTask decryptorTask, File toDecrypt, String newPathFile,
+    public void decrypt(CryptoTask cryptoTask, File toDecrypt, String newPathFile,
                         List<String> successList, List<String> failedList)        //encrypting function
     {
         String name = toDecrypt.getName();
         String newFilePath = newPathFile + slash + name;
         System.out.println("--decrytping:" + toDecrypt + " --> " + newFilePath);
-        decryptorTask.add(toDecrypt.toString(), newFilePath);
+        cryptoTask.add(toDecrypt.toString(), newFilePath);
         /*try {
             fileEncryptor.decrypt(toDecrypt.toString(), newFilePath);
             successList.add(toDecrypt.toString());
