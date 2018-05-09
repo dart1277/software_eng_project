@@ -1,10 +1,7 @@
 package gui;
 
 
-import gui.cipherModule.CryptoException;
-import gui.cipherModule.CryptoModule;
-import gui.cipherModule.EncryptorTask;
-import gui.cipherModule.FileEncryptor;
+import gui.cipherModule.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
@@ -220,7 +217,7 @@ public class FilePathTreeItem extends TreeItem<String> {
         }*/
     }
 
-    public void decryptFileTree(EncryptorTask encryptorTask, String mainPath, String localPath,
+    public void decryptFileTree(DecryptorTask decryptorTask, String mainPath, String localPath,
                                 List<String> successList, List<String> failedList)   //<-- old working version
     {
         File f = this.file;
@@ -249,7 +246,7 @@ public class FilePathTreeItem extends TreeItem<String> {
             File[] files = f.listFiles();
             if (files != null) {
                 for (File childFile : files) {
-                    new FilePathTreeItem(childFile).decryptFileTree(encryptorTask, mainPath, newLocalPath,
+                    new FilePathTreeItem(childFile).decryptFileTree(decryptorTask, mainPath, newLocalPath,
                             successList, failedList);
                 }
             }
@@ -257,17 +254,17 @@ public class FilePathTreeItem extends TreeItem<String> {
         {
             newLocalPath = mainPath + localPath;
             if (f.getName().lastIndexOf(".chr") != -1)
-                decrypt(encryptorTask, f, newLocalPath, successList, failedList);
+                decrypt(decryptorTask, f, newLocalPath, successList, failedList);
         }
     }
 
-    public void decrypt(EncryptorTask encryptorTask, File toDecrypt, String newPathFile,
+    public void decrypt(DecryptorTask decryptorTask, File toDecrypt, String newPathFile,
                         List<String> successList, List<String> failedList)        //encrypting function
     {
         String name = toDecrypt.getName();
         String newFilePath = newPathFile + slash + name;
         System.out.println("--decrytping:" + toDecrypt + " --> " + newFilePath);
-        encryptorTask.add(toDecrypt.toString(), newFilePath);
+        decryptorTask.add(toDecrypt.toString(), newFilePath);
         /*try {
             fileEncryptor.decrypt(toDecrypt.toString(), newFilePath);
             successList.add(toDecrypt.toString());

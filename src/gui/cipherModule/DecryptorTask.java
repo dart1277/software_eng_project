@@ -12,15 +12,15 @@ import javafx.concurrent.Task;
 import javafx.util.Pair;
 
 
-public class EncryptorTask extends CryptoTask {
+public class DecryptorTask extends CryptoTask {
 
 
-    public EncryptorTask(FileEncryptor encryptor, INotifier freezeGUI, BiConsumer<List<String>, List<String>> unfreezeGUI) {
+    public DecryptorTask(FileEncryptor encryptor, INotifier freezeGUI, BiConsumer<List<String>, List<String>> unfreezeGUI) {
         super(encryptor, freezeGUI, unfreezeGUI);
     }
 
     protected void methodCall(String src, String dst) throws IOException, CryptoException {
-        this.encryptor.encrypt(src, dst);
+        this.encryptor.decrypt(src, dst);
     }
 
 }

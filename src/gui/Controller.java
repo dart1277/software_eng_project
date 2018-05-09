@@ -1,5 +1,6 @@
 package gui;
 
+import gui.cipherModule.DecryptorTask;
 import gui.cipherModule.EncryptorTask;
 import gui.cipherModule.FileEncryptor;
 import gui.translationsImporter.TranslationsImporter;
@@ -306,7 +307,7 @@ public class Controller implements Initializable {
 
         FileEncryptor fileEncryptor = new FileEncryptor();
         fileEncryptor.configure(pass, speed, true, hint);
-        EncryptorTask encryptorTask = new EncryptorTask(fileEncryptor, 0, this::freezeGUI, this::unfreezeGUI);
+        EncryptorTask encryptorTask = new EncryptorTask(fileEncryptor, this::freezeGUI, this::unfreezeGUI);
         encryptorTask.setLists(successList, failedList);
         if (!chosenFilesTree.getChildren().isEmpty()) {
             Object[] chosenFilesArr = chosenFilesTree.getChildren().toArray();
@@ -366,8 +367,8 @@ public class Controller implements Initializable {
         List<String> failedList = Collections.synchronizedList(new ArrayList<>());
         FileEncryptor fileEncryptor = new FileEncryptor();
         fileEncryptor.setKey(pass);
-        EncryptorTask encryptorTask = new EncryptorTask(fileEncryptor, 1, this::freezeGUI, this::unfreezeGUI);
-        encryptorTask.setLists(successList, failedList);
+        DecryptorTask decryptorTask = new DecryptorTask(fileEncryptor, this::freezeGUI, this::unfreezeGUI);
+        decryptorTask.setLists(successList, failedList);
         //fileEncryptor.configure(pass, CryptoModule.REGULAR_MODE, true, "Masełko");
 
 
@@ -377,10 +378,10 @@ public class Controller implements Initializable {
                 String fileName = chosenFile.toString();
 
                 FilePathTreeItem fileTree = new FilePathTreeItem(new File(fileName));
-                fileTree.decryptFileTree(encryptorTask, folderChoosenPath, "", successList, failedList);
+                fileTree.decryptFileTree(decryptorTask, folderChoosenPath, "", successList, failedList);
 
             }
-            encryptorTask.process();
+            decryptorTask.process();
         } else {
             System.out.println("THERE ARE NO FILES IN HERE");
         }
