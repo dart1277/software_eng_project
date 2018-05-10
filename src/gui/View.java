@@ -238,6 +238,18 @@ public class View {
     }
 
     /**
+     * Displays alert when the password is too short
+     */
+    public void passwordTooShort() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        setActualFontsSizeForAlert(alert);
+        alert.setTitle(getDisplayString("failureMsg"));
+        alert.setHeaderText(null);
+        alert.setContentText(getDisplayString("passwordTooShort"));
+        alert.showAndWait();
+    }
+
+    /**
      * Changes destination folder color and enables button to show chosen folder path.
      */
     public void destinationFolderClick() {

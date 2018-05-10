@@ -193,6 +193,10 @@ public class Controller implements Initializable {
             view.passwordsNotEqual();
             return;
         }
+        if (passwordText.getText().length() < 5) {
+            view.passwordTooShort();
+            return;
+        }
         //start procedure
         if (isEncrypt) {
             encryptFiles();

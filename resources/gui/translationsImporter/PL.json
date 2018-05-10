@@ -53,5 +53,6 @@
   "failureWord": "Niepowodzenie",
   "processingResult": "Wynik przetwarzania plików",
   "processingResultNote": "Przetwarzanie dało następujące wyniki",
-  "noHintMsg": "Brak podpowiedzi"
+  "noHintMsg": "Brak podpowiedzi",
+  "passwordTooShort": "Hasło zbyt krótkie, powinno mieć przynajmniej 5 znaków!"
 }

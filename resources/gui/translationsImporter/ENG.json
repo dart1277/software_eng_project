@@ -55,7 +55,8 @@
   "failureWord": "Failure",
   "processingResult": "File processing result",
   "processingResultNote": "These are the results of file processing:",
-  "noHintMsg": "No hint"
+  "noHintMsg": "No hint",
+  "passwordTooShort": "Password is to short, it should have at least 5 characters!"
 
 }
 
