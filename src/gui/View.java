@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.stage.Stage;
 
 import java.util.List;
 import java.util.Map;
@@ -21,11 +22,9 @@ public class View {
      * Creates an view with controller and translationsMap.
      * Sets by default font size to 10.0.
      *
-     * @param controller     main controller.
      * @param translationMap map with translations for all GUI elements.
      */
-    View(Controller controller, Map<String, String> translationMap) {
-        m_controller = controller;
+    View(Map<String, String> translationMap) {
         m_translationMap = translationMap;
         m_fontSize = 10.0;
     }
@@ -43,6 +42,7 @@ public class View {
      * Sets translations for all GUI elements.
      */
     public void setTranslationsForGuiElements() {
+        Controller m_controller = ControllerFactory.getController();
         m_controller.addBtn.setText(getDisplayString("addBtn"));
         m_controller.fileSelectedLabel.setText(getDisplayString("fileSelectedLabel"));
         m_controller.fileBrowserLabel.setText(getDisplayString("fileBrowserLabel"));
@@ -93,7 +93,7 @@ public class View {
     public void setFonts(Double fontSize) {
         m_fontSize = fontSize;
         String fontSizeFormat = String.format("-fx-font-size: %dpt;", m_fontSize.intValue());
-        m_controller.mainGrid.setStyle(fontSizeFormat);
+        ControllerFactory.getController().mainGrid.setStyle(fontSizeFormat);
         setButtonStyle(fontSize, true);
     }
 
@@ -103,6 +103,7 @@ public class View {
      * @param backgroundColor color to set.
      */
     public void setBackgroundColor(String backgroundColor) {
+        Controller m_controller = ControllerFactory.getController();
         String currentStyle = m_controller.mainGrid.getStyle();
         m_controller.mainGrid.setStyle(currentStyle + " -fx-background-color: " + backgroundColor);
     }
@@ -115,6 +116,7 @@ public class View {
      * Shows all only encryption fields
      */
     public void encodeRadioClick() {
+        Controller m_controller = ControllerFactory.getController();
         m_controller.addHint.setSelected(false);
         setHintTextFieldVisibility(false);
 
@@ -142,6 +144,7 @@ public class View {
      * hide all only encryption fields
      */
     public void decodeRadioClick() {
+        Controller m_controller = ControllerFactory.getController();
         m_controller.addHint.setSelected(false);
         setHintTextFieldVisibility(false);
 
@@ -237,6 +240,7 @@ public class View {
      * Changes destination folder color and enables button to show chosen folder path.
      */
     public void destinationFolderClick() {
+        Controller m_controller = ControllerFactory.getController();
         m_controller.chooseDestinationFolder.setStyle("-fx-background-color: #006400");
         m_controller.showChoosenFolderPath.setDisable(false);
     }
@@ -313,7 +317,9 @@ public class View {
         expContent.add(textArea, 0, 1);
 
         alert.getDialogPane().setExpandableContent(expContent);
-
+        alert.getDialogPane().setPrefSize(800, 300);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.setAlwaysOnTop(true);
         return alert.showAndWait();
     }
 
@@ -361,7 +367,9 @@ public class View {
         expContent.add(textArea, 0, 1);
 
         alert.getDialogPane().setExpandableContent(expContent);
-
+        alert.getDialogPane().setPrefSize(800, 300);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.setAlwaysOnTop(true);
         alert.showAndWait();
     }
 
@@ -412,7 +420,7 @@ public class View {
      * @param setVisible value that indicates if we want to set it visible or not.
      */
     public void setHintTextFieldVisibility(Boolean setVisible) {
-        m_controller.hintTextField.setVisible(setVisible);
+        ControllerFactory.getController().hintTextField.setVisible(setVisible);
     }
 
     /**
@@ -422,6 +430,7 @@ public class View {
      * @param isEncrypt Is Encryption value
      */
     private void setButtonStyle(Double fontSize, Boolean isEncrypt) {
+        Controller m_controller = ControllerFactory.getController();
         m_fontSize = fontSize;
         String fontSizeFormat = String.format("-fx-font-size: %dpt;", m_fontSize.intValue());
 
@@ -457,6 +466,7 @@ public class View {
      * @param path path to get message from.
      */
     public void displayHintFromFile(String path) {
+        Controller m_controller = ControllerFactory.getController();
         m_controller.hintTextField.setDisable(true);
         FileEncryptor encryptor = new FileEncryptor();
         String hint = getDisplayString("noHintMsg");
@@ -469,7 +479,6 @@ public class View {
     }
 
     private Alert processingAlert;
-    private Controller m_controller;
     private Map<String, String> m_translationMap;
     private Double m_fontSize;
     private DialogPane alertRootNode;

@@ -139,6 +139,7 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ControllerFactory.init(this);
         setToggleGroups();
         setDefaultSelectedOperations();
         isEncrypt = true;
@@ -150,7 +151,7 @@ public class Controller implements Initializable {
             return;
         }
 
-        view = new View(this, translImp.getTranslations());
+        view = new View(translImp.getTranslations());
         view.setTranslationsForGuiElements();
         view.setFonts(fontSizeSelect);
         view.setHintTextFieldVisibility(false);
@@ -316,7 +317,7 @@ public class Controller implements Initializable {
                 String fileName = chosenFile.toString();
 
                 FilePathTreeItem fileTree = new FilePathTreeItem(new File(fileName));
-                fileTree.encryptFileTree(cryptoTask, folderChoosenPath, "", successList, failedList);
+                fileTree.encryptOrDecryptFileTree(cryptoTask, folderChoosenPath, "");
 
             }
             cryptoTask.process();
@@ -341,18 +342,32 @@ public class Controller implements Initializable {
         return result;
     }
 
+    private void setDisableGUIElements(boolean sel) {
+        chooseDestinationFolder.setDisable(sel);
+        encryptOrDecryptFilesBtn.setDisable(sel);
+        addBtn.setDisable(sel);
+        encryptFiles.setDisable(sel);
+        decryptFiles.setDisable(sel);
+        chooseLanguage.setDisable(sel);
+        slowEncSpeed.setDisable(sel);
+        defaultEncSpeed.setDisable(sel);
+        fastEncSpeed.setDisable(sel);
+        addHint.setDisable(sel);
+        undoSelection.setDisable(sel);
+        clearSelection.setDisable(sel);
+        hintTextField.setDisable(sel);
+        passwordText.setDisable(sel);
+
+
+    }
+
     public void freezeGUI() {
-        Platform.runLater(() -> {
-            chooseDestinationFolder.setDisable(true);
-            encryptOrDecryptFilesBtn.setDisable(true)
-            ;
-        });
+        Platform.runLater(() -> setDisableGUIElements(true));
     }
 
     public void unfreezeGUI(List<String> successList, List<String> failedList) {
         Platform.runLater(() -> {
-            encryptOrDecryptFilesBtn.setDisable(false);
-            chooseDestinationFolder.setDisable(false);
+            setDisableGUIElements(false);
             view.cipheringResultAlert(successList, failedList);
         });
 
@@ -379,7 +394,7 @@ public class Controller implements Initializable {
                 String fileName = chosenFile.toString();
 
                 FilePathTreeItem fileTree = new FilePathTreeItem(new File(fileName));
-                fileTree.decryptFileTree(cryptoTask, folderChoosenPath, "", successList, failedList);
+                fileTree.encryptOrDecryptFileTree(cryptoTask, folderChoosenPath, "");
 
             }
             cryptoTask.process();
