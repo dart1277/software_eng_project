@@ -250,7 +250,7 @@ public class FileEncryptor {
             if (!this.fileProvider.addNextPrimitive(source, destination)) return; // or throw exception to fail here
             current = this.fileProvider.getNextPrimitive();
 
-            FileInputStream currIn;
+            FileInputStream currIn = null;
             try {
                 currIn = new FileInputStream(current);
                 long remainingBytes = current.length();
@@ -296,10 +296,11 @@ public class FileEncryptor {
             } catch (BadPaddingException | IOException | InvalidAlgorithmParameterException ex) {
                 fileProvider.cleanBrokenDestination();
                 throw new CryptoException(ex.getMessage(), current.getPath());
+            } finally {
+                if (currIn != null) currIn.close();
+                fileProvider.closeOutputFile();
+                this.bufferedFile = null;
             }
-            currIn.close();
-            fileProvider.closeOutputFile();
-            this.bufferedFile = null;
         } else {
             System.out.println("Can use only standard method decryptNext() - use empty constructor to access this");
         }

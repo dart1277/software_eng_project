@@ -1,6 +1,9 @@
 package gui.cipherModule;
 
+import java.awt.image.ImagingOpException;
 import java.io.File;
+import java.io.IOError;
+import java.io.IOException;
 
 public interface FileProviderInterface {
 
@@ -16,6 +19,6 @@ public interface FileProviderInterface {
      *
      * @param bytesToSave encrypted byte array
      */
-    void saveNextBytes(byte[] bytesToSave);
+    void saveNextBytes(byte[] bytesToSave) throws IOException;
 
 }

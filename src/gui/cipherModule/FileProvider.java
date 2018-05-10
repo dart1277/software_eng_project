@@ -17,8 +17,8 @@ public class FileProvider implements FileProviderInterface {
 
     public void closeOutputFile() {
         try {
-            if(this.fos != null)
-            fos.close();
+            if (this.fos != null)
+                fos.close();
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
@@ -40,18 +40,18 @@ public class FileProvider implements FileProviderInterface {
         this.destName = destDriName;
     }
 
-    public boolean addNextPrimitive(String path, String dst){
-        if(this.fos != null)
+    public boolean addNextPrimitive(String path, String dst) {
+        if (this.fos != null)
             closeOutputFile();
         file_list.clear();
         fileToSave = new File(dst);
-        if(fileToSave.exists())return false;
+        if (fileToSave.exists()) return false;
         file_list.add(new File(path));
         return true;
 
     }
 
-    public File getNextPrimitive(){
+    public File getNextPrimitive() {
         if (this.hasNext()) {
             current_file = file_list.get(0);
             bytesSaved = 0;
@@ -67,7 +67,7 @@ public class FileProvider implements FileProviderInterface {
         return null;
     }
 
-    public File getNextPrimitiveNoStream(){
+    public File getNextPrimitiveNoStream() {
         if (this.hasNext()) {
             current_file = file_list.get(0);
             bytesSaved = 0;
@@ -77,15 +77,15 @@ public class FileProvider implements FileProviderInterface {
         return null;
     }
 
-    public void cleanBrokenDestination(){
-        if(this.fos != null)
+    public void cleanBrokenDestination() {
+        if (this.fos != null)
             this.closeOutputFile();
-        if(this.fileToSave.exists()){
+        if (this.fileToSave.exists()) {
             this.fileToSave.delete();
         }
     }
 
-     public File getNext() {
+    public File getNext() {
         if (this.hasNext()) {
             current_file = iter.next();
             bytesSaved = 0;
@@ -108,11 +108,11 @@ public class FileProvider implements FileProviderInterface {
         return iter.hasNext();
     }
 
-    public void saveNextBytes(byte[] bytesToSave) {
+    public void saveNextBytes(byte[] bytesToSave) throws IOException {
         bytesSaved += bytesToSave.length;
         try {
             fos.write(bytesToSave);
-        } catch (IOException | NullPointerException e) {
+        } catch (NullPointerException e) {
             System.out.println(e.getMessage());
         }
 

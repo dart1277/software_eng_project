@@ -20,12 +20,10 @@ public class FileProviderTest {
     private static String pathToFile;
 
     @BeforeClass
-    public static void setUpClass() throws Exception
-    {
+    public static void setUpClass() throws Exception {
         if (System.getProperty("os.name").startsWith("Windows")) {
             pathToFile = "\\test\\gui\\cipherModule\\FileProvider_TestingFiles\\";
-        }
-        else {
+        } else {
             pathToFile = "/test/gui/cipherModule/FileProvider_TestingFiles/";
         }
         basePath = new File("").getAbsolutePath();
@@ -43,16 +41,16 @@ public class FileProviderTest {
     }
 
     @Test
-    public void FileProviderCtr(){
-        assertEquals("TestFile1.txt",prov.getNext().getName());
+    public void FileProviderCtr() {
+        assertEquals("TestFile1.txt", prov.getNext().getName());
     }
 
     @Test
     public void addNextPrimitive() {
         //This file TestFile2.txt does not exists
-        assertTrue(prov.addNextPrimitive("TestFile2.txt","TestFile2.txt"));
+        assertTrue(prov.addNextPrimitive("TestFile2.txt", "TestFile2.txt"));
 
-        assertEquals("TestFile2.txt",prov.getNextPrimitiveNoStream().getName());
+        assertEquals("TestFile2.txt", prov.getNextPrimitiveNoStream().getName());
 
         //This file TestFile1.txt is already exists
         assertFalse(prov.addNextPrimitive(basePath + pathToFile + "TestFile1.txt", basePath + pathToFile + "TestFile1.txt"));
@@ -70,29 +68,29 @@ public class FileProviderTest {
     }
 
     @Test
-    public void saveNextBytes()
-    {
+    public void saveNextBytes() {
         byte[] toSave = "HelloWorld".getBytes();
         boolean isFileExist = prov.addNextPrimitive(basePath + pathToFile + "FileToSaveBytes.txt", basePath + pathToFile + "FileToSaveBytes.txt");
-        if(!isFileExist)
-        {
+        if (!isFileExist) {
             prov.cleanBrokenDestination();
             prov.addNextPrimitive(basePath + pathToFile + "FileToSaveBytes.txt", basePath + pathToFile + "FileToSaveBytes.txt");
         }
 
         assertNotNull(prov.getNextPrimitive());
-
-        prov.saveNextBytes(toSave);
+        try {
+            prov.saveNextBytes(toSave);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         File savedFile = new File(basePath + pathToFile + "FileToSaveBytes.txt");
-        byte[] savedFileData = new byte[(int)savedFile.length()];
+        byte[] savedFileData = new byte[(int) savedFile.length()];
         try {
             FileInputStream fis = new FileInputStream(savedFile);
             fis.read(savedFileData);
             fis.close();
+        } catch (IOException e) {
         }
-        catch (IOException e)
-        {}
 
         assertEquals(Arrays.toString(toSave), Arrays.toString(savedFileData));
     }
