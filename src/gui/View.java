@@ -3,6 +3,7 @@ package gui;
 
 import gui.cipherModule.CryptoException;
 import gui.cipherModule.FileEncryptor;
+import gui.cipherModule.HintMessageProvider;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -468,13 +469,8 @@ public class View {
     public void displayHintFromFile(String path) {
         Controller m_controller = ControllerFactory.getController();
         m_controller.hintTextField.setDisable(true);
-        FileEncryptor encryptor = new FileEncryptor();
-        String hint = getDisplayString("noHintMsg");
-        try {
-            hint = encryptor.getHelpMessage(path);
-        } catch (CryptoException e) {
-            //e.printStackTrace();
-        }
+        HintMessageProvider hintMessageProvider = new HintMessageProvider();
+        String hint = hintMessageProvider.getHint(path, getDisplayString("noHintMsg"));
         m_controller.hintTextField.setText(hint);
     }
 
