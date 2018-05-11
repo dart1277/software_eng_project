@@ -143,6 +143,26 @@ public class FileEncryptorTest {
     public void configure() throws CryptoException {
 
         assertEquals("helpMess",fileEn.getHelpMessage(basePath + pathToFile + "EncFile1.txt.chr"));
+
+        try {
+            Field key = FileEncryptor.class.getDeclaredField("key");
+            key.setAccessible(true);
+            Field complexity = FileEncryptor.class.getDeclaredField("complexity");
+            complexity.setAccessible(true);
+            Field header = FileEncryptor.class.getDeclaredField("header");
+            header.setAccessible(true);
+            Field allowMultiEncryptions = FileEncryptor.class.getDeclaredField("allowMultiEncryptions");
+            allowMultiEncryptions.setAccessible(true);
+
+            assertEquals("somekey", key.get(fileEn));
+            assertEquals(1, complexity.get(fileEn));
+            assertEquals(true, allowMultiEncryptions.get(fileEn));
+
+        }
+        catch (NoSuchFieldException | IllegalAccessException e){
+
+        }
+
     }
 
     @Test
@@ -189,4 +209,13 @@ public class FileEncryptorTest {
         }
     }
 
+    @Test
+    public void setHelpMessage() throws CryptoException, IOException {
+        fileEn.setHelpMessage("SetHelpMess");
+
+        fileEn.encrypt(basePath + pathToFile + "TestingFile1.txt", basePath + pathToFile + "EncFile1ForSetHelp.txt");
+
+        assertEquals("SetHelpMess", fileEn.getHelpMessage(basePath + pathToFile + "EncFile1ForSetHelp.txt.chr"));
+
+    }
 }
