@@ -330,6 +330,11 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Generates list of all selected files
+     * @return selected files list
+     */
+
     private List<String> generateSelectedFilesList() {
         List<String> result = new ArrayList<>();
         if (!chosenFilesTree.getChildren().isEmpty()) {
@@ -499,11 +504,12 @@ public class Controller implements Initializable {
         if (decryptFiles.isSelected()) {
             List<String> selectedFiles = generateSelectedFilesList();
             String randomFilePath = "";
-            for (String filePath : selectedFiles)
-                if (filePath.contains(".")) {
+            for (String filePath : selectedFiles) {
+                if(new File(filePath).isFile()){
                     randomFilePath = filePath;
                     break;
                 }
+            }
             view.displayHintFromFile(randomFilePath);
         }
     }

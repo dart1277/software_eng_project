@@ -1,6 +1,5 @@
 package gui;
 
-
 import gui.cipherModule.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,8 +8,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,8 +20,6 @@ public class FilePathTreeItem extends TreeItem<String> {
     public static Image fileImage = new Image("file:img/text-x-generic.png");
     private final String extension = "chr";
     private final String slash = System.getProperty("os.name").startsWith("Windows") ? "\\" : "/";
-
-    //private final FileEncryptor fileEncryptor;
 
     private boolean isLeaf;
     private boolean isFirstTimeChildren = true;
@@ -207,9 +202,9 @@ public class FilePathTreeItem extends TreeItem<String> {
         cryptoTask.add(toEncrypt.toString(), newFilePath);
     }
 
-
-    private static List<String> selectedFilesList;
-
+    /**
+     * Generates list of selected files by recursive traversal of the tree
+     */
     private void generateSelectedFilesList() {
         File f = this.file;
         if (f != null && f.isDirectory())  // this is file ->keep digging deeper...
@@ -226,10 +221,17 @@ public class FilePathTreeItem extends TreeItem<String> {
         }
     }
 
+    /**
+     * Provides list of all selected files in the tree
+     *
+     * @return complete list of selected files
+     */
     public List<String> getSelectedFilesList() {
         selectedFilesList = new ArrayList<>();
         generateSelectedFilesList();
         return selectedFilesList;
     }
+
+    private static List<String> selectedFilesList;
 
 }

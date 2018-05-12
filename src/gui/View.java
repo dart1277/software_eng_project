@@ -1,8 +1,5 @@
 package gui;
 
-
-import gui.cipherModule.CryptoException;
-import gui.cipherModule.FileEncryptor;
 import gui.cipherModule.HintMessageProvider;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -31,7 +28,7 @@ public class View {
     }
 
     /**
-     * Sets traslation map.
+     * Sets translations map.
      *
      * @param translationsMap map to set.
      */
@@ -285,17 +282,6 @@ public class View {
         return alert.showAndWait();
     }
 
-
-    //redundant
-//    public Optional<ButtonType> showConfirmationAlert(String alertContent) {
-//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, alertContent);
-//        setActualFontsSizeForAlert(alert);
-//
-//        alert.setTitle(getDisplayString("confirmationMsg"));
-//        alert.setHeaderText("");
-//        return alert.showAndWait();
-//    }
-
     /**
      * Displays success message.
      */
@@ -307,7 +293,15 @@ public class View {
         alert.showAndWait();
     }
 
-    public Optional<ButtonType> showMultipleEncryptionConfirmation(String message) {
+    /**
+     * Prompts the user to confirm encryption of already encrypted files with alert
+     * containing list of encrypted files that were selected
+     *
+     * @param parsedListOfAlreadyEncryptedFiles prepared to display list of already encrypted files
+     * @return user confirmation
+     */
+
+    public Optional<ButtonType> showMultipleEncryptionConfirmation(String parsedListOfAlreadyEncryptedFiles) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
         alert.setTitle(getDisplayString("confirmMultipleEncryptionTitle"));
@@ -315,7 +309,7 @@ public class View {
         alert.setContentText("");
         Label label = new Label(getDisplayString("confirmMultipleEncryptionNote"));
 
-        TextArea textArea = new TextArea(message);
+        TextArea textArea = new TextArea(parsedListOfAlreadyEncryptedFiles);
         textArea.setEditable(false);
         textArea.setWrapText(true);
 
@@ -336,6 +330,12 @@ public class View {
         return alert.showAndWait();
     }
 
+    /**
+     * Displays results of encryption or decryption showing list of en/decrypted and not en/decrypted files
+     *
+     * @param successList list of files successfully en/decrypted
+     * @param failedList list of files not en/decrypted
+     */
 
     public void cipheringResultAlert(List<String> successList, List<String> failedList) {
 
