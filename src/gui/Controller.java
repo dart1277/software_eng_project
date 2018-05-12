@@ -8,6 +8,8 @@ import gui.translationsImporter.TranslationsImporter;
 import gui.translationsImporter.TranslationsImporterFactory;
 import gui.translationsImporter.TranslationsImporterType;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -142,6 +144,7 @@ public class Controller implements Initializable {
         ControllerFactory.init(this);
         setToggleGroups();
         setDefaultSelectedOperations();
+        addTextLimiter(hintTextField, 60);
         isEncrypt = true;
         refreshTreeView();
         fontSizeSelect = 10.0;
@@ -351,6 +354,15 @@ public class Controller implements Initializable {
         return result;
     }
 
+    private static void addTextLimiter(final TextField textField, final int maxLength) {
+        textField.textProperty().addListener( (final ObservableValue<? extends String> ov, final String oldValue, final String newValue) ->{
+            if (textField.getText().length() > maxLength) {
+                String s = textField.getText().substring(0, maxLength);
+                textField.setText(s);
+            }
+        });
+    }
+
     private void setDisableGUIElements(boolean sel) {
         chooseDestinationFolder.setDisable(sel);
         encryptOrDecryptFilesBtn.setDisable(sel);
@@ -366,8 +378,6 @@ public class Controller implements Initializable {
         clearSelection.setDisable(sel);
         hintTextField.setDisable(sel);
         passwordText.setDisable(sel);
-
-
     }
 
     public void freezeGUI() {
