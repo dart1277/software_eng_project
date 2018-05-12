@@ -1,8 +1,10 @@
 package gui.cipherModule;
 
 import javafx.util.Pair;
+import javafx.concurrent.Task;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -20,10 +22,16 @@ public class CryptoTaskTest {
     private CryptoTask encryptoTaskTest;
     private CryptoTask decryptoTaskTest;
 
+    @Mock
+    private INotifier freezTest;
+    @Mock
+    private BiConsumer unfreezTest;
     @Before
     public void setUp()
     {
-        encryptoTaskTest = new EncryptorTask(mock(FileEncryptor.class), mock(INotifier.class), mock(BiConsumer.class));
+        freezTest = mock(INotifier.class);
+        unfreezTest = mock(BiConsumer.class);
+        encryptoTaskTest = new EncryptorTask(mock(FileEncryptor.class), freezTest, unfreezTest);
         decryptoTaskTest = new EncryptorTask(mock(FileEncryptor.class), mock(INotifier.class), mock(BiConsumer.class));
     }
 
@@ -98,5 +106,36 @@ public class CryptoTaskTest {
         {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void call(){
+        encryptoTaskTest.add("SRC", "DST");
+        List<String> suc = new ArrayList<>();
+        List<String> fail = new ArrayList<>();
+        suc.add("OK");
+        suc.add("SRC");
+        fail.add("Not OK");
+        encryptoTaskTest.setLists(suc, fail);
+
+        assertNull(encryptoTaskTest.call());
+
+        verify(freezTest).notifies();
+        verify(unfreezTest).accept(suc, fail);
+
+        try {
+            Field fieldSuc = CryptoTask.class.getDeclaredField("succList");
+            Field fieldFail = CryptoTask.class.getDeclaredField("failList");
+            fieldSuc.setAccessible(true);
+            fieldFail.setAccessible(true);
+
+            assertEquals(suc, fieldSuc.get(encryptoTaskTest));
+            assertEquals(fail, fieldFail.get(encryptoTaskTest));
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
+
     }
 }
