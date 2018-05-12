@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 
-public class MainTest2 extends ApplicationTest {
+public class MainTest3 extends ApplicationTest {
 
     @Before
     public void setUp() throws Exception {
@@ -50,12 +50,13 @@ public class MainTest2 extends ApplicationTest {
 
     }
 
+
     @Test
-    public void testEncryption() {
+    public void testEncryptionPasswordsDontMatch() {
         String fakeFile = "/.file";
         String fakeDir = "/";
         clickOn("#passwordText");
-        write("123456789");
+        write("12345678");
         clickOn("#passwordTextRepeat");
         write("123456789");
         Controller controller = ControllerFactory.getController();
@@ -63,12 +64,8 @@ public class MainTest2 extends ApplicationTest {
             controller.addPathChoice(fakeFile);
             controller.setChosenFolderPath(fakeDir);
             controller.getChosenFilesTree().setValue(fakeDir);
-            controller.setDisableGUIElements(true);
-            controller.setDisableGUIElements(false);
             controller.encryptOrDecryptFilesClick();
         });
     }
-
-
 
 }
