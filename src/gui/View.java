@@ -334,7 +334,7 @@ public class View {
      * Displays results of encryption or decryption showing list of en/decrypted and not en/decrypted files
      *
      * @param successList list of files successfully en/decrypted
-     * @param failedList list of files not en/decrypted
+     * @param failedList  list of files not en/decrypted
      */
 
     public void cipheringResultAlert(List<String> successList, List<String> failedList) {
@@ -437,6 +437,19 @@ public class View {
     }
 
     /**
+     * Displays hint. It is done when decryptFiles RadioButton is selected.
+     *
+     * @param path path to get message from.
+     */
+    public void displayHintFromFile(String path) {
+        Controller m_controller = ControllerFactory.getController();
+        m_controller.hintTextField.setDisable(true);
+        HintMessageProvider hintMessageProvider = new HintMessageProvider();
+        String hint = hintMessageProvider.getHint(path, getDisplayString("noHintMsg"));
+        m_controller.hintTextField.setText(hint);
+    }
+
+    /**
      * Sets buttons size.
      *
      * @param fontSize  Double font size to set.
@@ -471,19 +484,6 @@ public class View {
     private void setActualFontsSizeForAlert(Alert alert) {
         alertRootNode = alert.getDialogPane();
         alertRootNode.setStyle(String.format("-fx-font-size: %dpt;", m_fontSize.intValue()));
-    }
-
-    /**
-     * Displays hint. It is done when decryptFiles RadioButton is selected.
-     *
-     * @param path path to get message from.
-     */
-    public void displayHintFromFile(String path) {
-        Controller m_controller = ControllerFactory.getController();
-        m_controller.hintTextField.setDisable(true);
-        HintMessageProvider hintMessageProvider = new HintMessageProvider();
-        String hint = hintMessageProvider.getHint(path, getDisplayString("noHintMsg"));
-        m_controller.hintTextField.setText(hint);
     }
 
     private Alert processingAlert;

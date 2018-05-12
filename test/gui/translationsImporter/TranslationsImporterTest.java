@@ -3,11 +3,9 @@ package gui.translationsImporter;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 public class TranslationsImporterTest {

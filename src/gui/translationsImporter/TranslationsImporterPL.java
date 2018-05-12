@@ -1,26 +1,42 @@
 package gui.translationsImporter;
 
-import com.owlike.genson.Genson;
-
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Map;
-import java.util.Scanner;
 
 /**
- * Class that represents polish TranslationImporter - SINGLETON.
+ * Class that represents polish version of TranslationImporter - SINGLETON.
  *
  * @since 2018-17-01
  */
 public class TranslationsImporterPL extends TranslationsImporter {
-    private Map<String, String> m_translationsMap;
 
-    private TranslationsImporterPL() {
+    /**
+     * Performs translations.
+     *
+     * @return true if translation went ok, false otherwise.
+     */
+    public Boolean translate() {
+        String translationPath = "PL.json";
+
+        m_translationsMap = super.parseTranslations(translationPath);
+        return m_translationsMap != null;
     }
 
-    private static TranslationsImporterPL instance = null;
+    /**
+     * Gets translations.
+     *
+     * @return An Map<String, String> that has translation mappings.                                                                                                                                                                                                                                                            ,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               String> with required string as key and its translation as value.
+     */
+    public Map<String, String> getTranslations() {
+        return m_translationsMap;
+    }
 
-    public static TranslationsImporterPL getInstance() {
+    /**
+     * Static function that gets instance of TranslationImporter.
+     * Creates new if does not exists.
+     *
+     * @return instance of polish version of TranslationsImporter.
+     */
+    static TranslationsImporterPL getInstance() {
         if (instance == null) {
             instance = new TranslationsImporterPL();
         }
@@ -28,14 +44,9 @@ public class TranslationsImporterPL extends TranslationsImporter {
         return instance;
     }
 
-    public Boolean translate() {
-        String translationPath = getPathSuffix("PL.json");
-
-        m_translationsMap = super.parseTranslations(translationPath);
-        return m_translationsMap != null;
+    private TranslationsImporterPL() {
     }
 
-    public Map<String, String> getTranslations() {
-        return m_translationsMap;
-    }
+    private static TranslationsImporterPL instance = null;
+    private Map<String, String> m_translationsMap;
 }
