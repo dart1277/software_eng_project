@@ -362,7 +362,7 @@ public class Controller implements Initializable {
         fileBrowserPane.getChildren().add(treeView);
     }
 
-    private boolean addPathChoice(String path) {
+    public boolean addPathChoice(String path) {
         System.out.println("trying to add " + path);
 
         if (checkIfNodeAlreadyAdded(path))//check if adding is possible
@@ -401,7 +401,7 @@ public class Controller implements Initializable {
         });
     }
 
-    private void setDisableGUIElements(boolean sel) {
+    public void setDisableGUIElements(boolean sel) {
         chooseDestinationFolder.setDisable(sel);
         encryptOrDecryptFilesBtn.setDisable(sel);
         addBtn.setDisable(sel);
@@ -544,6 +544,14 @@ public class Controller implements Initializable {
         } else {
             System.out.println("THERE ARE NO FILES IN HERE");
         }
+    }
+
+    public void setChosenFolderPath(String path) {
+        folderChoosenPath = path;
+    }
+
+    public TreeItem<String> getChosenFilesTree() {
+        return chosenFilesTree;
     }
 
     private final ToggleGroup operationToPerformGroup = new ToggleGroup();
