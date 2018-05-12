@@ -41,7 +41,10 @@ dependencies {
 }
 
 test {
-
+    testLogging {
+        events "failed"
+        exceptionFormat "short"
+    }
     testLogging.showStandardStreams = true
 }
 
