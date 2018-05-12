@@ -2,10 +2,6 @@ package gui.translationsImporter;
 
 import com.owlike.genson.Genson;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -19,26 +15,33 @@ public abstract class TranslationsImporter {
     /**
      * Abstract function to get translations.
      *
-     * @return Map<String                                                                                                                               ,                                                                                                                                                                                                                                                               String> with required string as key and its translation as value.
+     * @return An Map<String, String> that has translation mappings.                                                                                                                                                                                                                                                            ,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               String> with required string as key and its translation as value.
      */
-    abstract public Map<String, String> getTranslations();
+    public abstract Map<String, String> getTranslations();
 
-    abstract public Boolean translate();
+    /**
+     * Abstract function to perform translations.
+     *
+     * @return true if translation went ok, false otherwise.
+     */
+    public abstract Boolean translate();
 
-    public String getPathSuffix(String configFileName) {
-        if (System.getProperty("os.name").startsWith("Windows")) {
-            return configFileName;
-        } else {
-            return configFileName;
-        }
-    }
-
+    /**
+     * Function that parses translations.
+     *
+     * @param translationFilePath path to translation file.
+     * @return true if translation went ok, false otherwise.
+     */
     @SuppressWarnings("unchecked")
-    Map<String, String> parseTranslations(String translationPath) {
+    Map<String, String> parseTranslations(String translationFilePath) {
         String entireJson = "{}";
-        Scanner scn = new Scanner(getClass().getResourceAsStream(translationPath));
-        entireJson = scn.useDelimiter("\\A").next();
-        scn.close();
+        try (Scanner scn = new Scanner(getClass().getResourceAsStream(translationFilePath))) {
+            final String pattern = "\\A";
+            scn.useDelimiter(pattern);
+            if (scn.hasNext())
+                entireJson = scn.useDelimiter(pattern).next();
+        }
+
         Genson genson = new Genson();
         return genson.deserialize(entireJson, Map.class);
     }

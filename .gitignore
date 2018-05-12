@@ -8,6 +8,8 @@ out/
 build/
 .gradle/
 .idea/
+gradle*
+*.iml
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

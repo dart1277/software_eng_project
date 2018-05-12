@@ -8,6 +8,7 @@ import gui.translationsImporter.TranslationsImporter;
 import gui.translationsImporter.TranslationsImporterFactory;
 import gui.translationsImporter.TranslationsImporterType;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -61,87 +62,13 @@ public class Controller implements Initializable {
     public PasswordField passwordText;
     public PasswordField passwordTextRepeat;
 
-    public final ToggleGroup operationToPerformGroup = new ToggleGroup();
-    public final ToggleGroup encyptSpeedGroup = new ToggleGroup();
-
-    private String currentObjectClickedFullPath; // file or folder
-    private TreeItem<String> chosenFilesTree = new TreeItem<>("", new ImageView(new Image("file:img/computer.jpg")));
-    private boolean isEncrypt;
-    private Double fontSizeSelect;
-    private String folderChoosenPath;
-    private View view;
-
-    private void setUpFileBrowser() {
-        String hostName = "computer";
-        try {
-            hostName = InetAddress.getLocalHost().getHostName();
-        } catch (UnknownHostException ex) {
-            System.out.println(ex.getMessage());
-            ex.printStackTrace();
-        }
-
-        //System.out.println("hostName: " + hostName);
-        TreeItem<String> rootNode = new TreeItem<>(hostName, new ImageView(new Image("file:img/computer.jpg")));
-
-        Iterable<Path> rootDirectories = FileSystems.getDefault().getRootDirectories();
-        for (Path name : rootDirectories) {
-            rootNode.getChildren().add(new FilePathTreeItem(name.toFile()));
-        }
-        rootNode.setExpanded(true);
-
-        TreeView<String> treeView = new TreeView<>(rootNode);
-
-        treeView.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> handleMouseClicked(e, treeView));
-
-        fileBrowserPane.getChildren().add(treeView);
-    }
-
-    private boolean addPathChoice(String path) {
-        System.out.println("trying to add " + path);
-
-        if (checkIfNodeAlreadyAdded(path))//check if adding is possible
-            return false;         //cannot add, file found
-
-        chosenFilesTree.getChildren().add(new FilePathTreeItem(new File(path)));
-        chosenFilesTree.setExpanded(true);
-
-        TreeView<String> treeView = new TreeView<>(chosenFilesTree);
-
-        selectedFileBrowserPane.getChildren().add(treeView);
-        return true;
-    }
-
-    private void handleMouseClicked(MouseEvent event, TreeView treeView) {
-        Node node = event.getPickResult().getIntersectedNode();
-        // Accept clicks only on node cells, and not on empty spaces of the TreeView
-        if (node instanceof Text || (node instanceof TreeCell && ((TreeCell) node).getText() != null)) {
-            String fullPath = "";
-            try {
-                fullPath = ((FilePathTreeItem) treeView.getSelectionModel().getSelectedItem()).getAbsolutePath();
-            } catch (ClassCastException | NullPointerException ex) {
-                System.out.println("handleMouseClicked treeView exception");
-            }
-            currentObjectClickedFullPath = fullPath;
-        }
-
-    }
-
-
-    public void refreshTreeView() {
-        folderChoosenPath = "";
-        setUpFileBrowser();
-        chosenFilesTree.setExpanded(true);
-        TreeView<String> treeView = new TreeView<>(chosenFilesTree);
-        selectedFileBrowserPane.getChildren().add(treeView);
-        showChoosenFolderPath.setDisable(true);
-        setHeadNodeName("");
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ControllerFactory.init(this);
         setToggleGroups();
         setDefaultSelectedOperations();
+        addTextLimiter(hintTextField, 60);
         isEncrypt = true;
         refreshTreeView();
         fontSizeSelect = 10.0;
@@ -205,6 +132,305 @@ public class Controller implements Initializable {
         }
     }
 
+    public Path chooseDestinationFolderClick() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle(view.getDisplayString("directoryChooserTitle"));
+        File selectedFolder = directoryChooser.showDialog(new Stage());
+
+        if (selectedFolder != null) {
+            System.out.println("selected folder");
+            view.destinationFolderClick();
+
+            folderChoosenPath = selectedFolder.toPath().toString();
+            setHeadNodeName(folderChoosenPath);             //sets chosen head node name as path
+            return selectedFolder.toPath();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Adds folder or file. Displays result.
+     */
+    public void addFileOrFolderClick() {
+        if (currentObjectClickedFullPath == null) {
+            view.noObjectClicked();
+            return;
+        }
+
+        Optional<ButtonType> confirmResult = view.confirmAddFileOrFolder(currentObjectClickedFullPath);
+        if (confirmResult.isPresent() && confirmResult.get() == ButtonType.OK) {
+            boolean result = true; // temporary
+
+            if (!addPathChoice(currentObjectClickedFullPath)) //trying to add file
+                result = false;
+
+            if (result) {
+                view.successMsg();
+            } else {
+                view.cannotSelectFileOrFolderMsg();
+            }
+        }
+    }
+
+
+    /**
+     * Chooses english language for entire GUI.
+     */
+    public void chooseEnglishLanguage() {
+        TranslationsImporter translImp = TranslationsImporterFactory.getTranslationImporter(TranslationsImporterType.TranslationsImporterENG);
+        if (!translImp.translate()) {
+            System.out.println("Translation failed!");
+            return;
+        }
+        view.setTranslationsMap(translImp.getTranslations());
+        view.setTranslationsForGuiElements();
+    }
+
+    /**
+     * Chooses polish language for entire GUI.
+     */
+    public void choosePolishLanguage() {
+        TranslationsImporter translImp = TranslationsImporterFactory.getTranslationImporter(TranslationsImporterType.TranslationsImporterPL);
+        if (!translImp.translate()) {
+            System.out.println("Translation failed!");
+            return;
+        }
+        view.setTranslationsMap(translImp.getTranslations());
+        view.setTranslationsForGuiElements();
+    }
+
+    /**
+     * Sets font size to 10px, and background color depending on encrypt/decrypt mode.
+     */
+    public void fontSize10pxSelected() {
+        fontSizeSelect = 10.0;
+        view.setFonts(fontSizeSelect);
+        setBackgroundColor();
+    }
+
+    /**
+     * Sets font size to 12px, and background color depending on encrypt/decrypt mode.
+     */
+    public void fontSize12pxSelected() {
+        fontSizeSelect = 12.0;
+        view.setFonts(fontSizeSelect);
+        setBackgroundColor();
+    }
+
+    /**
+     * Sets font size to 14px, and background color depending on encrypt/decrypt mode.
+     */
+    public void fontSize14pxSelected() {
+        fontSizeSelect = 14.0;
+        view.setFonts(fontSizeSelect);
+        setBackgroundColor();
+    }
+
+    /**
+     * Displays help menu.
+     */
+    public void helpMenuSelected() {
+        view.displayHelpMenu();
+    }
+
+    /**
+     * Shows choosen folder path.
+     */
+    public void showChoosenFolderPathClick() {
+        view.showChosenFolderPathClick(folderChoosenPath);
+    }
+
+    public void undoSelectionClick() {
+        int last_item_index = chosenFilesTree.getChildren().size() - 1;
+        if (last_item_index >= 0)
+            chosenFilesTree.getChildren().remove(last_item_index);
+    }
+
+    public void clearSelectionClick() {
+        chosenFilesTree.getChildren().clear();
+    }
+
+    /**
+     * Handles add hint RadioButton click.
+     */
+    public void addHintClick() {
+        view.setHintTextFieldVisibility(addHint.isSelected());
+
+        if (decryptFiles.isSelected()) {
+            List<String> selectedFiles = generateSelectedFilesList();
+            String randomFilePath = "";
+            for (String filePath : selectedFiles) {
+                if (new File(filePath).isFile()) {
+                    randomFilePath = filePath;
+                    break;
+                }
+            }
+            view.displayHintFromFile(randomFilePath);
+        }
+    }
+
+    private void setBackgroundColor() {
+        if (isEncrypt) {
+            view.setBackgroundColor("#FFFFFF");
+        } else {
+            view.setBackgroundColor("#90EE90");
+        }
+    }
+
+    private List<String> generateSelectedFilesList() {
+        List<String> result = new ArrayList<>();
+        if (!chosenFilesTree.getChildren().isEmpty()) {
+            Object[] chosenFilesArr = chosenFilesTree.getChildren().toArray();
+            for (Object chosenFile : chosenFilesArr) {
+                String fileName = chosenFile.toString();
+
+                FilePathTreeItem fileTree = new FilePathTreeItem(new File(fileName));
+                result.addAll(fileTree.getSelectedFilesList());
+            }
+        } else {
+            System.out.println("THERE ARE NO FILES IN HERE");
+        }
+        return result;
+    }
+
+    private boolean checkIfNodeAlreadyAdded(String newPath) {
+        //checking under chosen files
+        Object[] chosenFilesArr = chosenFilesTree.getChildren().toArray();
+        for (Object chosenFile : chosenFilesArr) {
+            FilePathTreeItem fileTree = new FilePathTreeItem(new File(chosenFile.toString()));
+            if (fileTree.findPath(newPath))
+                return true;
+
+        }
+        //checking under newPath file
+        FilePathTreeItem fileTree = new FilePathTreeItem(new File(newPath));
+        for (Object chosenFile : chosenFilesArr) {
+            if (fileTree.findPath(chosenFile.toString())) {
+                chosenFilesTree.getChildren().remove(chosenFile);
+            }
+        }
+        return false;
+    }
+
+    private void setDefaultSelectedOperations() {
+        defaultEncSpeed.setSelected(true);
+        encryptFiles.setSelected(true);
+    }
+
+    private void setToggleGroups() {
+        slowEncSpeed.setToggleGroup(encyptSpeedGroup);
+        defaultEncSpeed.setToggleGroup(encyptSpeedGroup);
+        fastEncSpeed.setToggleGroup(encyptSpeedGroup);
+
+        encryptFiles.setToggleGroup(operationToPerformGroup);
+        decryptFiles.setToggleGroup(operationToPerformGroup);
+    }
+
+    private void refreshTreeView() {
+        folderChoosenPath = "";
+        setUpFileBrowser();
+        chosenFilesTree.setExpanded(true);
+        TreeView<String> treeView = new TreeView<>(chosenFilesTree);
+        selectedFileBrowserPane.getChildren().add(treeView);
+        showChoosenFolderPath.setDisable(true);
+        setHeadNodeName("");
+    }
+
+    private void setUpFileBrowser() {
+        String hostName = "computer";
+        try {
+            hostName = InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException ex) {
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+        }
+
+        //System.out.println("hostName: " + hostName);
+        TreeItem<String> rootNode = new TreeItem<>(hostName, new ImageView(new Image("file:img/computer.jpg")));
+
+        Iterable<Path> rootDirectories = FileSystems.getDefault().getRootDirectories();
+        for (Path name : rootDirectories) {
+            rootNode.getChildren().add(new FilePathTreeItem(name.toFile()));
+        }
+        rootNode.setExpanded(true);
+
+        TreeView<String> treeView = new TreeView<>(rootNode);
+
+        treeView.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> handleMouseClicked(e, treeView));
+
+        fileBrowserPane.getChildren().add(treeView);
+    }
+
+    private boolean addPathChoice(String path) {
+        System.out.println("trying to add " + path);
+
+        if (checkIfNodeAlreadyAdded(path))//check if adding is possible
+            return false;         //cannot add, file found
+
+        chosenFilesTree.getChildren().add(new FilePathTreeItem(new File(path)));
+        chosenFilesTree.setExpanded(true);
+
+        TreeView<String> treeView = new TreeView<>(chosenFilesTree);
+
+        selectedFileBrowserPane.getChildren().add(treeView);
+        return true;
+    }
+
+    private void handleMouseClicked(MouseEvent event, TreeView treeView) {
+        Node node = event.getPickResult().getIntersectedNode();
+        // Accept clicks only on node cells, and not on empty spaces of the TreeView
+        if (node instanceof Text || (node instanceof TreeCell && ((TreeCell) node).getText() != null)) {
+            String fullPath = "";
+            try {
+                fullPath = ((FilePathTreeItem) treeView.getSelectionModel().getSelectedItem()).getAbsolutePath();
+            } catch (ClassCastException | NullPointerException ex) {
+                System.out.println("handleMouseClicked treeView exception");
+            }
+            currentObjectClickedFullPath = fullPath;
+        }
+
+    }
+
+    private static void addTextLimiter(final TextField textField, final int maxLength) {
+        textField.textProperty().addListener((final ObservableValue<? extends String> ov, final String oldValue, final String newValue) -> {
+            if (textField.getText().length() > maxLength) {
+                String s = textField.getText().substring(0, maxLength);
+                textField.setText(s);
+            }
+        });
+    }
+
+    private void setDisableGUIElements(boolean sel) {
+        chooseDestinationFolder.setDisable(sel);
+        encryptOrDecryptFilesBtn.setDisable(sel);
+        addBtn.setDisable(sel);
+        encryptFiles.setDisable(sel);
+        decryptFiles.setDisable(sel);
+        chooseLanguage.setDisable(sel);
+        slowEncSpeed.setDisable(sel);
+        defaultEncSpeed.setDisable(sel);
+        fastEncSpeed.setDisable(sel);
+        addHint.setDisable(sel);
+        undoSelection.setDisable(sel);
+        clearSelection.setDisable(sel);
+        hintTextField.setDisable(sel);
+        passwordText.setDisable(sel);
+    }
+
+    private void freezeGUI() {
+        Platform.runLater(() -> setDisableGUIElements(true));
+    }
+
+    private void unfreezeGUI(List<String> successList, List<String> failedList) {
+        Platform.runLater(() -> {
+            setDisableGUIElements(false);
+            view.cipheringResultAlert(successList, failedList);
+        });
+
+
+    }
+
     private void encryptFiles() {
         System.out.println("encryptFiles");
         List<String> list = generateSelectedFilesList();
@@ -233,6 +459,10 @@ public class Controller implements Initializable {
         //startEncryptingProcedure();
     }
 
+    private void setHeadNodeName(String name) {
+        chosenFilesTree.setValue(name);
+    }
+
     private void decryptFiles() {
         System.out.println("decryptFiles");
         view.decryptFilesStatusAlert();
@@ -240,49 +470,7 @@ public class Controller implements Initializable {
         startDecryptingProcedure();
     }
 
-    public Path chooseDestinationFolderClick() {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle(view.getDisplayString("directoryChooserTitle"));
-        File selectedFolder = directoryChooser.showDialog(new Stage());
-
-        if (selectedFolder != null) {
-            System.out.println("selected folder");
-            view.destinationFolderClick();
-
-            folderChoosenPath = selectedFolder.toPath().toString();
-            setHeadNodeName(folderChoosenPath);             //sets chosen head node name as path
-            return selectedFolder.toPath();
-        } else {
-            return null;
-        }
-    }
-
-    private void setHeadNodeName(String name) {
-        chosenFilesTree.setValue(name);
-    }
-
-    public void addFileOrFolderClick() {
-        if (currentObjectClickedFullPath == null) {
-            view.noObjectClicked();
-            return;
-        }
-
-        Optional<ButtonType> confirmResult = view.confirmAddFileOrFolder(currentObjectClickedFullPath);
-        if (confirmResult.isPresent() && confirmResult.get() == ButtonType.OK) {
-            boolean result = true; // temporary
-
-            if (!addPathChoice(currentObjectClickedFullPath)) //trying to add file
-                result = false;
-
-            if (result) {
-                view.successMsg();
-            } else {
-                view.cannotSelectFileOrFolderMsg();
-            }
-        }
-    }
-
-    public int getEncryptionSpeedValue() {
+    private int getEncryptionSpeedValue() {
         //get speed value from encryption speed controls on gui
         int x = encyptSpeedGroup.getSelectedToggle().selectedProperty().toString().lastIndexOf("id=");
         int y = encyptSpeedGroup.getSelectedToggle().selectedProperty().toString().indexOf(",", x);
@@ -330,60 +518,6 @@ public class Controller implements Initializable {
         }
     }
 
-    /**
-     * Generates list of all selected files
-     * @return selected files list
-     */
-
-    private List<String> generateSelectedFilesList() {
-        List<String> result = new ArrayList<>();
-        if (!chosenFilesTree.getChildren().isEmpty()) {
-            Object[] chosenFilesArr = chosenFilesTree.getChildren().toArray();
-            for (Object chosenFile : chosenFilesArr) {
-                String fileName = chosenFile.toString();
-
-                FilePathTreeItem fileTree = new FilePathTreeItem(new File(fileName));
-                result.addAll(fileTree.getSelectedFilesList());
-            }
-        } else {
-            System.out.println("THERE ARE NO FILES IN HERE");
-        }
-        return result;
-    }
-
-    private void setDisableGUIElements(boolean sel) {
-        chooseDestinationFolder.setDisable(sel);
-        encryptOrDecryptFilesBtn.setDisable(sel);
-        addBtn.setDisable(sel);
-        encryptFiles.setDisable(sel);
-        decryptFiles.setDisable(sel);
-        chooseLanguage.setDisable(sel);
-        slowEncSpeed.setDisable(sel);
-        defaultEncSpeed.setDisable(sel);
-        fastEncSpeed.setDisable(sel);
-        addHint.setDisable(sel);
-        undoSelection.setDisable(sel);
-        clearSelection.setDisable(sel);
-        hintTextField.setDisable(sel);
-        passwordText.setDisable(sel);
-
-
-    }
-
-    public void freezeGUI() {
-        Platform.runLater(() -> setDisableGUIElements(true));
-    }
-
-    public void unfreezeGUI(List<String> successList, List<String> failedList) {
-        Platform.runLater(() -> {
-            setDisableGUIElements(false);
-            view.cipheringResultAlert(successList, failedList);
-        });
-
-
-    }
-
-
     private void startDecryptingProcedure() {
         String pass = passwordText.getText();
 
@@ -412,126 +546,13 @@ public class Controller implements Initializable {
         }
     }
 
-    private boolean checkIfNodeAlreadyAdded(String newPath) {
-        //checking under chosen files
-        Object[] chosenFilesArr = chosenFilesTree.getChildren().toArray();
-        for (Object chosenFile : chosenFilesArr) {
-            FilePathTreeItem fileTree = new FilePathTreeItem(new File(chosenFile.toString()));
-            if (fileTree.findPath(newPath))
-                return true;
+    private final ToggleGroup operationToPerformGroup = new ToggleGroup();
+    private final ToggleGroup encyptSpeedGroup = new ToggleGroup();
 
-        }
-        //checking under newPath file
-        FilePathTreeItem fileTree = new FilePathTreeItem(new File(newPath));
-        for (Object chosenFile : chosenFilesArr) {
-            if (fileTree.findPath(chosenFile.toString())) {
-                chosenFilesTree.getChildren().remove(chosenFile);
-            }
-        }
-        return false;
-    }
-
-    public void chooseEnglishLanguage() {
-        TranslationsImporter translImp = TranslationsImporterFactory.getTranslationImporter(TranslationsImporterType.TranslationsImporterENG);
-        if (!translImp.translate()) {
-            System.out.println("Translation failed!");
-            return;
-        }
-        view.setTranslationsMap(translImp.getTranslations());
-        view.setTranslationsForGuiElements();
-    }
-
-    public void choosePolishLanguage() {
-        TranslationsImporter translImp = TranslationsImporterFactory.getTranslationImporter(TranslationsImporterType.TranslationsImporterPL);
-        if (!translImp.translate()) {
-            System.out.println("Translation failed!");
-            return;
-        }
-        view.setTranslationsMap(translImp.getTranslations());
-        view.setTranslationsForGuiElements();
-    }
-
-    private void setBackgroundStyle() {
-        if (isEncrypt) {
-            view.setBackgroundColor("#FFFFFF");
-        } else {
-            view.setBackgroundColor("#90EE90");
-        }
-    }
-
-    public void fontSize10pxSelected() {
-        fontSizeSelect = 10.0;
-        view.setFonts(fontSizeSelect);
-        setBackgroundStyle();
-    }
-
-    public void fontSize12pxSelected() {
-        fontSizeSelect = 12.0;
-        view.setFonts(fontSizeSelect);
-        setBackgroundStyle();
-    }
-
-    public void fontSize14pxSelected() {
-        fontSizeSelect = 14.0;
-        view.setFonts(fontSizeSelect);
-        setBackgroundStyle();
-    }
-
-    public void helpMenuSelected() {
-        view.displayHelpMenu();
-    }
-
-    public void showChoosenFolderPathClick() {
-        view.showChosenFolderPathClick(folderChoosenPath);
-    }
-
-    public void undoSelectionClick() {
-        int last_item_index = chosenFilesTree.getChildren().size() - 1;
-        if (last_item_index >= 0)
-            chosenFilesTree.getChildren().remove(last_item_index);
-    }
-
-    public void clearSelectionClick() {
-        chosenFilesTree.getChildren().clear();
-    }
-
-    /**
-     * Handles add hint RadioButton click.
-     */
-    public void addHintClick() {
-        view.setHintTextFieldVisibility(addHint.isSelected());
-
-        if (decryptFiles.isSelected()) {
-            List<String> selectedFiles = generateSelectedFilesList();
-            String randomFilePath = "";
-            for (String filePath : selectedFiles) {
-                if(new File(filePath).isFile()){
-                    randomFilePath = filePath;
-                    break;
-                }
-            }
-            view.displayHintFromFile(randomFilePath);
-        }
-    }
-
-    /**
-     * Sets default selected operations
-     */
-    private void setDefaultSelectedOperations() {
-        defaultEncSpeed.setSelected(true);
-        encryptFiles.setSelected(true);
-    }
-
-    /**
-     * Sets toggle groups.
-     */
-    private void setToggleGroups() {
-        slowEncSpeed.setToggleGroup(encyptSpeedGroup);
-        defaultEncSpeed.setToggleGroup(encyptSpeedGroup);
-        fastEncSpeed.setToggleGroup(encyptSpeedGroup);
-
-        encryptFiles.setToggleGroup(operationToPerformGroup);
-        decryptFiles.setToggleGroup(operationToPerformGroup);
-    }
-
+    private String currentObjectClickedFullPath; // file or folder
+    private TreeItem<String> chosenFilesTree = new TreeItem<>("", new ImageView(new Image("file:img/computer.jpg")));
+    private boolean isEncrypt;
+    private Double fontSizeSelect;
+    private String folderChoosenPath;
+    private View view;
 }
