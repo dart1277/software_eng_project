@@ -64,11 +64,11 @@ public class MainTest2 extends ApplicationTest {
             controller.setChosenFolderPath(fakeDir);
             controller.getChosenFilesTree().setValue(fakeDir);
             controller.setDisableGUIElements(true);
+            assertThat(controller.encryptOrDecryptFilesBtn.isDisable(), is(true));
             controller.setDisableGUIElements(false);
             controller.encryptOrDecryptFilesClick();
         });
     }
-
 
 
 }
