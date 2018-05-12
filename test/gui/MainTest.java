@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.After;
@@ -100,12 +101,15 @@ public class MainTest extends ApplicationTest {
     public void testCallBacks() {
         clickOn("#program");
         clickOn("#help");
-        clickOn("#chooseDestinationFolder");
-        clickOn("#slowEncSpeed");
-        clickOn("#undoSelection");
-        clickOn("#clearSelection");
+    }
 
-
+    @Test
+    public void testHintField(){
+        clickOn("#addHint");
+        clickOn("#hintTextField");
+        write("123456789");
+        TextField hintField = GuiTest.find("#hintTextField");
+        assertThat(hintField.getText(), is("123456789"));
     }
 
 
