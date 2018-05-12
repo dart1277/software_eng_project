@@ -64,6 +64,7 @@ public class MainTest extends ApplicationTest {
         clickOn("#passwordTextRepeat");
         write("123456789");
         assertThat(passwordField.getText(), is("123456789"));
+        clickOn("#encryptOrDecryptFilesBtn");
     }
 
     @Test
@@ -94,5 +95,18 @@ public class MainTest extends ApplicationTest {
 
 
     }
+
+    @Test
+    public void testCallBacks() {
+        clickOn("#program");
+        clickOn("#help");
+        clickOn("#chooseDestinationFolder");
+        clickOn("#slowEncSpeed");
+        clickOn("#undoSelection");
+        clickOn("#clearSelection");
+
+
+    }
+
 
 }
