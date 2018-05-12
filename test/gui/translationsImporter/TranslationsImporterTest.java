@@ -50,26 +50,6 @@ public class TranslationsImporterTest {
     }
 
     @Test
-    public void getPathSuffix() {
-/*
-        String pathToFile = "";
-        if (System.getProperty("os.name").startsWith("Windows")) {
-            pathToFile = "\\src\\gui\\translationsImporter\\SomeFile.txt";
-        }
-        else {
-            pathToFile = "/src/gui/translationsImporter/SomeFile.txt";
-        }
-
-        assertNotNull(instanceEng1.getPathSuffix("SomeFile.txt"));
-        assertNotNull(instancePl1.getPathSuffix("SomeFile.txt"));
-        assertEquals(pathToFile, instanceEng1.getPathSuffix("SomeFile.txt"));
-        assertEquals(pathToFile, instancePl1.getPathSuffix("SomeFile.txt"));
-        */
-        assertEquals("SomeName", instanceEng1.getPathSuffix("SomeName"));
-        assertEquals("SomeNamePL", instancePl1.getPathSuffix("SomeNamePL"));
-    }
-
-    @Test
     public void parseTranslations(){
         Map<String, String> testMap = new HashMap<>();
         testMap.put("firstKey","firstValue");
