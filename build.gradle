@@ -12,9 +12,9 @@ sourceSets {
             srcDirs = ['src/']
 
         }
-        resources{
+        resources {
             srcDirs = ['resources/']
-            includes = ['**/*.fxml','**/*.css','**/*.json']
+            includes = ['**/*.fxml', '**/*.css', '**/*.json']
         }
 
     }
@@ -31,17 +31,25 @@ sourceSets {
 
 dependencies {
     compile 'com.owlike:genson:1.4'
+    testCompile "org.testfx:openjfx-monocle:8u76-b04"
     testCompile 'junit:junit:4.12', 'org.mockito:mockito-core:1.+'
+    testCompile group: 'org.testfx', name: 'testfx-core', version: '4.0.12-alpha'
+    testCompile group: 'org.testfx', name: 'testfx-junit', version: '4.0.12-alpha'
+    testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
+    testCompile group: 'org.loadui', name: 'testFx', version: '3.1.2'
 
 }
 
-test{
-
+test {
+    testLogging {
+        events "failed"
+        exceptionFormat "short"
+    }
     testLogging.showStandardStreams = true
 }
 
 
-jar{
+jar {
 
     manifest {
         attributes(
