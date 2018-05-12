@@ -53,4 +53,14 @@ public class MainTest extends ApplicationTest {
         //clickOn("#applyButton");
         assertThat(passwordField.getText(), is("123456789"));
     }
+
+    @Test
+    public void testPasswordAgainInput() {
+        //Label label = GuiTest.find("#label");
+        PasswordField passwordField = GuiTest.find("#passwordTextRepeat");
+        clickOn("#passwordTextRepeat");
+        write("123456789");
+        //clickOn("#applyButton");
+        assertThat(passwordField.getText(), is("123456789"));
+    }
 }
