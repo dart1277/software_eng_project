@@ -330,6 +330,11 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Generates list of all selected files
+     * @return selected files list
+     */
+
     private List<String> generateSelectedFilesList() {
         List<String> result = new ArrayList<>();
         if (!chosenFilesTree.getChildren().isEmpty()) {
