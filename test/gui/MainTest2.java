@@ -66,7 +66,7 @@ public class MainTest2 extends ApplicationTest {
             controller.setDisableGUIElements(true);
             assertThat(controller.encryptOrDecryptFilesBtn.isDisable(), is(true));
             controller.setDisableGUIElements(false);
-            controller.encryptOrDecryptFilesClick();
+            assertThat(controller.encryptOrDecryptFilesClick(), is(true));
         });
     }
 

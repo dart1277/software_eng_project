@@ -102,27 +102,27 @@ public class Controller implements Initializable {
         view.decodeRadioClick();
     }
 
-    public void encryptOrDecryptFilesClick() {
+    public boolean encryptOrDecryptFilesClick() {
         //failure cases
         if (chosenFilesTree.getChildren().isEmpty()) {
             view.noFilesToEncryptOrDecryptAlert();
-            return;
+            return false;
         }
         if (folderChoosenPath.isEmpty()) {
             view.folderChosenPathEmptyAlert();
-            return;
+            return false;
         }
         if (passwordText.getText().isEmpty()) {
             view.noPasswordProvided();
-            return;
+            return false;
         }
         if (isEncrypt && !passwordText.getText().equals(passwordTextRepeat.getText())) {
             view.passwordsNotEqual();
-            return;
+            return false;
         }
         if (passwordText.getText().length() < 5) {
             view.passwordTooShort();
-            return;
+            return false;
         }
         //start procedure
         if (isEncrypt) {
@@ -130,6 +130,7 @@ public class Controller implements Initializable {
         } else {
             decryptFiles();
         }
+        return true;
     }
 
     public Path chooseDestinationFolderClick() {
