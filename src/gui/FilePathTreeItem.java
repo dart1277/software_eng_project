@@ -43,11 +43,13 @@ public class FilePathTreeItem extends TreeItem<String> {
         return this.isDirectory;
     }
 
+    /**
+     * Constructor
+     * Sets up file path tree for chosen file
+     * @param file chosen file to build tree for
+     * */
     public FilePathTreeItem(File file) {
         super(file.toString());
-        //this.fileEncryptor = new FileEncryptor();   //to remove
-        //String key = "masło_hasło";                 //to remove
-        //this.fileEncryptor.configure(key, CryptoModule.REGULAR_MODE, true, "Masełko");//to remove
         this.file = file;
         this.absolutePath = file.getAbsolutePath();
         this.isDirectory = file.isDirectory();
@@ -61,7 +63,10 @@ public class FilePathTreeItem extends TreeItem<String> {
 
         setValueDisplayedInTree();
     }
-
+    /**
+     * Absolute path on the head node
+     * @return Absolute path on the head node
+     * */
     public String toString()        //function needed to compare path
     {
         return this.absolutePath;
@@ -132,7 +137,10 @@ public class FilePathTreeItem extends TreeItem<String> {
         }
         return FXCollections.emptyObservableList();
     }
-
+    /**
+     * Checks if file/folder exists in files tree
+     * @return flase if file/folder doesn't exist
+     * */
     public boolean findPath(String pathToFind) {
         System.out.println("szukam " + pathToFind + " w " + this.toString());
         if (pathToFind.equals(this.toString()))      //check if this is searched path
@@ -152,8 +160,13 @@ public class FilePathTreeItem extends TreeItem<String> {
 
         return false;
     }
-
-    public void encryptOrDecryptFileTree(CryptoTask cryptoTask, String mainPath, String localPath)   //<-- old working version
+    /**
+     * Iterates through files tree, creates folders in destination folder and calls endrypt/decrypt function.
+     * @param cryptoTask CryptoTask object.
+     * @param mainPath Destination folder path.
+     * @param localPath Local file path.
+     * */
+    public void encryptOrDecryptFileTree(CryptoTask cryptoTask, String mainPath, String localPath)
     {
         File f = this.file;
         String newLocalPath = "";
@@ -194,7 +207,12 @@ public class FilePathTreeItem extends TreeItem<String> {
                 encryptOrDecrypt(cryptoTask, f, newLocalPath);
         }
     }
-
+    /**
+     * Adds cryptoTask to proceed
+     * @param cryptoTask CryptoTask object.
+     * @param toEncrypt Path to file to encrypt.
+     * @param newPathFile Destination file path.
+     * */
     public void encryptOrDecrypt(CryptoTask cryptoTask, File toEncrypt, String newPathFile) {
         String name = toEncrypt.getName();
         String newFilePath = newPathFile + slash + name;
@@ -223,7 +241,6 @@ public class FilePathTreeItem extends TreeItem<String> {
 
     /**
      * Provides list of all selected files in the tree
-     *
      * @return complete list of selected files
      */
     public List<String> getSelectedFilesList() {

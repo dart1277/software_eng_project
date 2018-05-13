@@ -62,7 +62,9 @@ public class Controller implements Initializable {
     public PasswordField passwordText;
     public PasswordField passwordTextRepeat;
 
-
+    /**
+     * Initializes controller fields.
+     * */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ControllerFactory.init(this);
@@ -83,7 +85,9 @@ public class Controller implements Initializable {
         view.setFonts(fontSizeSelect);
         view.setHintTextFieldVisibility(false);
     }
-
+    /**
+    * Sets all parameters needed for encoding.
+    * */
     public void encodeRadioClick() {
         if (!isEncrypt) {      //if changed
             clearSelectionClick();
@@ -92,7 +96,9 @@ public class Controller implements Initializable {
         refreshTreeView();
         view.encodeRadioClick();
     }
-
+    /**
+     * Sets all parameters needed for decoding.
+     * */
     public void decodeRadioClick() {
         if (isEncrypt) {     //if changed
             clearSelectionClick();
@@ -101,7 +107,10 @@ public class Controller implements Initializable {
         refreshTreeView();
         view.decodeRadioClick();
     }
-
+    /**
+     * Checks all failure cases and runs encode/decode procedure.
+     * @return is encode/decode procedure run successfully.
+     * */
     public boolean encryptOrDecryptFilesClick() {
         //failure cases
         if (chosenFilesTree.getChildren().isEmpty()) {
@@ -132,7 +141,10 @@ public class Controller implements Initializable {
         }
         return true;
     }
-
+    /**
+     * Allows user to choose destination folder for encoding/decoding.
+     * @return path to choosen folder or null if nothing selected.
+     * */
     public Path chooseDestinationFolderClick() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle(view.getDisplayString("directoryChooserTitle"));
@@ -242,12 +254,18 @@ public class Controller implements Initializable {
         view.showChosenFolderPathClick(folderChoosenPath);
     }
 
+    /**
+     * Reverts last selected file from selected files list.
+     */
     public void undoSelectionClick() {
         int last_item_index = chosenFilesTree.getChildren().size() - 1;
         if (last_item_index >= 0)
             chosenFilesTree.getChildren().remove(last_item_index);
     }
 
+    /**
+     * Deletes all files from selected files list.
+     */
     public void clearSelectionClick() {
         chosenFilesTree.getChildren().clear();
     }
@@ -270,7 +288,9 @@ public class Controller implements Initializable {
             view.displayHintFromFile(randomFilePath);
         }
     }
-
+    /**
+     * Sets background application color depending on encryp/decrypt mode
+     * */
     private void setBackgroundColor() {
         if (isEncrypt) {
             view.setBackgroundColor("#FFFFFF");
@@ -278,7 +298,10 @@ public class Controller implements Initializable {
             view.setBackgroundColor("#90EE90");
         }
     }
-
+    /**
+     * Generates list of all selected files.
+     * @return List of selected files.
+     * */
     private List<String> generateSelectedFilesList() {
         List<String> result = new ArrayList<>();
         if (!chosenFilesTree.getChildren().isEmpty()) {
@@ -294,7 +317,11 @@ public class Controller implements Initializable {
         }
         return result;
     }
-
+    /**
+     * Checks if proposed file/folder is already on choosen files list.
+     * @param newPath Selested path to check.
+     * @return True if node already exists, flase if node do not exist.
+     * */
     private boolean checkIfNodeAlreadyAdded(String newPath) {
         //checking under chosen files
         Object[] chosenFilesArr = chosenFilesTree.getChildren().toArray();
@@ -313,7 +340,6 @@ public class Controller implements Initializable {
         }
         return false;
     }
-
     private void setDefaultSelectedOperations() {
         defaultEncSpeed.setSelected(true);
         encryptFiles.setSelected(true);
@@ -347,7 +373,6 @@ public class Controller implements Initializable {
             ex.printStackTrace();
         }
 
-        //System.out.println("hostName: " + hostName);
         TreeItem<String> rootNode = new TreeItem<>(hostName, new ImageView(new Image("file:img/computer.jpg")));
 
         Iterable<Path> rootDirectories = FileSystems.getDefault().getRootDirectories();
@@ -362,7 +387,11 @@ public class Controller implements Initializable {
 
         fileBrowserPane.getChildren().add(treeView);
     }
-
+    /**
+     * Tries to add/adds new file to chosen files list .
+     * @param path Selected file to add.
+     * @return True if file added successfully, false if file can't be added.
+     * */
     public boolean addPathChoice(String path) {
         System.out.println("trying to add " + path);
 
@@ -401,7 +430,10 @@ public class Controller implements Initializable {
             }
         });
     }
-
+    /**
+     * Enables/Disables GUIElements.
+     * @param sel Boolean value to Enable or Disable GUI elements.
+     * */
     public void setDisableGUIElements(boolean sel) {
         chooseDestinationFolder.setDisable(sel);
         encryptOrDecryptFilesBtn.setDisable(sel);
@@ -454,10 +486,6 @@ public class Controller implements Initializable {
             }
 
         }
-
-        //view.encryptFilesStatusAlert();
-
-        //startEncryptingProcedure();
     }
 
     private void setHeadNodeName(String name) {
@@ -529,8 +557,6 @@ public class Controller implements Initializable {
         fileEncryptor.setKey(pass);
         CryptoTask cryptoTask = new DecryptorTask(fileEncryptor, this::freezeGUI, this::unfreezeGUI);
         cryptoTask.setLists(successList, failedList);
-        //fileEncryptor.configure(pass, CryptoModule.REGULAR_MODE, true, "Masełko");
-
 
         if (!chosenFilesTree.getChildren().isEmpty()) {
             Object[] chosenFilesArr = chosenFilesTree.getChildren().toArray();
@@ -546,11 +572,17 @@ public class Controller implements Initializable {
             System.out.println("THERE ARE NO FILES IN HERE");
         }
     }
-
+    /**
+     * Sets path for selected destination folder.
+     * @param path Path to set as destination folder.
+     * */
     public void setChosenFolderPath(String path) {
         folderChoosenPath = path;
     }
-
+    /**
+     * Gets chosen files nodes
+     * @return All chosen files nodes
+     * */
     public TreeItem<String> getChosenFilesTree() {
         return chosenFilesTree;
     }
