@@ -10,8 +10,18 @@ import javafx.stage.Stage;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 
+/**
+ * The main application class
+ * */
+
 public class Main extends Application {
 
+    /**
+     * Initializes the stage for javafx
+     *
+     * @param primaryStage
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
@@ -38,6 +48,9 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Launches the application
+     * */
     public static void main(String[] args) {
         correctEncoding();
         launch(args);
