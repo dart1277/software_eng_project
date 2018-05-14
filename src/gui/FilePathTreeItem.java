@@ -139,6 +139,7 @@ public class FilePathTreeItem extends TreeItem<String> {
     }
     /**
      * Checks if file/folder exists in files tree
+     * @param pathToFind path to find
      * @return flase if file/folder doesn't exist
      * */
     public boolean findPath(String pathToFind) {

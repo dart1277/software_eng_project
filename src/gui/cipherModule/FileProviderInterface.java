@@ -16,7 +16,7 @@ public interface FileProviderInterface {
 
     /**
      * Saves next bytes of currently processed file
-     *
+     * @throws IOException IO Exception
      * @param bytesToSave encrypted byte array
      */
     void saveNextBytes(byte[] bytesToSave) throws IOException;

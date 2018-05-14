@@ -238,7 +238,7 @@ public class ByteArrayUtils {
 
     /**
      * Removes padding from byte array
-     *
+     * @throws javax.crypto.BadPaddingException wrong padding
      * @param array       byte array with padding to be removed
      * @param paddingSize padding size to be removed
      * @return byte array with padding removed

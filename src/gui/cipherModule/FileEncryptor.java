@@ -158,6 +158,9 @@ public class FileEncryptor {
     /**
      * Encrypts file from source and saves it to destination
      *
+     * @param source source file path
+     * @param destination source file path
+     *
      * @throws IOException     when file is nonexistent, it's not users fault to choose nonexistent file
      *                         because he shouldn't can do it using GUI
      * @throws CryptoException the only one you should worry about, contains file name
@@ -235,7 +238,8 @@ public class FileEncryptor {
 
     /**
      * Decrypts next file from source and saves it to destination
-     *
+     * @param source source file path
+     * @param destination source file path
      * @throws IOException     when file is nonexistent, it's not users fault to choose nonexistent file
      *                         because he shouldn't can do it using GUI
      * @throws CryptoException the only one you should worry about, contains file name

@@ -43,6 +43,7 @@ public class CryptoModule {
      * @param inputBytes array of bytes to cipher
      * @return ciphered array of bytes
      * @throws CryptoException when error in ciphering process occurs
+     * @throws java.security.InvalidAlgorithmParameterException wrong algorithm provided
      */
     public static byte[] encrypt(String key, int complexity, byte[] inputBytes)
             throws CryptoException, InvalidAlgorithmParameterException {
@@ -61,6 +62,7 @@ public class CryptoModule {
      * @param inputBytes array of bytes to cipher
      * @return ciphered array of bytes
      * @throws CryptoException when error in ciphering process occurs
+     * @throws java.security.InvalidAlgorithmParameterException wrong algorithm provided
      */
     public static byte[] decrypt(String key, int complexity, byte[] inputBytes)
             throws CryptoException, InvalidAlgorithmParameterException {

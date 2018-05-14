@@ -9,6 +9,7 @@ public class ControllerFactory {
 
     /**
      * A setter method for the controller object
+     * @param controllerNew new controller object
      * */
     public static void init(Controller controllerNew) {
         if (controller == null) controller = controllerNew;

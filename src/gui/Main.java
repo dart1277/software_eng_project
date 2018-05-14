@@ -19,8 +19,8 @@ public class Main extends Application {
     /**
      * Initializes the stage for javafx
      *
-     * @param primaryStage
-     * @throws Exception
+     * @param primaryStage primary stage for the app
+     * @throws Exception on failure throw exception
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -50,6 +50,7 @@ public class Main extends Application {
 
     /**
      * Launches the application
+     * @param args application args to pass to the launch method
      * */
     public static void main(String[] args) {
         correctEncoding();
