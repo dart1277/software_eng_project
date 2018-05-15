@@ -1,11 +1,6 @@
 package gui;
 
-import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.After;
@@ -15,13 +10,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
-import org.loadui.testfx.GuiTest;
-import org.testfx.api.FxAssert;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 
-
-import java.io.IOException;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
@@ -64,7 +55,7 @@ public class MainTest2 extends ApplicationTest {
             controller.setChosenFolderPath(fakeDir);
             controller.getChosenFilesTree().setValue(fakeDir);
             controller.setDisableGUIElements(true);
-            assertThat(controller.encryptOrDecryptFilesBtn.isDisable(), is(true));
+            assertThat(controller.getEncryptOrDecryptFilesBtn().isDisable(), is(true));
             controller.setDisableGUIElements(false);
             assertThat(controller.encryptOrDecryptFilesClick(), is(true));
         });

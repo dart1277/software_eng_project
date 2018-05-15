@@ -9,6 +9,7 @@ import gui.translationsImporter.TranslationsImporterFactory;
 import gui.translationsImporter.TranslationsImporterType;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -31,131 +32,167 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Controller implements Initializable {
-    public StackPane fileBrowserPane;
-    public StackPane selectedFileBrowserPane;
-    public GridPane mainGrid;
-    public Button addBtn;
-    public MenuBar menuBar;
-    public Label fileSelectedLabel;
-    public Label fileBrowserLabel;
-    public RadioButton encryptFiles;
-    public RadioButton decryptFiles;
-    public Menu program;
-    public Menu chooseLanguage;
-    public Menu fontSize;
-    public Button chooseDestinationFolder;
-    public Label encryptionSpeedLabel;
-    public RadioButton slowEncSpeed;
-    public RadioButton defaultEncSpeed;
-    public RadioButton fastEncSpeed;
-    public Label passwordLabel;
-    public Label passwordAgainLabel;
-    public RadioButton addHint;
-    public Button encryptOrDecryptFilesBtn;
-    public MenuItem help;
-    public MenuItem polish;
-    public MenuItem english;
-    public Button showChoosenFolderPath;
-    public Button undoSelection;
-    public Button clearSelection;
-    public TextField hintTextField;
-    public PasswordField passwordText;
-    public PasswordField passwordTextRepeat;
+    @FXML
+    private StackPane fileBrowserPane;
+    @FXML
+    private StackPane selectedFileBrowserPane;
+    @FXML
+    private GridPane mainGrid;
+    @FXML
+    private Button addBtn;
+    @FXML
+    private MenuBar menuBar;
+    @FXML
+    private Label fileSelectedLabel;
+    @FXML
+    private Label fileBrowserLabel;
+    @FXML
+    private RadioButton encryptFiles;
+    @FXML
+    private RadioButton decryptFiles;
+    @FXML
+    private Menu program;
+    @FXML
+    private Menu chooseLanguage;
+    @FXML
+    private Menu fontSize;
+    @FXML
+    private Button chooseDestinationFolder;
+    @FXML
+    private Label encryptionSpeedLabel;
+    @FXML
+    private RadioButton slowEncSpeed;
+    @FXML
+    private RadioButton defaultEncSpeed;
+    @FXML
+    private RadioButton fastEncSpeed;
+    @FXML
+    private Label passwordLabel;
+    @FXML
+    private Label passwordAgainLabel;
+    @FXML
+    private RadioButton addHint;
+    @FXML
+    private Button encryptOrDecryptFilesBtn;
+    @FXML
+    private MenuItem help;
+    @FXML
+    private MenuItem polish;
+    @FXML
+    private MenuItem english;
+    @FXML
+    private Button showChoosenFolderPath;
+    @FXML
+    private Button undoSelection;
+    @FXML
+    private Button clearSelection;
+    @FXML
+    private TextField hintTextField;
+    @FXML
+    private PasswordField passwordText;
+    @FXML
+    private PasswordField passwordTextRepeat;
 
     /**
      * Initializes controller fields.
-     * */
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ControllerFactory.init(this);
         setToggleGroups();
         setDefaultSelectedOperations();
-        addTextLimiter(hintTextField, 60);
-        isEncrypt = true;
+        addTextLimiter(getHintTextField(), 60);
+        setEncrypt(true);
         refreshTreeView();
-        fontSizeSelect = 10.0;
+        setFontSizeSelect(10.0);
         TranslationsImporter translImp = TranslationsImporterFactory.getTranslationImporter(TranslationsImporterType.TranslationsImporterENG);
         if (!translImp.translate()) {
             System.out.println("Translation failed!");
             return;
         }
 
-        view = new View(translImp.getTranslations());
-        view.setTranslationsForGuiElements();
-        view.setFonts(fontSizeSelect);
-        view.setHintTextFieldVisibility(false);
+        setView(new View(translImp.getTranslations()));
+        getView().setTranslationsForGuiElements();
+        getView().setFonts(getFontSizeSelect());
+        getView().setHintTextFieldVisibility(false);
     }
+
     /**
-    * Sets all parameters needed for encoding.
-    * */
+     * Sets all parameters needed for encoding.
+     */
     public void encodeRadioClick() {
-        if (!isEncrypt) {      //if changed
+        if (!isEncrypt()) {      //if changed
             clearSelectionClick();
         }
-        isEncrypt = true;
+        setEncrypt(true);
         refreshTreeView();
-        view.encodeRadioClick();
+        getView().encodeRadioClick();
     }
+
     /**
      * Sets all parameters needed for decoding.
-     * */
+     */
     public void decodeRadioClick() {
-        if (isEncrypt) {     //if changed
+        if (isEncrypt()) {     //if changed
             clearSelectionClick();
         }
-        isEncrypt = false;
+        setEncrypt(false);
         refreshTreeView();
-        view.decodeRadioClick();
+        getView().decodeRadioClick();
     }
+
     /**
      * Checks all failure cases and runs encode/decode procedure.
+     *
      * @return is encode/decode procedure run successfully.
-     * */
+     */
     public boolean encryptOrDecryptFilesClick() {
         //failure cases
-        if (chosenFilesTree.getChildren().isEmpty()) {
-            view.noFilesToEncryptOrDecryptAlert();
+        if (getChosenFilesTree().getChildren().isEmpty()) {
+            getView().noFilesToEncryptOrDecryptAlert();
             return false;
         }
-        if (folderChoosenPath.isEmpty()) {
-            view.folderChosenPathEmptyAlert();
+        if (getFolderChoosenPath().isEmpty()) {
+            getView().folderChosenPathEmptyAlert();
             return false;
         }
-        if (passwordText.getText().isEmpty()) {
-            view.noPasswordProvided();
+        if (getPasswordText().getText().isEmpty()) {
+            getView().noPasswordProvided();
             return false;
         }
-        if (isEncrypt && !passwordText.getText().equals(passwordTextRepeat.getText())) {
-            view.passwordsNotEqual();
+        if (isEncrypt() && !getPasswordText().getText().equals(getPasswordTextRepeat().getText())) {
+            getView().passwordsNotEqual();
             return false;
         }
-        if (passwordText.getText().length() < 5) {
-            view.passwordTooShort();
+        if (getPasswordText().getText().length() < 5) {
+            getView().passwordTooShort();
             return false;
         }
         //start procedure
-        if (isEncrypt) {
+        if (isEncrypt()) {
             encryptFiles();
         } else {
             decryptFiles();
         }
         return true;
     }
+
     /**
      * Allows user to choose destination folder for encoding/decoding.
+     *
      * @return path to choosen folder or null if nothing selected.
-     * */
+     */
     public Path chooseDestinationFolderClick() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle(view.getDisplayString("directoryChooserTitle"));
+        directoryChooser.setTitle(getView().getDisplayString("directoryChooserTitle"));
         File selectedFolder = directoryChooser.showDialog(new Stage());
 
         if (selectedFolder != null) {
             System.out.println("selected folder");
-            view.destinationFolderClick();
+            getView().destinationFolderClick();
 
-            folderChoosenPath = selectedFolder.toPath().toString();
-            setHeadNodeName(folderChoosenPath);             //sets chosen head node name as path
+            setFolderChoosenPath(selectedFolder.toPath().toString());
+            setHeadNodeName(getFolderChoosenPath());             //sets chosen head node name as path
             return selectedFolder.toPath();
         } else {
             return null;
@@ -166,22 +203,22 @@ public class Controller implements Initializable {
      * Adds folder or file. Displays result.
      */
     public void addFileOrFolderClick() {
-        if (currentObjectClickedFullPath == null) {
-            view.noObjectClicked();
+        if (getCurrentObjectClickedFullPath() == null) {
+            getView().noObjectClicked();
             return;
         }
 
-        Optional<ButtonType> confirmResult = view.confirmAddFileOrFolder(currentObjectClickedFullPath);
+        Optional<ButtonType> confirmResult = getView().confirmAddFileOrFolder(getCurrentObjectClickedFullPath());
         if (confirmResult.isPresent() && confirmResult.get() == ButtonType.OK) {
             boolean result = true; // temporary
 
-            if (!addPathChoice(currentObjectClickedFullPath)) //trying to add file
+            if (!addPathChoice(getCurrentObjectClickedFullPath())) //trying to add file
                 result = false;
 
             if (result) {
-                view.successMsg();
+                getView().successMsg();
             } else {
-                view.cannotSelectFileOrFolderMsg();
+                getView().cannotSelectFileOrFolderMsg();
             }
         }
     }
@@ -196,8 +233,8 @@ public class Controller implements Initializable {
             System.out.println("Translation failed!");
             return;
         }
-        view.setTranslationsMap(translImp.getTranslations());
-        view.setTranslationsForGuiElements();
+        getView().setTranslationsMap(translImp.getTranslations());
+        getView().setTranslationsForGuiElements();
     }
 
     /**
@@ -209,16 +246,16 @@ public class Controller implements Initializable {
             System.out.println("Translation failed!");
             return;
         }
-        view.setTranslationsMap(translImp.getTranslations());
-        view.setTranslationsForGuiElements();
+        getView().setTranslationsMap(translImp.getTranslations());
+        getView().setTranslationsForGuiElements();
     }
 
     /**
      * Sets font size to 10px, and background color depending on encrypt/decrypt mode.
      */
     public void fontSize10pxSelected() {
-        fontSizeSelect = 10.0;
-        view.setFonts(fontSizeSelect);
+        setFontSizeSelect(10.0);
+        getView().setFonts(getFontSizeSelect());
         setBackgroundColor();
     }
 
@@ -226,8 +263,8 @@ public class Controller implements Initializable {
      * Sets font size to 12px, and background color depending on encrypt/decrypt mode.
      */
     public void fontSize12pxSelected() {
-        fontSizeSelect = 12.0;
-        view.setFonts(fontSizeSelect);
+        setFontSizeSelect(12.0);
+        getView().setFonts(getFontSizeSelect());
         setBackgroundColor();
     }
 
@@ -235,8 +272,8 @@ public class Controller implements Initializable {
      * Sets font size to 14px, and background color depending on encrypt/decrypt mode.
      */
     public void fontSize14pxSelected() {
-        fontSizeSelect = 14.0;
-        view.setFonts(fontSizeSelect);
+        setFontSizeSelect(14.0);
+        getView().setFonts(getFontSizeSelect());
         setBackgroundColor();
     }
 
@@ -244,39 +281,39 @@ public class Controller implements Initializable {
      * Displays help menu.
      */
     public void helpMenuSelected() {
-        view.displayHelpMenu();
+        getView().displayHelpMenu();
     }
 
     /**
      * Shows choosen folder path.
      */
     public void showChoosenFolderPathClick() {
-        view.showChosenFolderPathClick(folderChoosenPath);
+        getView().showChosenFolderPathClick(getFolderChoosenPath());
     }
 
     /**
      * Reverts last selected file from selected files list.
      */
     public void undoSelectionClick() {
-        int last_item_index = chosenFilesTree.getChildren().size() - 1;
+        int last_item_index = getChosenFilesTree().getChildren().size() - 1;
         if (last_item_index >= 0)
-            chosenFilesTree.getChildren().remove(last_item_index);
+            getChosenFilesTree().getChildren().remove(last_item_index);
     }
 
     /**
      * Deletes all files from selected files list.
      */
     public void clearSelectionClick() {
-        chosenFilesTree.getChildren().clear();
+        getChosenFilesTree().getChildren().clear();
     }
 
     /**
      * Handles add hint RadioButton click.
      */
     public void addHintClick() {
-        view.setHintTextFieldVisibility(addHint.isSelected());
+        getView().setHintTextFieldVisibility(getAddHint().isSelected());
 
-        if (decryptFiles.isSelected()) {
+        if (getDecryptFiles().isSelected()) {
             List<String> selectedFiles = generateSelectedFilesList();
             String randomFilePath = "";
             for (String filePath : selectedFiles) {
@@ -285,27 +322,30 @@ public class Controller implements Initializable {
                     break;
                 }
             }
-            view.displayHintFromFile(randomFilePath);
+            getView().displayHintFromFile(randomFilePath);
         }
     }
+
     /**
      * Sets background application color depending on encryp/decrypt mode
-     * */
+     */
     private void setBackgroundColor() {
-        if (isEncrypt) {
-            view.setBackgroundColor("#FFFFFF");
+        if (isEncrypt()) {
+            getView().setBackgroundColor("#FFFFFF");
         } else {
-            view.setBackgroundColor("#90EE90");
+            getView().setBackgroundColor("#90EE90");
         }
     }
+
     /**
      * Generates list of all selected files.
+     *
      * @return List of selected files.
-     * */
+     */
     private List<String> generateSelectedFilesList() {
         List<String> result = new ArrayList<>();
-        if (!chosenFilesTree.getChildren().isEmpty()) {
-            Object[] chosenFilesArr = chosenFilesTree.getChildren().toArray();
+        if (!getChosenFilesTree().getChildren().isEmpty()) {
+            Object[] chosenFilesArr = getChosenFilesTree().getChildren().toArray();
             for (Object chosenFile : chosenFilesArr) {
                 String fileName = chosenFile.toString();
 
@@ -317,14 +357,16 @@ public class Controller implements Initializable {
         }
         return result;
     }
+
     /**
      * Checks if proposed file/folder is already on choosen files list.
+     *
      * @param newPath Selested path to check.
      * @return True if node already exists, flase if node do not exist.
-     * */
+     */
     private boolean checkIfNodeAlreadyAdded(String newPath) {
         //checking under chosen files
-        Object[] chosenFilesArr = chosenFilesTree.getChildren().toArray();
+        Object[] chosenFilesArr = getChosenFilesTree().getChildren().toArray();
         for (Object chosenFile : chosenFilesArr) {
             FilePathTreeItem fileTree = new FilePathTreeItem(new File(chosenFile.toString()));
             if (fileTree.findPath(newPath))
@@ -335,32 +377,33 @@ public class Controller implements Initializable {
         FilePathTreeItem fileTree = new FilePathTreeItem(new File(newPath));
         for (Object chosenFile : chosenFilesArr) {
             if (fileTree.findPath(chosenFile.toString())) {
-                chosenFilesTree.getChildren().remove(chosenFile);
+                getChosenFilesTree().getChildren().remove(chosenFile);
             }
         }
         return false;
     }
+
     private void setDefaultSelectedOperations() {
-        defaultEncSpeed.setSelected(true);
-        encryptFiles.setSelected(true);
+        getDefaultEncSpeed().setSelected(true);
+        getEncryptFiles().setSelected(true);
     }
 
     private void setToggleGroups() {
-        slowEncSpeed.setToggleGroup(encyptSpeedGroup);
-        defaultEncSpeed.setToggleGroup(encyptSpeedGroup);
-        fastEncSpeed.setToggleGroup(encyptSpeedGroup);
+        getSlowEncSpeed().setToggleGroup(getEncyptSpeedGroup());
+        getDefaultEncSpeed().setToggleGroup(getEncyptSpeedGroup());
+        getFastEncSpeed().setToggleGroup(getEncyptSpeedGroup());
 
-        encryptFiles.setToggleGroup(operationToPerformGroup);
-        decryptFiles.setToggleGroup(operationToPerformGroup);
+        getEncryptFiles().setToggleGroup(getOperationToPerformGroup());
+        getDecryptFiles().setToggleGroup(getOperationToPerformGroup());
     }
 
     private void refreshTreeView() {
-        folderChoosenPath = "";
+        setFolderChoosenPath("");
         setUpFileBrowser();
-        chosenFilesTree.setExpanded(true);
-        TreeView<String> treeView = new TreeView<>(chosenFilesTree);
-        selectedFileBrowserPane.getChildren().add(treeView);
-        showChoosenFolderPath.setDisable(true);
+        getChosenFilesTree().setExpanded(true);
+        TreeView<String> treeView = new TreeView<>(getChosenFilesTree());
+        getSelectedFileBrowserPane().getChildren().add(treeView);
+        getShowChoosenFolderPath().setDisable(true);
         setHeadNodeName("");
     }
 
@@ -385,25 +428,27 @@ public class Controller implements Initializable {
 
         treeView.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> handleMouseClicked(e, treeView));
 
-        fileBrowserPane.getChildren().add(treeView);
+        getFileBrowserPane().getChildren().add(treeView);
     }
+
     /**
      * Tries to add/adds new file to chosen files list .
+     *
      * @param path Selected file to add.
      * @return True if file added successfully, false if file can't be added.
-     * */
+     */
     public boolean addPathChoice(String path) {
         System.out.println("trying to add " + path);
 
         if (checkIfNodeAlreadyAdded(path))//check if adding is possible
             return false;         //cannot add, file found
 
-        chosenFilesTree.getChildren().add(new FilePathTreeItem(new File(path)));
-        chosenFilesTree.setExpanded(true);
+        getChosenFilesTree().getChildren().add(new FilePathTreeItem(new File(path)));
+        getChosenFilesTree().setExpanded(true);
 
-        TreeView<String> treeView = new TreeView<>(chosenFilesTree);
+        TreeView<String> treeView = new TreeView<>(getChosenFilesTree());
 
-        selectedFileBrowserPane.getChildren().add(treeView);
+        getSelectedFileBrowserPane().getChildren().add(treeView);
         return true;
     }
 
@@ -417,7 +462,7 @@ public class Controller implements Initializable {
             } catch (ClassCastException | NullPointerException ex) {
                 System.out.println("handleMouseClicked treeView exception");
             }
-            currentObjectClickedFullPath = fullPath;
+            setCurrentObjectClickedFullPath(fullPath);
         }
 
     }
@@ -430,25 +475,27 @@ public class Controller implements Initializable {
             }
         });
     }
+
     /**
      * Enables/Disables GUIElements.
+     *
      * @param sel Boolean value to Enable or Disable GUI elements.
-     * */
+     */
     public void setDisableGUIElements(boolean sel) {
-        chooseDestinationFolder.setDisable(sel);
-        encryptOrDecryptFilesBtn.setDisable(sel);
-        addBtn.setDisable(sel);
-        encryptFiles.setDisable(sel);
-        decryptFiles.setDisable(sel);
-        chooseLanguage.setDisable(sel);
-        slowEncSpeed.setDisable(sel);
-        defaultEncSpeed.setDisable(sel);
-        fastEncSpeed.setDisable(sel);
-        addHint.setDisable(sel);
-        undoSelection.setDisable(sel);
-        clearSelection.setDisable(sel);
-        hintTextField.setDisable(sel);
-        passwordText.setDisable(sel);
+        getChooseDestinationFolder().setDisable(sel);
+        getEncryptOrDecryptFilesBtn().setDisable(sel);
+        getAddBtn().setDisable(sel);
+        getEncryptFiles().setDisable(sel);
+        getDecryptFiles().setDisable(sel);
+        getChooseLanguage().setDisable(sel);
+        getSlowEncSpeed().setDisable(sel);
+        getDefaultEncSpeed().setDisable(sel);
+        getFastEncSpeed().setDisable(sel);
+        getAddHint().setDisable(sel);
+        getUndoSelection().setDisable(sel);
+        getClearSelection().setDisable(sel);
+        getHintTextField().setDisable(sel);
+        getPasswordText().setDisable(sel);
     }
 
     private void freezeGUI() {
@@ -458,7 +505,7 @@ public class Controller implements Initializable {
     private void unfreezeGUI(List<String> successList, List<String> failedList) {
         Platform.runLater(() -> {
             setDisableGUIElements(false);
-            view.cipheringResultAlert(successList, failedList);
+            getView().cipheringResultAlert(successList, failedList);
         });
 
 
@@ -471,7 +518,7 @@ public class Controller implements Initializable {
                 .filter(s -> s.endsWith(".chr"))
                 .collect(Collectors.toList());
         if (chrFilesList.isEmpty()) {
-            view.encryptFilesStatusAlert();
+            getView().encryptFilesStatusAlert();
             startEncryptingProcedure();
         } else {
             StringBuilder alertBuilder = new StringBuilder();
@@ -479,9 +526,9 @@ public class Controller implements Initializable {
                 alertBuilder.append(file + "\n");
             }
 
-            Optional<ButtonType> confirmResult = view.showMultipleEncryptionConfirmation(alertBuilder.toString());
+            Optional<ButtonType> confirmResult = getView().showMultipleEncryptionConfirmation(alertBuilder.toString());
             if (confirmResult.isPresent() && confirmResult.get() == ButtonType.OK) {
-                view.encryptFilesStatusAlert();
+                getView().encryptFilesStatusAlert();
                 startEncryptingProcedure();
             }
 
@@ -489,21 +536,21 @@ public class Controller implements Initializable {
     }
 
     private void setHeadNodeName(String name) {
-        chosenFilesTree.setValue(name);
+        getChosenFilesTree().setValue(name);
     }
 
     private void decryptFiles() {
         System.out.println("decryptFiles");
-        view.decryptFilesStatusAlert();
+        getView().decryptFilesStatusAlert();
 
         startDecryptingProcedure();
     }
 
     private int getEncryptionSpeedValue() {
         //get speed value from encryption speed controls on gui
-        int x = encyptSpeedGroup.getSelectedToggle().selectedProperty().toString().lastIndexOf("id=");
-        int y = encyptSpeedGroup.getSelectedToggle().selectedProperty().toString().indexOf(",", x);
-        String speedText = encyptSpeedGroup.getSelectedToggle().selectedProperty().toString().substring(x + 3, y);
+        int x = getEncyptSpeedGroup().getSelectedToggle().selectedProperty().toString().lastIndexOf("id=");
+        int y = getEncyptSpeedGroup().getSelectedToggle().selectedProperty().toString().indexOf(",", x);
+        String speedText = getEncyptSpeedGroup().getSelectedToggle().selectedProperty().toString().substring(x + 3, y);
         switch (speedText) {
             case "fastEncSpeed":
                 return 1;
@@ -516,29 +563,29 @@ public class Controller implements Initializable {
     }
 
     private void startEncryptingProcedure() {
-        String pass = passwordText.getText();
+        String pass = getPasswordText().getText();
         String hint = "";
 
         List<String> successList = Collections.synchronizedList(new ArrayList<>());
         List<String> failedList = Collections.synchronizedList(new ArrayList<>());
 
         int speed = getEncryptionSpeedValue();
-        if (hintTextField.getText().isEmpty())
-            hint = view.getDisplayString("noHintMsg");
+        if (getHintTextField().getText().isEmpty())
+            hint = getView().getDisplayString("noHintMsg");
         else
-            hint = hintTextField.getText();
+            hint = getHintTextField().getText();
 
         FileEncryptor fileEncryptor = new FileEncryptor();
         fileEncryptor.configure(pass, speed, true, hint);
         CryptoTask cryptoTask = new EncryptorTask(fileEncryptor, this::freezeGUI, this::unfreezeGUI);
         cryptoTask.setLists(successList, failedList);
-        if (!chosenFilesTree.getChildren().isEmpty()) {
-            Object[] chosenFilesArr = chosenFilesTree.getChildren().toArray();
+        if (!getChosenFilesTree().getChildren().isEmpty()) {
+            Object[] chosenFilesArr = getChosenFilesTree().getChildren().toArray();
             for (Object chosenFile : chosenFilesArr) {
                 String fileName = chosenFile.toString();
 
                 FilePathTreeItem fileTree = new FilePathTreeItem(new File(fileName));
-                fileTree.encryptOrDecryptFileTree(cryptoTask, folderChoosenPath, "");
+                fileTree.encryptOrDecryptFileTree(cryptoTask, getFolderChoosenPath(), "");
 
             }
             cryptoTask.process();
@@ -548,7 +595,7 @@ public class Controller implements Initializable {
     }
 
     private void startDecryptingProcedure() {
-        String pass = passwordText.getText();
+        String pass = getPasswordText().getText();
 
 
         List<String> successList = Collections.synchronizedList(new ArrayList<>());
@@ -558,13 +605,13 @@ public class Controller implements Initializable {
         CryptoTask cryptoTask = new DecryptorTask(fileEncryptor, this::freezeGUI, this::unfreezeGUI);
         cryptoTask.setLists(successList, failedList);
 
-        if (!chosenFilesTree.getChildren().isEmpty()) {
-            Object[] chosenFilesArr = chosenFilesTree.getChildren().toArray();
+        if (!getChosenFilesTree().getChildren().isEmpty()) {
+            Object[] chosenFilesArr = getChosenFilesTree().getChildren().toArray();
             for (Object chosenFile : chosenFilesArr) {
                 String fileName = chosenFile.toString();
 
                 FilePathTreeItem fileTree = new FilePathTreeItem(new File(fileName));
-                fileTree.encryptOrDecryptFileTree(cryptoTask, folderChoosenPath, "");
+                fileTree.encryptOrDecryptFileTree(cryptoTask, getFolderChoosenPath(), "");
 
             }
             cryptoTask.process();
@@ -572,17 +619,21 @@ public class Controller implements Initializable {
             System.out.println("THERE ARE NO FILES IN HERE");
         }
     }
+
     /**
      * Sets path for selected destination folder.
+     *
      * @param path Path to set as destination folder.
-     * */
+     */
     public void setChosenFolderPath(String path) {
-        folderChoosenPath = path;
+        setFolderChoosenPath(path);
     }
+
     /**
      * Gets chosen files nodes
+     *
      * @return All chosen files nodes
-     * */
+     */
     public TreeItem<String> getChosenFilesTree() {
         return chosenFilesTree;
     }
@@ -596,4 +647,197 @@ public class Controller implements Initializable {
     private Double fontSizeSelect;
     private String folderChoosenPath;
     private View view;
+
+    StackPane getFileBrowserPane() {
+        return fileBrowserPane;
+    }
+
+
+    StackPane getSelectedFileBrowserPane() {
+        return selectedFileBrowserPane;
+    }
+
+
+    GridPane getMainGrid() {
+        return mainGrid;
+    }
+
+
+    Button getAddBtn() {
+        return addBtn;
+    }
+
+
+    Label getFileSelectedLabel() {
+        return fileSelectedLabel;
+    }
+
+    Label getFileBrowserLabel() {
+        return fileBrowserLabel;
+    }
+
+
+    RadioButton getEncryptFiles() {
+        return encryptFiles;
+    }
+
+
+    RadioButton getDecryptFiles() {
+        return decryptFiles;
+    }
+
+
+    Menu getProgram() {
+        return program;
+    }
+
+
+    Menu getChooseLanguage() {
+        return chooseLanguage;
+    }
+
+
+    Menu getFontSize() {
+        return fontSize;
+    }
+
+
+    Button getChooseDestinationFolder() {
+        return chooseDestinationFolder;
+    }
+
+
+    Label getEncryptionSpeedLabel() {
+        return encryptionSpeedLabel;
+    }
+
+
+    RadioButton getSlowEncSpeed() {
+        return slowEncSpeed;
+    }
+
+
+    RadioButton getDefaultEncSpeed() {
+        return defaultEncSpeed;
+    }
+
+
+    RadioButton getFastEncSpeed() {
+        return fastEncSpeed;
+    }
+
+
+    Label getPasswordLabel() {
+        return passwordLabel;
+    }
+
+
+    Label getPasswordAgainLabel() {
+        return passwordAgainLabel;
+    }
+
+
+    RadioButton getAddHint() {
+        return addHint;
+    }
+
+
+    Button getEncryptOrDecryptFilesBtn() {
+        return encryptOrDecryptFilesBtn;
+    }
+
+
+    MenuItem getHelp() {
+        return help;
+    }
+
+
+    MenuItem getPolish() {
+        return polish;
+    }
+
+
+    MenuItem getEnglish() {
+        return english;
+    }
+
+
+    Button getShowChoosenFolderPath() {
+        return showChoosenFolderPath;
+    }
+
+
+    Button getUndoSelection() {
+        return undoSelection;
+    }
+
+
+    Button getClearSelection() {
+        return clearSelection;
+    }
+
+
+    TextField getHintTextField() {
+        return hintTextField;
+    }
+
+
+    PasswordField getPasswordText() {
+        return passwordText;
+    }
+
+
+    PasswordField getPasswordTextRepeat() {
+        return passwordTextRepeat;
+    }
+
+
+    ToggleGroup getOperationToPerformGroup() {
+        return operationToPerformGroup;
+    }
+
+    ToggleGroup getEncyptSpeedGroup() {
+        return encyptSpeedGroup;
+    }
+
+    String getCurrentObjectClickedFullPath() {
+        return currentObjectClickedFullPath;
+    }
+
+    void setCurrentObjectClickedFullPath(String currentObjectClickedFullPath) {
+        this.currentObjectClickedFullPath = currentObjectClickedFullPath;
+    }
+
+
+    boolean isEncrypt() {
+        return isEncrypt;
+    }
+
+    void setEncrypt(boolean encrypt) {
+        isEncrypt = encrypt;
+    }
+
+    Double getFontSizeSelect() {
+        return fontSizeSelect;
+    }
+
+    void setFontSizeSelect(Double fontSizeSelect) {
+        this.fontSizeSelect = fontSizeSelect;
+    }
+
+    String getFolderChoosenPath() {
+        return folderChoosenPath;
+    }
+
+    void setFolderChoosenPath(String folderChoosenPath) {
+        this.folderChoosenPath = folderChoosenPath;
+    }
+
+    View getView() {
+        return view;
+    }
+
+    void setView(View view) {
+        this.view = view;
+    }
 }

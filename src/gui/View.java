@@ -41,36 +41,36 @@ public class View {
      */
     public void setTranslationsForGuiElements() {
         Controller m_controller = ControllerFactory.getController();
-        m_controller.addBtn.setText(getDisplayString("addBtn"));
-        m_controller.fileSelectedLabel.setText(getDisplayString("fileSelectedLabel"));
-        m_controller.fileBrowserLabel.setText(getDisplayString("fileBrowserLabel"));
-        m_controller.encryptFiles.setText(getDisplayString("encryptFiles"));
-        m_controller.decryptFiles.setText(getDisplayString("decryptFiles"));
-        m_controller.program.setText(getDisplayString("program"));
-        m_controller.chooseLanguage.setText(getDisplayString("chooseLanguage"));
-        m_controller.fontSize.setText(getDisplayString("fontSize"));
-        m_controller.chooseDestinationFolder.setText(getDisplayString("chooseDestinationFolder"));
-        m_controller.encryptionSpeedLabel.setText(getDisplayString("encryptionSpeedLabel"));
-        m_controller.slowEncSpeed.setText(getDisplayString("slowEncSpeed"));
-        m_controller.defaultEncSpeed.setText(getDisplayString("defaultEncSpeed"));
-        m_controller.fastEncSpeed.setText(getDisplayString("fastEncSpeed"));
-        m_controller.passwordLabel.setText(getDisplayString("passwordLabel"));
-        m_controller.passwordAgainLabel.setText(getDisplayString("passwordAgainLabel"));
+        m_controller.getAddBtn().setText(getDisplayString("addBtn"));
+        m_controller.getFileSelectedLabel().setText(getDisplayString("fileSelectedLabel"));
+        m_controller.getFileBrowserLabel().setText(getDisplayString("fileBrowserLabel"));
+        m_controller.getEncryptFiles().setText(getDisplayString("encryptFiles"));
+        m_controller.getDecryptFiles().setText(getDisplayString("decryptFiles"));
+        m_controller.getProgram().setText(getDisplayString("program"));
+        m_controller.getChooseLanguage().setText(getDisplayString("chooseLanguage"));
+        m_controller.getFontSize().setText(getDisplayString("fontSize"));
+        m_controller.getChooseDestinationFolder().setText(getDisplayString("chooseDestinationFolder"));
+        m_controller.getEncryptionSpeedLabel().setText(getDisplayString("encryptionSpeedLabel"));
+        m_controller.getSlowEncSpeed().setText(getDisplayString("slowEncSpeed"));
+        m_controller.getDefaultEncSpeed().setText(getDisplayString("defaultEncSpeed"));
+        m_controller.getFastEncSpeed().setText(getDisplayString("fastEncSpeed"));
+        m_controller.getPasswordLabel().setText(getDisplayString("passwordLabel"));
+        m_controller.getPasswordAgainLabel().setText(getDisplayString("passwordAgainLabel"));
 
-        if (m_controller.decryptFiles.isSelected()) {
-            m_controller.addHint.setText(getDisplayString("showHintLabel"));
-            m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("decryptFiles"));
+        if (m_controller.getDecryptFiles().isSelected()) {
+            m_controller.getAddHint().setText(getDisplayString("showHintLabel"));
+            m_controller.getEncryptOrDecryptFilesBtn().setText(getDisplayString("decryptFiles"));
         } else {
-            m_controller.addHint.setText(getDisplayString("addHintLabel"));
-            m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("encryptFiles"));
+            m_controller.getAddHint().setText(getDisplayString("addHintLabel"));
+            m_controller.getEncryptOrDecryptFilesBtn().setText(getDisplayString("encryptFiles"));
         }
 
-        m_controller.help.setText(getDisplayString("help"));
-        m_controller.polish.setText(getDisplayString("polish"));
-        m_controller.english.setText(getDisplayString("english"));
-        m_controller.showChoosenFolderPath.setText(getDisplayString("showChoosenFolderPath"));
-        m_controller.undoSelection.setText(getDisplayString("undoSelection"));
-        m_controller.clearSelection.setText(getDisplayString("clearSelection"));
+        m_controller.getHelp().setText(getDisplayString("help"));
+        m_controller.getPolish().setText(getDisplayString("polish"));
+        m_controller.getEnglish().setText(getDisplayString("english"));
+        m_controller.getShowChoosenFolderPath().setText(getDisplayString("showChoosenFolderPath"));
+        m_controller.getUndoSelection().setText(getDisplayString("undoSelection"));
+        m_controller.getClearSelection().setText(getDisplayString("clearSelection"));
     }
 
     /**
@@ -91,7 +91,7 @@ public class View {
     public void setFonts(Double fontSize) {
         m_fontSize = fontSize;
         String fontSizeFormat = String.format("-fx-font-size: %dpt;", m_fontSize.intValue());
-        ControllerFactory.getController().mainGrid.setStyle(fontSizeFormat);
+        ControllerFactory.getController().getMainGrid().setStyle(fontSizeFormat);
         setButtonStyle(fontSize, true);
     }
 
@@ -102,8 +102,8 @@ public class View {
      */
     public void setBackgroundColor(String backgroundColor) {
         Controller m_controller = ControllerFactory.getController();
-        String currentStyle = m_controller.mainGrid.getStyle();
-        m_controller.mainGrid.setStyle(currentStyle + " -fx-background-color: " + backgroundColor);
+        String currentStyle = m_controller.getMainGrid().getStyle();
+        m_controller.getMainGrid().setStyle(currentStyle + " -fx-background-color: " + backgroundColor);
     }
 
     /**
@@ -115,23 +115,23 @@ public class View {
      */
     public void encodeRadioClick() {
         Controller m_controller = ControllerFactory.getController();
-        m_controller.addHint.setSelected(false);
+        m_controller.getAddHint().setSelected(false);
         setHintTextFieldVisibility(false);
 
-        m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("encryptFiles"));
-        m_controller.addHint.setText(getDisplayString("addHintLabel"));
+        m_controller.getEncryptOrDecryptFilesBtn().setText(getDisplayString("encryptFiles"));
+        m_controller.getAddHint().setText(getDisplayString("addHintLabel"));
         setFonts(m_fontSize);
         setBackgroundColor("#FFFFFF");
 
-        m_controller.hintTextField.setDisable(false);
-        m_controller.hintTextField.setText("");
+        m_controller.getHintTextField().setDisable(false);
+        m_controller.getHintTextField().setText("");
 
-        m_controller.passwordAgainLabel.setDisable(false);
-        m_controller.passwordTextRepeat.setDisable(false);
-        m_controller.encryptionSpeedLabel.setDisable(false);
-        m_controller.slowEncSpeed.setDisable(false);
-        m_controller.defaultEncSpeed.setDisable(false);
-        m_controller.fastEncSpeed.setDisable(false);
+        m_controller.getPasswordAgainLabel().setDisable(false);
+        m_controller.getPasswordTextRepeat().setDisable(false);
+        m_controller.getEncryptionSpeedLabel().setDisable(false);
+        m_controller.getSlowEncSpeed().setDisable(false);
+        m_controller.getDefaultEncSpeed().setDisable(false);
+        m_controller.getFastEncSpeed().setDisable(false);
 
     }
 
@@ -143,21 +143,21 @@ public class View {
      */
     public void decodeRadioClick() {
         Controller m_controller = ControllerFactory.getController();
-        m_controller.addHint.setSelected(false);
+        m_controller.getAddHint().setSelected(false);
         setHintTextFieldVisibility(false);
 
-        m_controller.encryptOrDecryptFilesBtn.setText(getDisplayString("decryptFiles"));
-        m_controller.addHint.setText(getDisplayString("showHintLabel"));
+        m_controller.getEncryptOrDecryptFilesBtn().setText(getDisplayString("decryptFiles"));
+        m_controller.getAddHint().setText(getDisplayString("showHintLabel"));
         setFonts(m_fontSize);
         setBackgroundColor("#90EE90");
 
-        m_controller.passwordAgainLabel.setDisable(true);
-        m_controller.passwordTextRepeat.setDisable(true);
-        m_controller.passwordTextRepeat.clear();
-        m_controller.encryptionSpeedLabel.setDisable(true);
-        m_controller.slowEncSpeed.setDisable(true);
-        m_controller.defaultEncSpeed.setDisable(true);
-        m_controller.fastEncSpeed.setDisable(true);
+        m_controller.getPasswordAgainLabel().setDisable(true);
+        m_controller.getPasswordTextRepeat().setDisable(true);
+        m_controller.getPasswordTextRepeat().clear();
+        m_controller.getEncryptionSpeedLabel().setDisable(true);
+        m_controller.getSlowEncSpeed().setDisable(true);
+        m_controller.getDefaultEncSpeed().setDisable(true);
+        m_controller.getFastEncSpeed().setDisable(true);
 
 
     }
@@ -251,8 +251,8 @@ public class View {
      */
     public void destinationFolderClick() {
         Controller m_controller = ControllerFactory.getController();
-        m_controller.chooseDestinationFolder.setStyle("-fx-background-color: #006400");
-        m_controller.showChoosenFolderPath.setDisable(false);
+        m_controller.getChooseDestinationFolder().setStyle("-fx-background-color: #006400");
+        m_controller.getShowChoosenFolderPath().setDisable(false);
     }
 
     /**
@@ -433,7 +433,7 @@ public class View {
      * @param setVisible value that indicates if we want to set it visible or not.
      */
     public void setHintTextFieldVisibility(Boolean setVisible) {
-        ControllerFactory.getController().hintTextField.setVisible(setVisible);
+        ControllerFactory.getController().getHintTextField().setVisible(setVisible);
     }
 
     /**
@@ -443,10 +443,10 @@ public class View {
      */
     public void displayHintFromFile(String path) {
         Controller m_controller = ControllerFactory.getController();
-        m_controller.hintTextField.setDisable(true);
+        m_controller.getHintTextField().setDisable(true);
         HintMessageProvider hintMessageProvider = new HintMessageProvider();
         String hint = hintMessageProvider.getHint(path, getDisplayString("noHintMsg"));
-        m_controller.hintTextField.setText(hint);
+        m_controller.getHintTextField().setText(hint);
     }
 
     /**
@@ -471,9 +471,9 @@ public class View {
                 fontSizeFormat +
                 "-fx-font-family: \"Arial\";";
 
-        m_controller.encryptOrDecryptFilesBtn.setStyle(buttonsStyle);
-        m_controller.chooseDestinationFolder.setStyle(buttonsStyle);
-        m_controller.addBtn.setStyle(buttonsStyle);
+        m_controller.getEncryptOrDecryptFilesBtn().setStyle(buttonsStyle);
+        m_controller.getChooseDestinationFolder().setStyle(buttonsStyle);
+        m_controller.getAddBtn().setStyle(buttonsStyle);
     }
 
     /**
